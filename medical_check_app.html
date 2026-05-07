@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0e14">
+<title>検査補助</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg1: #121821;
+    --bg2: #1a2230;
+    --line: #243042;
+    --text: #e8edf5;
+    --dim: #8a96a8;
+    --mute: #5a6678;
+    --accent: #4dd0c5;
+    --warn: #f5a524;
+    --danger: #f56565;
+    --insight: #ffb454;
+    --mistake: #ff6b8a;
+    --r: 14px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+  html { height: 100%; }
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 72px);
+    padding-top: env(safe-area-inset-top);
+  }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  input, textarea { font-family: inherit; }
+
+  /* Topbar */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(10,14,20,.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 13px 16px 11px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .topbar-right { display: flex; gap: 4px; }
+  .tbtn { padding: 6px 10px; border-radius: 8px; font-size: 13px; color: var(--dim); }
+  .tbtn:active { background: var(--bg2); }
+  .tbtn.accent { color: var(--accent); font-weight: 600; }
+
+  /* Views */
+  .view { display: none; padding: 16px; animation: fadein .15s ease; }
+  .view.active { display: block; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* Bottom tabbar */
+  .tabbar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    background: rgba(10,14,20,.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    padding: 4px 0 calc(4px + env(safe-area-inset-bottom));
+  }
+  .tab {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 8px 0; color: var(--mute); font-size: 10px; letter-spacing: .04em;
+  }
+  .tab.active { color: var(--accent); }
+  .tab svg { width: 22px; height: 22px; }
+
+  /* Home */
+  .mod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .mod-card {
+    background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 16px 14px; position: relative; overflow: hidden; text-align: left;
+    transition: transform .12s;
+  }
+  .mod-card:active { transform: scale(.97); }
+  .mod-card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--c, var(--accent));
+  }
+  .mod-card .lbl { font-size: 10px; color: var(--mute); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 4px; }
+  .mod-card .name { font-size: 24px; font-weight: 800; }
+  .mod-card .cnt { font-size: 12px; color: var(--dim); margin-top: 12px; }
+
+  /* Proc list */
+  .proc-item {
+    background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center;
+    justify-content: space-between; gap: 8px; text-align: left; width: 100%;
+    transition: transform .12s;
+  }
+  .proc-item:active { transform: scale(.98); }
+  .proc-item .pt { font-size: 15px; font-weight: 600; }
+  .proc-item .pd { font-size: 12px; color: var(--dim); margin-top: 2px; }
+  .proc-edit { color: var(--mute); padding: 8px; border-radius: 8px; font-size: 16px; }
+  .proc-edit:active { background: var(--bg2); }
+
+  /* Checklist */
+  .prog-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .prog-bar { flex: 1; height: 4px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--accent); transition: width .25s; }
+  .prog-txt { font-size: 12px; color: var(--dim); white-space: nowrap; }
+  .sec-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .12em; margin: 0 4px 8px; display: flex; align-items: center; justify-content: space-between; }
+  .sec-edit-btns { display: flex; gap: 4px; }
+  .sec-edit-btns button { font-size: 11px; color: var(--mute); padding: 3px 8px; border-radius: 6px; }
+  .sec-edit-btns button:active { background: var(--bg2); }
+
+  /* Check item */
+  .ci {
+    background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r);
+    margin-bottom: 8px; overflow: hidden; transition: border-color .15s;
+  }
+  .ci.done { border-color: var(--accent); background: rgba(77,208,197,.06); }
+  .ci.has-m { border-color: var(--mistake); background: rgba(255,107,138,.06); }
+  .ci.has-i { border-color: var(--insight); background: rgba(255,180,84,.06); }
+
+  /* チェック行 */
+  .ci-top { display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px 10px; }
+  .chk {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px;
+    border: 1.5px solid var(--line); background: var(--bg); margin-top: 1px;
+    display: grid; place-items: center; transition: all .15s; cursor: pointer;
+  }
+  .done .chk { background: var(--accent); border-color: var(--accent); }
+  .done .chk::after {
+    content: ""; width: 6px; height: 11px;
+    border-right: 2px solid var(--bg); border-bottom: 2px solid var(--bg);
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+  .ci-body { flex: 1; min-width: 0; cursor: pointer; }
+  .ci-text { font-size: 14px; line-height: 1.5; }
+  .done .ci-text { color: var(--dim); text-decoration: line-through; text-decoration-color: var(--mute); }
+  .ci-note { font-size: 12px; color: var(--dim); margin-top: 5px; border-left: 2px solid var(--line); padding: 6px 8px; border-radius: 0 6px 6px 0; }
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: 2px; background: var(--warn); color: #1a1a1a; }
+  .tag.d { background: var(--danger); color: #fff; }
+
+  /* ミス/気づきボタン行 */
+  .ci-btns { display: flex; gap: 6px; padding: 8px 12px 12px; border-top: 1px solid rgba(255,255,255,.05); }
+  .ci-btn {
+    flex: 1; padding: 9px 6px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--line); background: var(--bg);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    transition: all .12s; line-height: 1;
+  }
+  .ci-btn:active { transform: scale(.96); }
+  .ci-btn.mb { color: var(--mistake); border-color: rgba(255,107,138,.3); }
+  .ci-btn.mb:active { background: rgba(255,107,138,.12); }
+  .ci-btn.ib { color: var(--insight); border-color: rgba(255,180,84,.3); }
+  .ci-btn.ib:active { background: rgba(255,180,84,.12); }
+  .ci-btn.eb { color: var(--mute); flex: 0 0 44px; }
+  .ci-btn.eb:active { background: var(--bg2); }
+
+  /* バッジ */
+  .badges { padding: 0 14px 12px; display: grid; gap: 6px; }
+  .badge {
+    display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px;
+    border-radius: 8px; font-size: 13px; line-height: 1.45;
+  }
+  .badge.m { background: rgba(255,107,138,.12); border-left: 3px solid var(--mistake); }
+  .badge.i { background: rgba(255,180,84,.12); border-left: 3px solid var(--insight); }
+  .badge-icon { flex-shrink: 0; }
+  .badge-body { flex: 1; word-break: break-word; }
+  .badge-meta { font-size: 10px; color: var(--mute); margin-top: 2px; }
+  .badge-del { color: var(--mute); font-size: 18px; padding: 0 4px; align-self: center; }
+
+  /* 追加ボタン */
+  .add-btn { width: 100%; border: 1.5px dashed var(--line); border-radius: var(--r); padding: 11px; color: var(--mute); font-size: 13px; margin-top: 8px; }
+  .add-btn:active { border-color: var(--accent); color: var(--accent); background: rgba(77,208,197,.08); }
+
+  /* Notes view */
+  .notes-filter { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 2px; }
+  .nf-btn { flex-shrink: 0; padding: 6px 12px; border-radius: 99px; font-size: 12px; border: 1px solid var(--line); color: var(--dim); white-space: nowrap; }
+  .nf-btn.active { background: var(--accent); color: #08120f; font-weight: 700; border-color: var(--accent); }
+  .note-card { background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; margin-bottom: 10px; }
+  .note-card.m { border-left: 3px solid var(--mistake); }
+  .note-card.i { border-left: 3px solid var(--insight); }
+  .nc-head { display: flex; justify-content: space-between; font-size: 11px; color: var(--mute); margin-bottom: 6px; }
+  .nc-typ { font-weight: 700; }
+  .nc-typ.m { color: var(--mistake); }
+  .nc-typ.i { color: var(--insight); }
+  .nc-ctx { font-size: 12px; color: var(--dim); margin-bottom: 6px; }
+  .nc-ctx b { color: var(--text); }
+  .nc-text { font-size: 14px; word-break: break-word; }
+  .nc-actions { display: flex; gap: 6px; margin-top: 8px; justify-content: flex-end; }
+  .nc-actions button { font-size: 11px; color: var(--mute); padding: 4px 8px; border-radius: 6px; }
+  .nc-actions button:active { background: var(--bg2); }
+
+  /* Bottom sheet */
+  .scrim { display: none; position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.55); }
+  .scrim.on { display: block; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 51;
+    background: var(--bg1); border-radius: 18px 18px 0 0;
+    padding: 12px 18px calc(24px + env(safe-area-inset-bottom));
+    transform: translateY(100%); max-height: 92vh; overflow-y: auto;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1);
+    border-top: 1px solid var(--line);
+  }
+  .sheet.on { transform: translateY(0); }
+  .grip { width: 36px; height: 4px; background: var(--line); border-radius: 99px; margin: 4px auto 16px; }
+  .sheet h2 { font-size: 18px; margin-bottom: 6px; }
+  .sheet .ctx-txt { font-size: 12px; color: var(--dim); background: var(--bg2); border-radius: 8px; padding: 8px 10px; margin-bottom: 14px; border-left: 2px solid var(--line); word-break: break-word; }
+  .form-lbl { font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: .12em; font-weight: 600; margin-bottom: 6px; display: block; }
+  .form-input { width: 100%; background: var(--bg2); border: 1px solid var(--line); color: var(--text); border-radius: 10px; padding: 12px 14px; font: inherit; margin-bottom: 14px; }
+  .form-input:focus { outline: none; border-color: var(--accent); }
+  textarea.form-input { min-height: 100px; resize: vertical; font-size: 15px; }
+  .type-banner { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; margin-bottom: 14px; font-weight: 700; }
+  .type-banner.m { background: rgba(255,107,138,.12); color: var(--mistake); border: 1px solid rgba(255,107,138,.3); }
+  .type-banner.i { background: rgba(255,180,84,.12); color: var(--insight); border: 1px solid rgba(255,180,84,.3); }
+  .type-banner .sw { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--dim); padding: 4px 10px; border: 1px solid var(--line); border-radius: 99px; }
+  .type-banner .sw:active { background: var(--bg2); }
+  .btn-main { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; }
+  .btn-main.a { background: var(--accent); color: #08120f; }
+  .btn-main.m { background: var(--mistake); color: #fff; }
+  .btn-main.i { background: var(--insight); color: #1a1a1a; }
+  .btn-main:active { opacity: .9; transform: scale(.99); }
+  .btn-sub { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--line); color: var(--dim); font-size: 13px; margin-top: 8px; }
+  .btn-sub:active { background: var(--bg2); }
+  .btn-danger { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(245,101,101,.3); color: var(--danger); font-size: 13px; margin-top: 8px; }
+  .btn-danger:active { background: rgba(245,101,101,.1); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Toast */
+  .toast {
+    position: fixed; left: 50%; bottom: 88px; z-index: 100;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: var(--bg);
+    padding: 10px 18px; border-radius: 99px; font-size: 13px; font-weight: 600;
+    opacity: 0; pointer-events: none; transition: all .25s;
+    white-space: nowrap;
+  }
+  .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .empty { text-align: center; color: var(--mute); padding: 40px 16px; font-size: 13px; line-height: 1.8; }
+  .hint { display: flex; gap: 10px; align-items: flex-start; background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; margin-bottom: 16px; font-size: 12.5px; color: var(--dim); }
+  .hint b { color: var(--text); }
+  .hint .hc { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  .hint .hx { color: var(--mute); padding: 0 4px; flex-shrink: 0; }
+  .shdr { font-size: 11px; font-weight: 600; letter-spacing: .14em; color: var(--mute); text-transform: uppercase; margin: 4px 2px 10px; display: flex; align-items: center; justify-content: space-between; }
+  .shdr .al { color: var(--accent); font-size: 12px; text-transform: none; font-weight: 600; padding: 4px 8px; border-radius: 6px; letter-spacing: 0; }
+  .shdr .al:active { background: rgba(77,208,197,.1); }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="brand"><span class="dot"></span>検査補助</div>
+  <div class="topbar-right">
+    <button class="tbtn" id="backBtn" style="display:none;">‹ 戻る</button>
+    <button class="tbtn accent" id="editBtn" style="display:none;">編集</button>
+    <button class="tbtn accent" id="doneBtn" style="display:none;">完了</button>
+  </div>
+</header>
+
+<!-- Views -->
+<div class="view active" id="v-home">
+  <p style="color:var(--dim);font-size:13px;margin:4px 2px 16px;">今日の検査を選択してください</p>
+  <div class="shdr">モダリティ</div>
+  <div class="mod-grid" id="mod-grid"></div>
+</div>
+
+<div class="view" id="v-procs">
+  <div class="shdr">
+    <span id="proc-lbl">手順</span>
+    <button class="al" id="addProcBtn">+ 手順を追加</button>
+  </div>
+  <div id="proc-list"></div>
+</div>
+
+<div class="view" id="v-check">
+  <div class="prog-row">
+    <span class="prog-txt" id="prog-txt">0 / 0</span>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <button class="tbtn" id="resetBtn" style="font-size:12px;">リセット</button>
+  </div>
+  <h2 id="check-title" style="font-size:20px;margin-bottom:14px;"></h2>
+  <div class="hint" id="check-hint">
+    <span class="hc">!</span>
+    <span style="flex:1;">項目をタップで<b>チェック</b>。各項目の <b style="color:var(--mistake)">⚠ ミス</b> / <b style="color:var(--insight)">💡 気づき</b> ボタンで記録できます。</span>
+    <button class="hx" onclick="closeHint()">×</button>
+  </div>
+  <div id="check-body"></div>
+</div>
+
+<div class="view" id="v-notes">
+  <h2 style="font-size:20px;margin-bottom:4px;">気づき & ミス</h2>
+  <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">すべての記録を横断表示</p>
+  <div class="notes-filter">
+    <button class="nf-btn active" data-f="all">すべて</button>
+    <button class="nf-btn" data-f="mistake">⚠ ミス</button>
+    <button class="nf-btn" data-f="insight">💡 気づき</button>
+  </div>
+  <div id="notes-body"></div>
+</div>
+
+<!-- Tabbar -->
+<nav class="tabbar">
+  <button class="tab active" data-t="home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+    ホーム
+  </button>
+  <button class="tab" data-t="checklist">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+    チェック
+  </button>
+  <button class="tab" data-t="notes">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><circle cx="12" cy="17" r=".5" fill="currentColor"/><path d="M10.3 3.86l-8.18 14a2 2 0 001.71 3h16.34a2 2 0 001.71-3l-8.18-14a2 2 0 00-3.4 0z"/></svg>
+    気づき
+  </button>
+</nav>
+
+<!-- Sheet -->
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet"><div class="grip"></div><div id="sheet-body"></div></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== DATA =====================
+const DEFAULT = {
+  modalities: [
+    { key:"ivr", label:"IVR", sub:"Interventional", c:"#4dd0c5" },
+    { key:"xp",  label:"XP",  sub:"X-ray",          c:"#6aa6ff" },
+    { key:"ct",  label:"CT",  sub:"Computed Tomography", c:"#b48cff" },
+    { key:"mri", label:"MRI", sub:"Magnetic Resonance",  c:"#ff8aa8" }
+  ],
+  procedures: {
+    ivr: [{
+      id:"ivr-dsa", title:"DSA (脳血管撮影)", desc:"大動脈分岐部 → 首撮影 → 3D血管",
+      sections:[
+        { id:"s1", heading:"準備", items:[
+          { id:"i1",  text:"手元の操作版が元に戻っていることを確認" },
+          { id:"i2",  text:"インジェクター取り付け" },
+          { id:"i3",  text:"操作卓の配置と位置を確認" },
+          { id:"i4",  text:"頭のポジションをすぐに確認", warn:"重要" },
+          { id:"i5",  text:"イオパミドール 300 / 100 を 150 入れる", note:"造影剤の準備" },
+          { id:"i6",  text:"取り付け時、声掛けてから造影剤を繋げる", warn:"声掛け" },
+          { id:"i7",  text:"造影剤をチューブで吸った後、繋げる際は根本から外す" },
+          { id:"i8",  text:"造影チューブ繋げて 1/3 くらい造影剤を流す" },
+          { id:"i9",  text:"ペアンで気泡除去" },
+          { id:"i10", text:"一気にダブル矢印で気泡除去" }
+        ]},
+        { id:"s2", heading:"撮影 1: フェモラール穿刺・分岐部", items:[
+          { id:"i11", text:"フェモラールから穿刺して造影、分岐部を写す" },
+          { id:"i12", text:"リファレンスに貼り付け", note:"ラテラルのリファレンスも忘れずに" },
+          { id:"i13", text:"大動脈分岐部にカテーテルを進める" },
+          { id:"i14", text:"難しい場合は透視 DSA で映す", note:"高平先生の場合" }
+        ]},
+        { id:"s3", heading:"撮影 2: 首", items:[
+          { id:"i15", text:"首の手押し造影" },
+          { id:"i16", text:"リファレンスを貼る" },
+          { id:"i17", text:"インジェクター繋げる" },
+          { id:"i18", text:"気泡除去を 2 回言ってくる → 2 回目でハンドルを勢いよく回す", warn:"タイミング" },
+          { id:"i19", text:"首撮影開始" },
+          { id:"i20", text:"インジェクター接続撮影時に A・B 管球の両方が繋がっているか確認", danger:"必須" },
+          { id:"i21", text:"撮影実施" },
+          { id:"i22", text:"最後にフットスイッチが戻っているか確認", danger:"安全" }
+        ]},
+        { id:"s4", heading:"3D 血管・後処理", items:[
+          { id:"i23", text:"過去画像、MRA の画像と比較" },
+          { id:"i24", text:"エクステンダー塗り、最後に拡大 1 でなめらか" },
+          { id:"i25", text:"SCA → PCA → IC → MCA → ACA の順に追っていく" },
+          { id:"i26", text:"脳実質に入っている、蛇行気密のものは基本的に動脈", note:"判別のポイント" },
+          { id:"i27", text:"MCA の付近に静脈あり", note:"見落とし注意" }
+        ]}
+      ]
+    }],
+    xp:[], ct:[], mri:[]
+  }
+};
+
+// ===================== STORAGE (localStorage) =====================
+const LS = {
+  getData()    { try { const v = localStorage.getItem("md_data"); return v ? JSON.parse(v) : null; } catch { return null; } },
+  setData(d)   { try { localStorage.setItem("md_data", JSON.stringify(d)); } catch(e){} },
+  getChecked() { try { const v = localStorage.getItem("md_checked"); return v ? JSON.parse(v) : {}; } catch { return {}; } },
+  setChecked(v){ try { localStorage.setItem("md_checked", JSON.stringify(v)); } catch(e){} },
+  getNotes()   { try { const v = localStorage.getItem("md_notes"); return v ? JSON.parse(v) : []; } catch { return []; } },
+  setNotes(v)  { try { localStorage.setItem("md_notes", JSON.stringify(v)); } catch(e){} },
+  getHint()    { try { return localStorage.getItem("md_hint") === "1"; } catch { return false; } },
+  setHint()    { try { localStorage.setItem("md_hint","1"); } catch(e){} }
+};
+
+// ===================== STATE =====================
+const S = {
+  data: null,
+  currentMod: null,
+  currentProc: null,
+  checked: {},
+  notes: [],
+  editMode: false,
+  notesFilter: "all"
+};
+
+function genId(p) { return p+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+const $ = id => document.getElementById(id);
+
+// ===================== VIEWS =====================
+function showView(name) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  $("v-"+name).classList.add("active");
+
+  document.querySelectorAll(".tab").forEach(t => {
+    const map = { home:"home", procs:"home", check:"checklist", notes:"notes" };
+    t.classList.toggle("active", t.dataset.t === (map[name]||"home"));
+  });
+
+  $("backBtn").style.display = (name==="home"||name==="notes") ? "none" : "";
+  $("editBtn").style.display = (name==="check" && !S.editMode) ? "" : "none";
+  $("doneBtn").style.display = (name==="check" && S.editMode) ? "" : "none";
+
+  if (name==="check") $("check-hint").style.display = LS.getHint() ? "none" : "";
+  if (name!=="check") S.editMode = false;
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  setTimeout(()=>t.classList.remove("on"), 1800);
+}
+
+function esc(s) {
+  return (s||"").replace(/[&<>"']/g, c=>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])
+  );
+}
+
+// ===================== SHEET =====================
+function openSheet(html) {
+  $("sheet-body").innerHTML = html;
+  $("scrim").classList.add("on");
+  requestAnimationFrame(()=>$("sheet").classList.add("on"));
+}
+function closeSheet() {
+  $("sheet").classList.remove("on");
+  $("scrim").classList.remove("on");
+  setTimeout(()=>{ $("sheet-body").innerHTML=""; }, 260);
+}
+$("scrim").onclick = closeSheet;
+
+// ===================== HINT =====================
+function closeHint() {
+  LS.setHint();
+  $("check-hint").style.display = "none";
+}
+
+// ===================== HOME =====================
+function renderHome() {
+  $("mod-grid").innerHTML = S.data.modalities.map(m=>{
+    const cnt = (S.data.procedures[m.key]||[]).length;
+    return `<button class="mod-card" style="--c:${m.c}" onclick="onMod('${m.key}')">
+      <div class="lbl">${esc(m.sub)}</div>
+      <div class="name">${esc(m.label)}</div>
+      <div class="cnt">${cnt} 件の手順</div>
+    </button>`;
+  }).join("");
+}
+
+function onMod(key) {
+  S.currentMod = key;
+  renderProcs();
+  showView("procs");
+}
+
+// ===================== PROCS =====================
+function renderProcs() {
+  const mod = S.data.modalities.find(m=>m.key===S.currentMod);
+  $("proc-lbl").textContent = `${mod.label} / 手順`;
+  const procs = S.data.procedures[S.currentMod]||[];
+  if (!procs.length) {
+    $("proc-list").innerHTML = `<div class="empty">手順がまだありません<br>右上の「+ 手順を追加」から作成</div>`;
+    return;
+  }
+  $("proc-list").innerHTML = "";
+  procs.forEach(p=>{
+    const btn = document.createElement("button");
+    btn.className = "proc-item";
+    btn.innerHTML = `
+      <div style="flex:1;min-width:0">
+        <div class="pt">${esc(p.title)}</div>
+        <div class="pd">${esc(p.desc||"")}</div>
+      </div>
+      <button class="proc-edit" data-act="edit">✎</button>
+      <span style="color:var(--mute);font-size:18px;">›</span>`;
+    btn.addEventListener("click", e=>{
+      if (e.target.closest("[data-act='edit']")) { e.stopPropagation(); openProcEditor(p); }
+      else onProc(p.id);
+    });
+    $("proc-list").appendChild(btn);
+  });
+}
+
+function onProc(id) {
+  S.currentProc = id;
+  S.editMode = false;
+  const mod = S.data.modalities.find(m=>m.key===S.currentMod);
+  const proc = getProc();
+  $("check-title").textContent = `${mod.label} / ${proc.title}`;
+  renderCheck();
+  showView("check");
+}
+
+// ===================== CHECKLIST =====================
+function getProc() {
+  return (S.data.procedures[S.currentMod]||[]).find(p=>p.id===S.currentProc);
+}
+
+function renderCheck() {
+  const proc = getProc();
+  if (!proc) return;
+  if (!S.checked[proc.id]) S.checked[proc.id] = [];
+  const doneSet = new Set(S.checked[proc.id]);
+  const body = $("check-body");
+  body.innerHTML = "";
+
+  proc.sections.forEach(sec=>{
+    const wrap = document.createElement("div");
+    wrap.style.marginBottom = "22px";
+
+    // セクションヘッダ
+    const sh = document.createElement("div");
+    sh.className = "sec-title";
+    sh.innerHTML = `<span>${esc(sec.heading)}</span>`;
+    if (S.editMode) {
+      const eb = document.createElement("div");
+      eb.className = "sec-edit-btns";
+      eb.innerHTML = `<button onclick="editSec('${sec.id}')">編集</button><button onclick="delSec('${sec.id}')">削除</button>`;
+      sh.appendChild(eb);
+    }
+    wrap.appendChild(sh);
+
+    // アイテム
+    sec.items.forEach(it=>{
+      const notes = S.notes.filter(n=>n.itemId===it.id);
+      const hasM = notes.some(n=>n.type==="mistake");
+      const hasI = notes.some(n=>n.type==="insight");
+
+      const ci = document.createElement("div");
+      ci.className = "ci" + (doneSet.has(it.id)?" done":"") + (hasM?" has-m":(hasI?" has-i":""));
+
+      // チェック行
+      const top = document.createElement("div");
+      top.className = "ci-top";
+      top.innerHTML = `
+        <div class="chk"></div>
+        <div class="ci-body">
+          <div class="ci-text">${esc(it.text)}${it.warn?`<span class="tag">${esc(it.warn)}</span>`:""}${it.danger?`<span class="tag d">${esc(it.danger)}</span>`:""}</div>
+          ${it.note?`<div class="ci-note">${esc(it.note)}</div>`:""}
+        </div>`;
+      top.addEventListener("click", ()=>{
+        if (S.editMode) return;
+        if (doneSet.has(it.id)) doneSet.delete(it.id);
+        else doneSet.add(it.id);
+        S.checked[proc.id] = [...doneSet];
+        LS.setChecked(S.checked);
+        renderCheck();
+      });
+      ci.appendChild(top);
+
+      // ボタン行
+      const btns = document.createElement("div");
+      btns.className = "ci-btns";
+      if (S.editMode) {
+        btns.innerHTML = `
+          <button class="ci-btn eb" data-a="ei">✎ 編集</button>
+          <button class="ci-btn eb" data-a="di" style="color:var(--danger);">× 削除</button>`;
+      } else {
+        btns.innerHTML = `
+          <button class="ci-btn mb" data-a="m">⚠ ミスを記録</button>
+          <button class="ci-btn ib" data-a="i">💡 気づきを記録</button>`;
+      }
+      btns.querySelectorAll("button").forEach(b=>{
+        b.addEventListener("click", e=>{
+          e.stopPropagation();
+          const a = b.dataset.a;
+          if (a==="m") openNoteSheet(proc, it, "mistake");
+          else if (a==="i") openNoteSheet(proc, it, "insight");
+          else if (a==="ei") openItemEditor(sec, it);
+          else if (a==="di") delItem(sec.id, it.id);
+        });
+      });
+      ci.appendChild(btns);
+
+      // バッジ
+      if (notes.length) {
+        const bd = document.createElement("div");
+        bd.className = "badges";
+        bd.innerHTML = notes.map(n=>`
+          <div class="badge ${n.type==="mistake"?"m":"i"}">
+            <span class="badge-icon">${n.type==="mistake"?"⚠":"💡"}</span>
+            <div class="badge-body">${esc(n.text)}<div class="badge-meta">${fmtDate(n.t)}</div></div>
+            <button class="badge-del" data-nid="${n.id}">×</button>
+          </div>`).join("");
+        bd.querySelectorAll(".badge-del").forEach(b=>{
+          b.addEventListener("click", e=>{ e.stopPropagation(); delNote(b.dataset.nid); });
+        });
+        ci.appendChild(bd);
+      }
+
+      wrap.appendChild(ci);
+    });
+
+    // 編集モード: 項目追加ボタン
+    if (S.editMode) {
+      const ab = document.createElement("button");
+      ab.className = "add-btn";
+      ab.textContent = "+ 項目を追加";
+      ab.onclick = ()=>openItemEditor(sec, null);
+      wrap.appendChild(ab);
+    }
+
+    body.appendChild(wrap);
+  });
+
+  // 編集モード: セクション追加
+  if (S.editMode) {
+    const ab = document.createElement("button");
+    ab.className = "add-btn";
+    ab.style.marginTop = "10px";
+    ab.textContent = "+ セクションを追加";
+    ab.onclick = ()=>openSecEditor(null);
+    body.appendChild(ab);
+  }
+
+  updateProg();
+}
+
+function updateProg() {
+  const proc = getProc();
+  if (!proc) return;
+  const total = proc.sections.reduce((n,s)=>n+s.items.length, 0);
+  const done = (S.checked[proc.id]||[]).length;
+  $("prog-txt").textContent = `${done} / ${total}`;
+  $("prog-fill").style.width = (total ? done/total*100 : 0)+"%";
+}
+
+function fmtDate(t) {
+  const d = new Date(t);
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+}
+
+// ===================== NOTE SHEET =====================
+function openNoteSheet(proc, item, initType) {
+  let typ = initType;
+
+  function render() {
+    const isM = typ==="mistake";
+    $("sheet-body").innerHTML = `
+      <h2>${isM?"⚠ ミスを記録":"💡 気づきを記録"}</h2>
+      <div class="type-banner ${isM?"m":"i"}">
+        <span>${isM?"⚠ ミス":"💡 気づき"}</span>
+        <button class="sw" id="sw-btn">${isM?"→ 気づきに変更":"→ ミスに変更"}</button>
+      </div>
+      <div class="ctx-txt"><b>対象:</b> ${esc(item.text)}</div>
+      <label class="form-lbl">${isM?"何を間違えた / 忘れた?":"何に気づいた?"}</label>
+      <textarea class="form-input" id="note-ta" placeholder="${isM?"例: フットスイッチ確認を忘れた":"例: カテ進めるとき抵抗があった"}"></textarea>
+      <button class="btn-main ${isM?"m":"i"}" id="note-save">保存する</button>
+      <button class="btn-sub" id="note-cancel">キャンセル</button>`;
+
+    $("sw-btn").onclick = e=>{
+      e.stopPropagation();
+      const cur = $("note-ta").value;
+      typ = typ==="mistake"?"insight":"mistake";
+      render();
+      $("note-ta").value = cur;
+      $("note-ta").focus();
+    };
+    $("note-cancel").onclick = closeSheet;
+    $("note-save").onclick = async ()=>{
+      const text = $("note-ta").value.trim();
+      if (!text) { toast("内容を入力してください"); $("note-ta").focus(); return; }
+      S.notes.push({
+        id: genId("n"), t: Date.now(), type: typ,
+        modKey: S.currentMod, procId: proc.id, procTitle: proc.title,
+        itemId: item.id, itemText: item.text, text
+      });
+      LS.setNotes(S.notes);
+      closeSheet();
+      renderCheck();
+      toast(typ==="mistake"?"⚠ ミスを記録しました":"💡 気づきを記録しました");
+    };
+    setTimeout(()=>{ const ta=$("note-ta"); if(ta) ta.focus(); }, 320);
+  }
+
+  $("scrim").classList.add("on");
+  $("sheet").classList.add("on");
+  render();
+}
+
+function delNote(id) {
+  S.notes = S.notes.filter(n=>n.id!==id);
+  LS.setNotes(S.notes);
+  renderCheck();
+  if ($("v-notes").classList.contains("active")) renderNotes();
+  toast("削除しました");
+}
+
+// ===================== EDITORS =====================
+function openProcEditor(proc) {
+  const isNew = !proc;
+  openSheet(`
+    <h2>${isNew?"手順を追加":"手順を編集"}</h2>
+    <label class="form-lbl">タイトル</label>
+    <input class="form-input" id="pe-title" type="text" placeholder="例: DSA (脳血管撮影)" value="${esc(proc?.title||"")}">
+    <label class="form-lbl">サブテキスト</label>
+    <input class="form-input" id="pe-desc" type="text" placeholder="例: 大動脈分岐部 → 首撮影" value="${esc(proc?.desc||"")}">
+    <button class="btn-main a" id="pe-save">${isNew?"作成":"保存"}</button>
+    ${!isNew?`<button class="btn-danger" id="pe-del">この手順を削除</button>`:""}
+    <button class="btn-sub" id="pe-cancel">キャンセル</button>
+  `);
+  $("pe-cancel").onclick = closeSheet;
+  $("pe-save").onclick = ()=>{
+    const title = $("pe-title").value.trim();
+    const desc  = $("pe-desc").value.trim();
+    if (!title) { toast("タイトルを入力してください"); return; }
+    if (isNew) {
+      S.data.procedures[S.currentMod].push({ id:genId("p"), title, desc, sections:[] });
+    } else { proc.title=title; proc.desc=desc; }
+    LS.setData(S.data);
+    closeSheet(); renderProcs(); renderHome();
+    toast(isNew?"追加しました":"保存しました");
+  };
+  if (!isNew) $("pe-del").onclick = ()=>{
+    if (!confirm(`「${proc.title}」を削除しますか?`)) return;
+    S.data.procedures[S.currentMod] = S.data.procedures[S.currentMod].filter(p=>p.id!==proc.id);
+    LS.setData(S.data);
+    closeSheet(); renderProcs(); renderHome();
+    toast("削除しました");
+  };
+}
+
+function openSecEditor(sec) {
+  const proc = getProc();
+  const isNew = !sec;
+  openSheet(`
+    <h2>${isNew?"セクションを追加":"セクションを編集"}</h2>
+    <label class="form-lbl">見出し</label>
+    <input class="form-input" id="se-head" type="text" placeholder="例: 準備 / 撮影 1" value="${esc(sec?.heading||"")}">
+    <button class="btn-main a" id="se-save">${isNew?"追加":"保存"}</button>
+    <button class="btn-sub" id="se-cancel">キャンセル</button>
+  `);
+  $("se-cancel").onclick = closeSheet;
+  $("se-save").onclick = ()=>{
+    const heading = $("se-head").value.trim();
+    if (!heading) { toast("見出しを入力してください"); return; }
+    if (isNew) proc.sections.push({ id:genId("s"), heading, items:[] });
+    else sec.heading = heading;
+    LS.setData(S.data);
+    closeSheet(); renderCheck();
+    toast(isNew?"追加しました":"保存しました");
+  };
+}
+
+function editSec(secId) {
+  const sec = getProc().sections.find(s=>s.id===secId);
+  openSecEditor(sec);
+}
+
+function delSec(secId) {
+  const proc = getProc();
+  const sec = proc.sections.find(s=>s.id===secId);
+  if (!confirm(`「${sec.heading}」を削除しますか?`)) return;
+  proc.sections = proc.sections.filter(s=>s.id!==secId);
+  LS.setData(S.data);
+  renderCheck();
+  toast("削除しました");
+}
+
+function openItemEditor(sec, item) {
+  const isNew = !item;
+  openSheet(`
+    <h2>${isNew?"項目を追加":"項目を編集"}</h2>
+    <label class="form-lbl">本文</label>
+    <textarea class="form-input" id="ie-text">${esc(item?.text||"")}</textarea>
+    <label class="form-lbl">補足メモ（任意）</label>
+    <textarea class="form-input" id="ie-note" style="min-height:60px;">${esc(item?.note||"")}</textarea>
+    <div class="form-row">
+      <div>
+        <label class="form-lbl">注意ラベル（黄）</label>
+        <input class="form-input" id="ie-warn" type="text" placeholder="例: 重要" value="${esc(item?.warn||"")}">
+      </div>
+      <div>
+        <label class="form-lbl">必須ラベル（赤）</label>
+        <input class="form-input" id="ie-danger" type="text" placeholder="例: 必須" value="${esc(item?.danger||"")}">
+      </div>
+    </div>
+    <button class="btn-main a" id="ie-save">${isNew?"追加":"保存"}</button>
+    <button class="btn-sub" id="ie-cancel">キャンセル</button>
+  `);
+  $("ie-cancel").onclick = closeSheet;
+  $("ie-save").onclick = ()=>{
+    const text   = $("ie-text").value.trim();
+    const note   = $("ie-note").value.trim();
+    const warn   = $("ie-warn").value.trim();
+    const danger = $("ie-danger").value.trim();
+    if (!text) { toast("本文を入力してください"); return; }
+    if (isNew) sec.items.push({ id:genId("i"), text, note, warn, danger });
+    else { item.text=text; item.note=note; item.warn=warn; item.danger=danger; }
+    LS.setData(S.data);
+    closeSheet(); renderCheck();
+    toast(isNew?"追加しました":"保存しました");
+  };
+}
+
+function delItem(secId, itemId) {
+  const proc = getProc();
+  const sec = proc.sections.find(s=>s.id===secId);
+  const item = sec.items.find(i=>i.id===itemId);
+  if (!confirm(`「${item.text}」を削除しますか?`)) return;
+  sec.items = sec.items.filter(i=>i.id!==itemId);
+  if (S.checked[proc.id]) {
+    S.checked[proc.id] = S.checked[proc.id].filter(id=>id!==itemId);
+    LS.setChecked(S.checked);
+  }
+  LS.setData(S.data);
+  renderCheck();
+  toast("削除しました");
+}
+
+// ===================== NOTES VIEW =====================
+function renderNotes() {
+  let notes = S.notes.slice().sort((a,b)=>b.t-a.t);
+  if (S.notesFilter!=="all") notes = notes.filter(n=>n.type===S.notesFilter);
+  if (!notes.length) {
+    $("notes-body").innerHTML = `<div class="empty">記録はまだありません<br>チェックリストの<br><b style="color:var(--mistake)">⚠ ミスを記録</b> / <b style="color:var(--insight)">💡 気づきを記録</b><br>ボタンから追加できます</div>`;
+    return;
+  }
+  $("notes-body").innerHTML = "";
+  notes.forEach(n=>{
+    const c = document.createElement("div");
+    c.className = `note-card ${n.type==="mistake"?"m":"i"}`;
+    c.innerHTML = `
+      <div class="nc-head">
+        <span class="nc-typ ${n.type==="mistake"?"m":"i"}">${n.type==="mistake"?"⚠ ミス":"💡 気づき"}</span>
+        <span>${fmtDate(n.t)}</span>
+      </div>
+      <div class="nc-ctx"><b>${esc(n.procTitle||"")}</b> · ${esc(n.itemText||"")}</div>
+      <div class="nc-text">${esc(n.text)}</div>
+      <div class="nc-actions">
+        <button onclick="onNoteGoto('${n.modKey}','${n.procId}')">該当項目へ</button>
+        <button onclick="delNote('${n.id}')">削除</button>
+      </div>`;
+    $("notes-body").appendChild(c);
+  });
+}
+
+function onNoteGoto(modKey, procId) {
+  S.currentMod = modKey;
+  onProc(procId);
+}
+
+// ===================== EVENTS =====================
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick = ()=>{
+    const tab = t.dataset.t;
+    if (tab==="home") showView("home");
+    else if (tab==="checklist") {
+      if (!S.currentProc) {
+        const m = S.data.modalities.find(m=>(S.data.procedures[m.key]||[]).length>0);
+        if (m) onMod(m.key); else onMod(S.data.modalities[0].key);
+      } else showView("check");
+    } else if (tab==="notes") { renderNotes(); showView("notes"); }
+  };
+});
+
+$("backBtn").onclick = ()=>{
+  const a = document.querySelector(".view.active");
+  if (!a) return;
+  if (a.id==="v-check") { if(S.editMode){ S.editMode=false; renderCheck(); showView("check"); return; } renderProcs(); showView("procs"); }
+  else if (a.id==="v-procs") showView("home");
+  else showView("home");
+};
+
+$("editBtn").onclick = ()=>{ S.editMode=true; renderCheck(); showView("check"); };
+$("doneBtn").onclick = ()=>{ S.editMode=false; renderCheck(); showView("check"); };
+
+$("resetBtn").onclick = ()=>{
+  if (!S.currentProc) return;
+  if (!confirm("チェックをすべてリセットしますか?")) return;
+  S.checked[S.currentProc] = [];
+  LS.setChecked(S.checked);
+  renderCheck();
+  toast("リセットしました");
+};
+
+$("addProcBtn").onclick = ()=> openProcEditor(null);
+
+document.querySelectorAll(".nf-btn").forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll(".nf-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    S.notesFilter = b.dataset.f;
+    renderNotes();
+  };
+});
+
+// ===================== INIT =====================
+(function init() {
+  const saved = LS.getData();
+  S.data = saved || JSON.parse(JSON.stringify(DEFAULT));
+  S.checked = LS.getChecked();
+  S.notes   = LS.getNotes();
+  renderHome();
+})();
+</script>
+</body>
+</html>
