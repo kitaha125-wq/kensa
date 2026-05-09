@@ -9,30 +9,17 @@
 <title>検査補助</title>
 <style>
   :root {
-    --bg: #0a0e14;
-    --bg1: #121821;
-    --bg2: #1a2230;
-    --line: #243042;
-    --text: #e8edf5;
-    --dim: #8a96a8;
-    --mute: #5a6678;
-    --accent: #4dd0c5;
-    --warn: #f5a524;
-    --danger: #f56565;
-    --insight: #ffb454;
-    --mistake: #ff6b8a;
-    --r: 14px;
+    --bg: #0a0e14; --bg1: #121821; --bg2: #1a2230;
+    --line: #243042; --text: #e8edf5; --dim: #8a96a8; --mute: #5a6678;
+    --accent: #4dd0c5; --warn: #f5a524; --danger: #f56565;
+    --insight: #ffb454; --mistake: #ff6b8a; --r: 14px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
   html { height: 100%; }
   body {
-    min-height: 100vh;
-    background: var(--bg);
-    color: var(--text);
+    min-height: 100vh; background: var(--bg); color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-    font-size: 15px;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
+    font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased;
     padding-bottom: calc(env(safe-area-inset-bottom) + 72px);
     padding-top: env(safe-area-inset-top);
   }
@@ -42,11 +29,8 @@
   /* Topbar */
   .topbar {
     position: sticky; top: 0; z-index: 20;
-    background: rgba(10,14,20,.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--line);
-    padding: 13px 16px 11px;
+    background: rgba(10,14,20,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line); padding: 13px 16px 11px;
     display: flex; align-items: center; justify-content: space-between;
   }
   .brand { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
@@ -61,20 +45,15 @@
   .view.active { display: block; }
   @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-  /* Bottom tabbar */
+  /* Tabbar */
   .tabbar {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    background: rgba(10,14,20,.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: rgba(10,14,20,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid var(--line);
     padding: 4px 0 calc(4px + env(safe-area-inset-bottom));
   }
-  .tab {
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    padding: 8px 0; color: var(--mute); font-size: 10px; letter-spacing: .04em;
-  }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 0; color: var(--mute); font-size: 10px; letter-spacing: .04em; }
   .tab.active { color: var(--accent); }
   .tab svg { width: 22px; height: 22px; }
 
@@ -82,14 +61,10 @@
   .mod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
   .mod-card {
     background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r);
-    padding: 16px 14px; position: relative; overflow: hidden; text-align: left;
-    transition: transform .12s;
+    padding: 16px 14px; position: relative; overflow: hidden; text-align: left; transition: transform .12s;
   }
   .mod-card:active { transform: scale(.97); }
-  .mod-card::before {
-    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-    background: var(--c, var(--accent));
-  }
+  .mod-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c, var(--accent)); }
   .mod-card .lbl { font-size: 10px; color: var(--mute); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 4px; }
   .mod-card .name { font-size: 24px; font-weight: 800; }
   .mod-card .cnt { font-size: 12px; color: var(--dim); margin-top: 12px; }
@@ -98,14 +73,11 @@
   .proc-item {
     background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r);
     padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center;
-    justify-content: space-between; gap: 8px; text-align: left; width: 100%;
-    transition: transform .12s;
+    justify-content: space-between; gap: 8px; text-align: left; width: 100%; transition: transform .12s;
   }
   .proc-item:active { transform: scale(.98); }
   .proc-item .pt { font-size: 15px; font-weight: 600; }
   .proc-item .pd { font-size: 12px; color: var(--dim); margin-top: 2px; }
-  .proc-edit { color: var(--mute); padding: 8px; border-radius: 8px; font-size: 16px; }
-  .proc-edit:active { background: var(--bg2); }
 
   /* Checklist */
   .prog-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -118,42 +90,22 @@
   .sec-edit-btns button:active { background: var(--bg2); }
 
   /* Check item */
-  .ci {
-    background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r);
-    margin-bottom: 8px; overflow: hidden; transition: border-color .15s;
-  }
+  .ci { background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r); margin-bottom: 8px; overflow: hidden; transition: border-color .15s; }
   .ci.done { border-color: var(--accent); background: rgba(77,208,197,.06); }
   .ci.has-m { border-color: var(--mistake); background: rgba(255,107,138,.06); }
   .ci.has-i { border-color: var(--insight); background: rgba(255,180,84,.06); }
-
-  /* チェック行 */
-  .ci-top { display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px 10px; }
-  .chk {
-    flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px;
-    border: 1.5px solid var(--line); background: var(--bg); margin-top: 1px;
-    display: grid; place-items: center; transition: all .15s; cursor: pointer;
-  }
+  .ci-top { display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px 10px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+  .chk { flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px; border: 1.5px solid var(--line); background: var(--bg); margin-top: 1px; display: grid; place-items: center; transition: all .15s; }
   .done .chk { background: var(--accent); border-color: var(--accent); }
-  .done .chk::after {
-    content: ""; width: 6px; height: 11px;
-    border-right: 2px solid var(--bg); border-bottom: 2px solid var(--bg);
-    transform: rotate(45deg) translate(-1px, -1px);
-  }
-  .ci-body { flex: 1; min-width: 0; cursor: pointer; }
+  .done .chk::after { content: ""; width: 6px; height: 11px; border-right: 2px solid var(--bg); border-bottom: 2px solid var(--bg); transform: rotate(45deg) translate(-1px,-1px); }
+  .ci-body { flex: 1; min-width: 0; }
   .ci-text { font-size: 14px; line-height: 1.5; }
   .done .ci-text { color: var(--dim); text-decoration: line-through; text-decoration-color: var(--mute); }
   .ci-note { font-size: 12px; color: var(--dim); margin-top: 5px; border-left: 2px solid var(--line); padding: 6px 8px; border-radius: 0 6px 6px 0; }
   .tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: 2px; background: var(--warn); color: #1a1a1a; }
   .tag.d { background: var(--danger); color: #fff; }
-
-  /* ミス/気づきボタン行 */
   .ci-btns { display: flex; gap: 6px; padding: 8px 12px 12px; border-top: 1px solid rgba(255,255,255,.05); }
-  .ci-btn {
-    flex: 1; padding: 9px 6px; border-radius: 8px; font-size: 12px; font-weight: 600;
-    border: 1px solid var(--line); background: var(--bg);
-    display: flex; align-items: center; justify-content: center; gap: 4px;
-    transition: all .12s; line-height: 1;
-  }
+  .ci-btn { flex: 1; padding: 9px 6px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid var(--line); background: var(--bg); display: flex; align-items: center; justify-content: center; gap: 4px; transition: all .12s; line-height: 1; }
   .ci-btn:active { transform: scale(.96); }
   .ci-btn.mb { color: var(--mistake); border-color: rgba(255,107,138,.3); }
   .ci-btn.mb:active { background: rgba(255,107,138,.12); }
@@ -161,25 +113,17 @@
   .ci-btn.ib:active { background: rgba(255,180,84,.12); }
   .ci-btn.eb { color: var(--mute); flex: 0 0 44px; }
   .ci-btn.eb:active { background: var(--bg2); }
-
-  /* バッジ */
   .badges { padding: 0 14px 12px; display: grid; gap: 6px; }
-  .badge {
-    display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px;
-    border-radius: 8px; font-size: 13px; line-height: 1.45;
-  }
+  .badge { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; border-radius: 8px; font-size: 13px; line-height: 1.45; }
   .badge.m { background: rgba(255,107,138,.12); border-left: 3px solid var(--mistake); }
   .badge.i { background: rgba(255,180,84,.12); border-left: 3px solid var(--insight); }
-  .badge-icon { flex-shrink: 0; }
   .badge-body { flex: 1; word-break: break-word; }
   .badge-meta { font-size: 10px; color: var(--mute); margin-top: 2px; }
   .badge-del { color: var(--mute); font-size: 18px; padding: 0 4px; align-self: center; }
-
-  /* 追加ボタン */
   .add-btn { width: 100%; border: 1.5px dashed var(--line); border-radius: var(--r); padding: 11px; color: var(--mute); font-size: 13px; margin-top: 8px; }
   .add-btn:active { border-color: var(--accent); color: var(--accent); background: rgba(77,208,197,.08); }
 
-  /* Notes view */
+  /* Notes */
   .notes-filter { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 2px; }
   .nf-btn { flex-shrink: 0; padding: 6px 12px; border-radius: 99px; font-size: 12px; border: 1px solid var(--line); color: var(--dim); white-space: nowrap; }
   .nf-btn.active { background: var(--accent); color: #08120f; font-weight: 700; border-color: var(--accent); }
@@ -187,9 +131,8 @@
   .note-card.m { border-left: 3px solid var(--mistake); }
   .note-card.i { border-left: 3px solid var(--insight); }
   .nc-head { display: flex; justify-content: space-between; font-size: 11px; color: var(--mute); margin-bottom: 6px; }
-  .nc-typ { font-weight: 700; }
-  .nc-typ.m { color: var(--mistake); }
-  .nc-typ.i { color: var(--insight); }
+  .nc-typ.m { color: var(--mistake); font-weight: 700; }
+  .nc-typ.i { color: var(--insight); font-weight: 700; }
   .nc-ctx { font-size: 12px; color: var(--dim); margin-bottom: 6px; }
   .nc-ctx b { color: var(--text); }
   .nc-text { font-size: 14px; word-break: break-word; }
@@ -197,7 +140,19 @@
   .nc-actions button { font-size: 11px; color: var(--mute); padding: 4px 8px; border-radius: 6px; }
   .nc-actions button:active { background: var(--bg2); }
 
-  /* Bottom sheet */
+  /* 参考タブ */
+  .ref-card {
+    background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--text); transition: transform .12s;
+  }
+  .ref-card:active { transform: scale(.98); }
+  .ref-card .ri { font-size: 22px; flex-shrink: 0; }
+  .ref-card .rb { flex: 1; min-width: 0; }
+  .ref-card .rt { font-weight: 600; font-size: 14px; }
+  .ref-card .rd { font-size: 12px; color: var(--dim); margin-top: 2px; }
+
+  /* Sheet */
   .scrim { display: none; position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.55); }
   .scrim.on { display: block; }
   .sheet {
@@ -210,8 +165,9 @@
   }
   .sheet.on { transform: translateY(0); }
   .grip { width: 36px; height: 4px; background: var(--line); border-radius: 99px; margin: 4px auto 16px; }
-  .sheet h2 { font-size: 18px; margin-bottom: 6px; }
-  .sheet .ctx-txt { font-size: 12px; color: var(--dim); background: var(--bg2); border-radius: 8px; padding: 8px 10px; margin-bottom: 14px; border-left: 2px solid var(--line); word-break: break-word; }
+  .sheet h2 { font-size: 18px; margin-bottom: 8px; }
+  .ctx-txt { font-size: 12px; color: var(--dim); background: var(--bg2); border-radius: 8px; padding: 8px 10px; margin-bottom: 14px; border-left: 2px solid var(--line); word-break: break-word; }
+  .ctx-txt b { color: var(--text); }
   .form-lbl { font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: .12em; font-weight: 600; margin-bottom: 6px; display: block; }
   .form-input { width: 100%; background: var(--bg2); border: 1px solid var(--line); color: var(--text); border-radius: 10px; padding: 12px 14px; font: inherit; margin-bottom: 14px; }
   .form-input:focus { outline: none; border-color: var(--accent); }
@@ -221,41 +177,79 @@
   .type-banner.i { background: rgba(255,180,84,.12); color: var(--insight); border: 1px solid rgba(255,180,84,.3); }
   .type-banner .sw { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--dim); padding: 4px 10px; border: 1px solid var(--line); border-radius: 99px; }
   .type-banner .sw:active { background: var(--bg2); }
-  .btn-main { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn-main { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; transition: opacity .1s; }
+  .btn-main:active { opacity: .9; }
   .btn-main.a { background: var(--accent); color: #08120f; }
   .btn-main.m { background: var(--mistake); color: #fff; }
   .btn-main.i { background: var(--insight); color: #1a1a1a; }
-  .btn-main:active { opacity: .9; transform: scale(.99); }
   .btn-sub { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--line); color: var(--dim); font-size: 13px; margin-top: 8px; }
   .btn-sub:active { background: var(--bg2); }
   .btn-danger { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(245,101,101,.3); color: var(--danger); font-size: 13px; margin-top: 8px; }
   .btn-danger:active { background: rgba(245,101,101,.1); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-  /* Toast */
-  .toast {
-    position: fixed; left: 50%; bottom: 88px; z-index: 100;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--text); color: var(--bg);
-    padding: 10px 18px; border-radius: 99px; font-size: 13px; font-weight: 600;
-    opacity: 0; pointer-events: none; transition: all .25s;
-    white-space: nowrap;
-  }
-  .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  .empty { text-align: center; color: var(--mute); padding: 40px 16px; font-size: 13px; line-height: 1.8; }
+  /* Misc */
+  .shdr { font-size: 11px; font-weight: 600; letter-spacing: .14em; color: var(--mute); text-transform: uppercase; margin: 4px 2px 10px; display: flex; align-items: center; justify-content: space-between; }
+  .shdr .al { color: var(--accent); font-size: 12px; text-transform: none; font-weight: 600; padding: 4px 8px; border-radius: 6px; letter-spacing: 0; }
+  .shdr .al:active { background: rgba(77,208,197,.1); }
   .hint { display: flex; gap: 10px; align-items: flex-start; background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; margin-bottom: 16px; font-size: 12.5px; color: var(--dim); }
   .hint b { color: var(--text); }
   .hint .hc { color: var(--accent); font-weight: 700; flex-shrink: 0; }
   .hint .hx { color: var(--mute); padding: 0 4px; flex-shrink: 0; }
-  .shdr { font-size: 11px; font-weight: 600; letter-spacing: .14em; color: var(--mute); text-transform: uppercase; margin: 4px 2px 10px; display: flex; align-items: center; justify-content: space-between; }
-  .shdr .al { color: var(--accent); font-size: 12px; text-transform: none; font-weight: 600; padding: 4px 8px; border-radius: 6px; letter-spacing: 0; }
-  .shdr .al:active { background: rgba(77,208,197,.1); }
+  .empty { text-align: center; color: var(--mute); padding: 40px 16px; font-size: 13px; line-height: 1.8; }
+  .toast { position: fixed; left: 50%; bottom: 88px; z-index: 100; transform: translateX(-50%) translateY(20px); background: var(--text); color: var(--bg); padding: 10px 18px; border-radius: 99px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: all .25s; white-space: nowrap; }
+  .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .search-hl { background: rgba(77,208,197,.25); color: var(--accent); border-radius: 3px; padding: 0 1px; }
+  .pdf-add-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .pdf-add-btn { padding: 12px; border-radius: var(--r); font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; }
+  /* Quiz */
+  .quiz-card { background:var(--bg1); border:1px solid var(--line); border-radius:var(--r); padding:16px; margin-bottom:12px; cursor:pointer; transition:all .15s; }
+  .quiz-card:active { transform:scale(.98); }
+  .quiz-card .qc-title { font-size:15px; font-weight:700; margin-bottom:6px; }
+  .quiz-card .qc-meta { font-size:12px; color:var(--dim); display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .qc-badge { padding:2px 8px; border-radius:99px; font-size:10px; font-weight:700; }
+  .q-prog-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .q-prog-bar { flex:1; height:4px; background:var(--line); border-radius:99px; overflow:hidden; }
+  .q-prog-fill { height:100%; background:var(--accent); transition:width .3s; }
+  .q-num { font-size:12px; color:var(--dim); white-space:nowrap; }
+  .q-type-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:99px; }
+  .q-type-order { background:rgba(77,208,197,.2); color:var(--accent); }
+  .q-type-truefalse { background:rgba(181,140,255,.2); color:#b48cff; }
+  .q-type-fill { background:rgba(255,180,84,.2); color:var(--insight); }
+  .q-type-choice { background:rgba(106,166,255,.2); color:#6aa6ff; }
+  .q-question { font-size:16px; font-weight:600; line-height:1.55; margin-bottom:16px; }
+  .sort-list { display:grid; gap:8px; margin-bottom:16px; }
+  .sort-item { background:var(--bg1); border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:flex; align-items:center; gap:10px; cursor:grab; transition:all .15s; user-select:none; -webkit-user-select:none; }
+  .sort-item.drag-over { border-color:var(--accent); background:rgba(77,208,197,.1); transform:scale(1.01); }
+  .sort-handle { color:var(--mute); font-size:18px; flex-shrink:0; }
+  .sort-num { width:24px; height:24px; border-radius:50%; background:var(--bg2); color:var(--dim); font-size:12px; font-weight:700; display:grid; place-items:center; flex-shrink:0; }
+  .sort-text { flex:1; font-size:14px; line-height:1.45; }
+  .choice-list { display:grid; gap:8px; margin-bottom:16px; }
+  .choice-btn { background:var(--bg1); border:1.5px solid var(--line); border-radius:10px; padding:13px 16px; text-align:left; font-size:14px; line-height:1.45; transition:all .15s; width:100%; }
+  .choice-btn:active { transform:scale(.98); }
+  .choice-btn.selected { border-color:var(--accent); background:rgba(77,208,197,.1); color:var(--accent); }
+  .choice-btn.correct { border-color:#5ed29a; background:rgba(94,210,154,.12); color:#5ed29a; }
+  .choice-btn.wrong { border-color:var(--danger); background:rgba(245,101,101,.1); color:var(--danger); }
+  .fill-input { width:100%; background:var(--bg2); border:1.5px solid var(--line); color:var(--text); border-radius:10px; padding:13px 14px; font:inherit; font-size:15px; margin-bottom:14px; }
+  .fill-input:focus { outline:none; border-color:var(--accent); }
+  .fill-input.correct { border-color:#5ed29a; }
+  .fill-input.wrong { border-color:var(--danger); }
+  .q-feedback { padding:12px 14px; border-radius:10px; margin-bottom:14px; font-size:14px; line-height:1.6; }
+  .q-feedback.ok { background:rgba(94,210,154,.12); border-left:3px solid #5ed29a; }
+  .q-feedback.ng { background:rgba(245,101,101,.1); border-left:3px solid var(--danger); }
+  .q-feedback .ans { font-weight:700; margin-top:4px; }
+  .q-feedback .exp { color:var(--dim); font-size:13px; margin-top:4px; }
+  .result-score { text-align:center; padding:24px 0 16px; }
+  .score-num { font-size:64px; font-weight:800; line-height:1; }
+  .score-max { font-size:20px; color:var(--dim); }
+  .score-msg { font-size:16px; margin-top:10px; font-weight:600; }
+  .result-item { background:var(--bg1); border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; }
+  .history-card { background:var(--bg1); border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  .history-score { font-size:22px; font-weight:800; }
 </style>
 </head>
 <body>
 
-<!-- Topbar -->
 <header class="topbar">
   <div class="brand"><span class="dot"></span>検査補助</div>
   <div class="topbar-right">
@@ -265,13 +259,16 @@
   </div>
 </header>
 
-<!-- Views -->
+<!-- ホーム -->
 <div class="view active" id="v-home">
   <p style="color:var(--dim);font-size:13px;margin:4px 2px 16px;">今日の検査を選択してください</p>
   <div class="shdr">モダリティ</div>
   <div class="mod-grid" id="mod-grid"></div>
+  <!-- 目標管理 -->
+  <div id="goal-wrap"></div>
 </div>
 
+<!-- 手順一覧 -->
 <div class="view" id="v-procs">
   <div class="shdr">
     <span id="proc-lbl">手順</span>
@@ -280,6 +277,7 @@
   <div id="proc-list"></div>
 </div>
 
+<!-- チェックリスト -->
 <div class="view" id="v-check">
   <div class="prog-row">
     <span class="prog-txt" id="prog-txt">0 / 0</span>
@@ -289,15 +287,23 @@
   <h2 id="check-title" style="font-size:20px;margin-bottom:14px;"></h2>
   <div class="hint" id="check-hint">
     <span class="hc">!</span>
-    <span style="flex:1;">項目をタップで<b>チェック</b>。各項目の <b style="color:var(--mistake)">⚠ ミス</b> / <b style="color:var(--insight)">💡 気づき</b> ボタンで記録できます。</span>
+    <span style="flex:1;">項目をタップで<b>チェック</b>。<b style="color:var(--mistake)">⚠ ミス</b> / <b style="color:var(--insight)">💡 気づき</b> ボタンで記録できます。</span>
     <button class="hx" onclick="closeHint()">×</button>
   </div>
   <div id="check-body"></div>
 </div>
 
+<!-- 気づき一覧 -->
 <div class="view" id="v-notes">
   <h2 style="font-size:20px;margin-bottom:4px;">気づき & ミス</h2>
-  <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">すべての記録を横断表示</p>
+  <p style="color:var(--dim);font-size:13px;margin-bottom:12px;">すべての記録を横断表示</p>
+
+  <!-- 直接追加ボタン -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+    <button onclick="openDirectNoteSheet('mistake')" style="padding:11px;border-radius:10px;background:rgba(255,107,138,.12);border:1px solid rgba(255,107,138,.3);color:var(--mistake);font-size:13px;font-weight:700;">⚠ ミスを追加</button>
+    <button onclick="openDirectNoteSheet('insight')" style="padding:11px;border-radius:10px;background:rgba(255,180,84,.12);border:1px solid rgba(255,180,84,.3);color:var(--insight);font-size:13px;font-weight:700;">💡 気づきを追加</button>
+  </div>
+
   <div class="notes-filter">
     <button class="nf-btn active" data-f="all">すべて</button>
     <button class="nf-btn" data-f="mistake">⚠ ミス</button>
@@ -306,31 +312,125 @@
   <div id="notes-body"></div>
 </div>
 
+<!-- 参考タブ -->
+<div class="view" id="v-links">
+  <h2 style="font-size:20px;margin-bottom:12px;">参考・検索</h2>
+  <div class="notes-filter" id="ref-tabs">
+    <button class="nf-btn active" data-rt="proc">🔍 手順検索</button>
+    <button class="nf-btn" data-rt="pdf">📄 PDF</button>
+    <button class="nf-btn" data-rt="memo">📝 メモ</button>
+    <button class="nf-btn" data-rt="web">🌐 Web</button>
+    <button class="nf-btn" data-rt="export">📤 出力</button>
+  </div>
+
+  <!-- 手順検索 -->
+  <div id="rt-proc">
+    <input id="proc-search-input" type="text" placeholder="例: 気泡除去 / リファレンス / フットスイッチ"
+      style="width:100%;background:var(--bg1);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 14px;font:inherit;font-size:14px;margin-bottom:14px;"
+      oninput="searchProcs()">
+    <div id="proc-search-results">
+      <div class="empty" style="padding:30px 0;">キーワードを入力すると<br>手順を横断検索できます</div>
+    </div>
+  </div>
+
+  <!-- PDF -->
+  <div id="rt-pdf" style="display:none;">
+    <div class="pdf-add-row">
+      <label class="pdf-add-btn" style="border:1.5px dashed var(--line);color:var(--mute);">
+        📄 端末から追加
+        <input type="file" accept="application/pdf" id="pdf-input" style="display:none;" onchange="addPDF(this)">
+      </label>
+      <button class="pdf-add-btn" onclick="openGDriveSheet()" style="border:1.5px dashed #6aa6ff;color:#6aa6ff;">
+        ☁️ Google Drive
+      </button>
+    </div>
+    <div id="pdf-list"></div>
+  </div>
+
+  <!-- メモ -->
+  <div id="rt-memo" style="display:none;">
+    <input id="memo-search" type="text" placeholder="メモを検索..."
+      style="width:100%;background:var(--bg1);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 14px;font:inherit;font-size:14px;margin-bottom:12px;"
+      oninput="renderMemos()">
+    <button class="add-btn" style="margin-bottom:14px;" onclick="openMemoEditor(null)">+ メモを追加（OCRテキスト貼り付け可）</button>
+    <div id="memo-list"></div>
+  </div>
+
+  <!-- Web検索 -->
+  <div id="rt-web" style="display:none;">
+    <input id="web-search-input" type="text" placeholder="例: IVR 造影剤 副作用"
+      style="width:100%;background:var(--bg1);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 14px;font:inherit;font-size:14px;margin-bottom:8px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;">
+      <button onclick="doSearch('pubmed')" style="padding:10px;border-radius:8px;background:var(--bg1);border:1px solid var(--line);color:var(--text);font-size:13px;font-weight:600;">🔬 PubMed</button>
+      <button onclick="doSearch('scholar')" style="padding:10px;border-radius:8px;background:var(--bg1);border:1px solid var(--line);color:var(--text);font-size:13px;font-weight:600;">🎓 Google Scholar</button>
+    </div>
+    <div class="shdr">よく使うサイト</div>
+    <div id="link-list"></div>
+  </div>
+
+  <!-- データ出力 -->
+  <div id="rt-export" style="display:none;">
+    <p style="color:var(--dim);font-size:13px;margin-bottom:16px;">手順データをテキストまたはJSONで出力できます。バックアップや別端末への移行に使えます。</p>
+    <div style="display:grid;gap:10px;">
+      <button class="btn-main a" onclick="exportText()">📋 テキストで出力（コピー用）</button>
+      <button class="btn-main a" style="background:var(--bg2);color:var(--accent);border:1px solid var(--accent);" onclick="exportJSON()">💾 JSONで出力（バックアップ用）</button>
+      <button class="btn-main a" style="background:var(--bg2);color:var(--insight);border:1px solid var(--insight);" onclick="openImportSheet()">📥 JSONをインポート</button>
+    </div>
+    <div id="export-preview" style="margin-top:20px;"></div>
+  </div>
+</div>
+
+<!-- テストビュー -->
+<div class="view" id="v-quiz">
+  <h2 style="font-size:20px;margin-bottom:4px;">理解度テスト</h2>
+  <p style="color:var(--dim);font-size:13px;margin-bottom:16px;">手順の順序・知識を確認しましょう</p>
+  <div id="quiz-home">
+    <div class="shdr">テストを選択</div>
+    <div id="quiz-select-list"></div>
+  </div>
+  <div id="quiz-body" style="display:none;"></div>
+  <div id="quiz-result" style="display:none;"></div>
+</div>
+
+<!-- 目標振り返りビュー -->
+<div class="view" id="v-goals">
+  <h2 style="font-size:20px;margin-bottom:4px;">目標の振り返り</h2>
+  <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">達成チェックの履歴</p>
+  <div id="goal-log-body"></div>
+</div>
+
 <!-- Tabbar -->
-<nav class="tabbar">
+<nav class="tabbar" style="grid-template-columns:repeat(5,1fr);">
   <button class="tab active" data-t="home">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
-    ホーム
+    <span>ホーム</span>
   </button>
   <button class="tab" data-t="checklist">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
-    チェック
+    <span>チェック</span>
   </button>
   <button class="tab" data-t="notes">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><circle cx="12" cy="17" r=".5" fill="currentColor"/><path d="M10.3 3.86l-8.18 14a2 2 0 001.71 3h16.34a2 2 0 001.71-3l-8.18-14a2 2 0 00-3.4 0z"/></svg>
-    気づき
+    <span>気づき</span>
+  </button>
+  <button class="tab" data-t="quiz">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+    <span>テスト</span>
+  </button>
+  <button class="tab" data-t="links">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+    <span>参考</span>
   </button>
 </nav>
 
-<!-- Sheet -->
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet"><div class="grip"></div><div id="sheet-body"></div></div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ===================== DATA =====================
+// ============================================================
+// DEFAULT DATA
+// ============================================================
 const DEFAULT = {
   modalities: [
     { key:"ivr", label:"IVR", sub:"Interventional", c:"#4dd0c5" },
@@ -383,19 +483,51 @@ const DEFAULT = {
   }
 };
 
-// ===================== STORAGE (localStorage) =====================
-const LS = {
-  getData()    { try { const v = localStorage.getItem("md_data"); return v ? JSON.parse(v) : null; } catch { return null; } },
-  setData(d)   { try { localStorage.setItem("md_data", JSON.stringify(d)); } catch(e){} },
-  getChecked() { try { const v = localStorage.getItem("md_checked"); return v ? JSON.parse(v) : {}; } catch { return {}; } },
-  setChecked(v){ try { localStorage.setItem("md_checked", JSON.stringify(v)); } catch(e){} },
-  getNotes()   { try { const v = localStorage.getItem("md_notes"); return v ? JSON.parse(v) : []; } catch { return []; } },
-  setNotes(v)  { try { localStorage.setItem("md_notes", JSON.stringify(v)); } catch(e){} },
-  getHint()    { try { return localStorage.getItem("md_hint") === "1"; } catch { return false; } },
-  setHint()    { try { localStorage.setItem("md_hint","1"); } catch(e){} }
-};
+// ============================================================
+// STORAGE (IndexedDB)
+// ============================================================
+const DB = (() => {
+  const NAME = "kensa_db_v2", VER = 1, STORE = "kv";
+  let _db = null;
 
-// ===================== STATE =====================
+  function open() {
+    if (_db) return Promise.resolve(_db);
+    return new Promise((res, rej) => {
+      const req = indexedDB.open(NAME, VER);
+      req.onupgradeneeded = e => e.target.result.createObjectStore(STORE, { keyPath:"k" });
+      req.onsuccess = e => { _db = e.target.result; res(_db); };
+      req.onerror = e => rej(e);
+    });
+  }
+
+  async function get(key, def) {
+    try {
+      const db = await open();
+      return await new Promise((res, rej) => {
+        const req = db.transaction(STORE,"readonly").objectStore(STORE).get(key);
+        req.onsuccess = e => res(e.target.result ? e.target.result.v : def);
+        req.onerror = e => rej(e);
+      });
+    } catch { return def; }
+  }
+
+  async function set(key, val) {
+    try {
+      const db = await open();
+      await new Promise((res, rej) => {
+        const tx = db.transaction(STORE,"readwrite");
+        tx.objectStore(STORE).put({ k:key, v:val });
+        tx.oncomplete = res; tx.onerror = rej;
+      });
+    } catch(e) { console.warn("DB set error", e); }
+  }
+
+  return { get, set };
+})();
+
+// ============================================================
+// STATE
+// ============================================================
 const S = {
   data: null,
   currentMod: null,
@@ -403,66 +535,64 @@ const S = {
   checked: {},
   notes: [],
   editMode: false,
-  notesFilter: "all"
+  notesFilter: "all",
+  refTab: "proc"
 };
 
 function genId(p) { return p+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
 const $ = id => document.getElementById(id);
 
-// ===================== VIEWS =====================
+// ============================================================
+// VIEW CONTROL
+// ============================================================
 function showView(name) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
   $("v-"+name).classList.add("active");
-
-  document.querySelectorAll(".tab").forEach(t => {
-    const map = { home:"home", procs:"home", check:"checklist", notes:"notes" };
-    t.classList.toggle("active", t.dataset.t === (map[name]||"home"));
-  });
-
-  $("backBtn").style.display = (name==="home"||name==="notes") ? "none" : "";
+  const map = { home:"home", procs:"home", check:"checklist", notes:"notes", quiz:"quiz", links:"links", goals:"home" };
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.t===(map[name]||"home")));
+  $("backBtn").style.display = (name==="home"||name==="notes"||name==="links") ? "none" : "";
   $("editBtn").style.display = (name==="check" && !S.editMode) ? "" : "none";
   $("doneBtn").style.display = (name==="check" && S.editMode) ? "" : "none";
-
-  if (name==="check") $("check-hint").style.display = LS.getHint() ? "none" : "";
+  if (name==="check") $("check-hint").style.display = localStorage.getItem("md_hint")==="1" ? "none" : "";
   if (name!=="check") S.editMode = false;
-  window.scrollTo({top:0,behavior:"instant"});
+  window.scrollTo({ top:0, behavior:"instant" });
 }
 
 function toast(msg) {
-  const t = $("toast");
-  t.textContent = msg;
-  t.classList.add("on");
-  setTimeout(()=>t.classList.remove("on"), 1800);
+  const t = $("toast"); t.textContent = msg; t.classList.add("on");
+  setTimeout(() => t.classList.remove("on"), 1800);
 }
 
 function esc(s) {
-  return (s||"").replace(/[&<>"']/g, c=>
-    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])
-  );
+  return (s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
-// ===================== SHEET =====================
+function fmtDate(t) {
+  const d = new Date(t);
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+}
+
+// ============================================================
+// SHEET
+// ============================================================
 function openSheet(html) {
   $("sheet-body").innerHTML = html;
   $("scrim").classList.add("on");
-  requestAnimationFrame(()=>$("sheet").classList.add("on"));
+  requestAnimationFrame(() => $("sheet").classList.add("on"));
 }
 function closeSheet() {
   $("sheet").classList.remove("on");
   $("scrim").classList.remove("on");
-  setTimeout(()=>{ $("sheet-body").innerHTML=""; }, 260);
+  setTimeout(() => { $("sheet-body").innerHTML = ""; }, 260);
 }
 $("scrim").onclick = closeSheet;
+function closeHint() { localStorage.setItem("md_hint","1"); $("check-hint").style.display = "none"; }
 
-// ===================== HINT =====================
-function closeHint() {
-  LS.setHint();
-  $("check-hint").style.display = "none";
-}
-
-// ===================== HOME =====================
+// ============================================================
+// HOME
+// ============================================================
 function renderHome() {
-  $("mod-grid").innerHTML = S.data.modalities.map(m=>{
+  $("mod-grid").innerHTML = S.data.modalities.map(m => {
     const cnt = (S.data.procedures[m.key]||[]).length;
     return `<button class="mod-card" style="--c:${m.c}" onclick="onMod('${m.key}')">
       <div class="lbl">${esc(m.sub)}</div>
@@ -473,70 +603,69 @@ function renderHome() {
 }
 
 function onMod(key) {
-  S.currentMod = key;
-  renderProcs();
-  showView("procs");
+  S.currentMod = key; renderProcs(); showView("procs");
 }
 
-// ===================== PROCS =====================
+// ============================================================
+// PROCEDURES
+// ============================================================
 function renderProcs() {
-  const mod = S.data.modalities.find(m=>m.key===S.currentMod);
+  const mod = S.data.modalities.find(m => m.key===S.currentMod);
   $("proc-lbl").textContent = `${mod.label} / 手順`;
   const procs = S.data.procedures[S.currentMod]||[];
-  if (!procs.length) {
-    $("proc-list").innerHTML = `<div class="empty">手順がまだありません<br>右上の「+ 手順を追加」から作成</div>`;
-    return;
-  }
-  $("proc-list").innerHTML = "";
-  procs.forEach(p=>{
+  const list = $("proc-list");
+  if (!procs.length) { list.innerHTML = `<div class="empty">手順がまだありません<br>右上の「+ 手順を追加」から作成</div>`; return; }
+  list.innerHTML = "";
+  procs.forEach(p => {
     const btn = document.createElement("button");
     btn.className = "proc-item";
     btn.innerHTML = `
-      <div style="flex:1;min-width:0">
+      <div style="flex:1;min-width:0;">
         <div class="pt">${esc(p.title)}</div>
         <div class="pd">${esc(p.desc||"")}</div>
       </div>
-      <button class="proc-edit" data-act="edit">✎</button>
+      <button style="color:var(--mute);padding:8px;border-radius:8px;font-size:16px;" data-act="edit">✎</button>
       <span style="color:var(--mute);font-size:18px;">›</span>`;
-    btn.addEventListener("click", e=>{
+    btn.addEventListener("click", e => {
       if (e.target.closest("[data-act='edit']")) { e.stopPropagation(); openProcEditor(p); }
       else onProc(p.id);
     });
-    $("proc-list").appendChild(btn);
+    list.appendChild(btn);
   });
 }
 
 function onProc(id) {
-  S.currentProc = id;
-  S.editMode = false;
-  const mod = S.data.modalities.find(m=>m.key===S.currentMod);
-  const proc = getProc();
-  $("check-title").textContent = `${mod.label} / ${proc.title}`;
-  renderCheck();
-  showView("check");
+  S.currentProc = id; S.editMode = false;
+  const mod = S.data.modalities.find(m => m.key===S.currentMod);
+  $("check-title").textContent = `${mod.label} / ${getProc().title}`;
+  renderCheck(); showView("check");
 }
 
-// ===================== CHECKLIST =====================
+// ============================================================
+// CHECKLIST
+// ============================================================
 function getProc() {
-  return (S.data.procedures[S.currentMod]||[]).find(p=>p.id===S.currentProc);
+  return (S.data.procedures[S.currentMod]||[]).find(p => p.id===S.currentProc);
 }
 
 function renderCheck() {
-  const proc = getProc();
-  if (!proc) return;
+  const proc = getProc(); if (!proc) return;
   if (!S.checked[proc.id]) S.checked[proc.id] = [];
   const doneSet = new Set(S.checked[proc.id]);
-  const body = $("check-body");
-  body.innerHTML = "";
+  const body = $("check-body"); body.innerHTML = "";
 
-  proc.sections.forEach(sec=>{
+  proc.sections.forEach(sec => {
     const wrap = document.createElement("div");
     wrap.style.marginBottom = "22px";
+    // セクション自体もドラッグ可能（編集モード）
+    if (S.editMode) {
+      wrap.setAttribute("draggable", "true");
+      wrap.dataset.secId = sec.id;
+    }
 
-    // セクションヘッダ
     const sh = document.createElement("div");
     sh.className = "sec-title";
-    sh.innerHTML = `<span>${esc(sec.heading)}</span>`;
+    sh.innerHTML = `<span>${S.editMode ? '<span style="color:var(--mute);margin-right:6px;font-size:16px;">⠿</span>' : ""}${esc(sec.heading)}</span>`;
     if (S.editMode) {
       const eb = document.createElement("div");
       eb.className = "sec-edit-btns";
@@ -545,35 +674,37 @@ function renderCheck() {
     }
     wrap.appendChild(sh);
 
-    // アイテム
-    sec.items.forEach(it=>{
-      const notes = S.notes.filter(n=>n.itemId===it.id);
-      const hasM = notes.some(n=>n.type==="mistake");
-      const hasI = notes.some(n=>n.type==="insight");
-
+    sec.items.forEach(it => {
+      const notes = S.notes.filter(n => n.itemId===it.id);
+      const hasM = notes.some(n => n.type==="mistake");
+      const hasI = notes.some(n => n.type==="insight");
       const ci = document.createElement("div");
       ci.className = "ci" + (doneSet.has(it.id)?" done":"") + (hasM?" has-m":(hasI?" has-i":""));
+      if (S.editMode) {
+        ci.setAttribute("draggable", "true");
+        ci.dataset.itemId = it.id;
+        ci.dataset.secId = sec.id;
+        ci.style.cursor = "grab";
+      }
 
-      // チェック行
       const top = document.createElement("div");
       top.className = "ci-top";
       top.innerHTML = `
+        ${S.editMode ? '<span style="color:var(--mute);font-size:20px;flex-shrink:0;padding-top:2px;">⠿</span>' : ""}
         <div class="chk"></div>
         <div class="ci-body">
           <div class="ci-text">${esc(it.text)}${it.warn?`<span class="tag">${esc(it.warn)}</span>`:""}${it.danger?`<span class="tag d">${esc(it.danger)}</span>`:""}</div>
           ${it.note?`<div class="ci-note">${esc(it.note)}</div>`:""}
         </div>`;
-      top.addEventListener("click", ()=>{
+      top.addEventListener("click", () => {
         if (S.editMode) return;
-        if (doneSet.has(it.id)) doneSet.delete(it.id);
-        else doneSet.add(it.id);
+        if (doneSet.has(it.id)) doneSet.delete(it.id); else doneSet.add(it.id);
         S.checked[proc.id] = [...doneSet];
-        LS.setChecked(S.checked);
+        DB.set("md_checked", S.checked);
         renderCheck();
       });
       ci.appendChild(top);
 
-      // ボタン行
       const btns = document.createElement("div");
       btns.className = "ci-btns";
       if (S.editMode) {
@@ -585,8 +716,8 @@ function renderCheck() {
           <button class="ci-btn mb" data-a="m">⚠ ミスを記録</button>
           <button class="ci-btn ib" data-a="i">💡 気づきを記録</button>`;
       }
-      btns.querySelectorAll("button").forEach(b=>{
-        b.addEventListener("click", e=>{
+      btns.querySelectorAll("button").forEach(b => {
+        b.addEventListener("click", e => {
           e.stopPropagation();
           const a = b.dataset.a;
           if (a==="m") openNoteSheet(proc, it, "mistake");
@@ -597,68 +728,244 @@ function renderCheck() {
       });
       ci.appendChild(btns);
 
-      // バッジ
       if (notes.length) {
         const bd = document.createElement("div");
         bd.className = "badges";
-        bd.innerHTML = notes.map(n=>`
+        bd.innerHTML = notes.map(n => `
           <div class="badge ${n.type==="mistake"?"m":"i"}">
-            <span class="badge-icon">${n.type==="mistake"?"⚠":"💡"}</span>
+            <span>${n.type==="mistake"?"⚠":"💡"}</span>
             <div class="badge-body">${esc(n.text)}<div class="badge-meta">${fmtDate(n.t)}</div></div>
             <button class="badge-del" data-nid="${n.id}">×</button>
           </div>`).join("");
-        bd.querySelectorAll(".badge-del").forEach(b=>{
-          b.addEventListener("click", e=>{ e.stopPropagation(); delNote(b.dataset.nid); });
+        bd.querySelectorAll(".badge-del").forEach(b => {
+          b.addEventListener("click", e => { e.stopPropagation(); delNote(b.dataset.nid); });
         });
         ci.appendChild(bd);
       }
-
       wrap.appendChild(ci);
     });
 
-    // 編集モード: 項目追加ボタン
     if (S.editMode) {
       const ab = document.createElement("button");
-      ab.className = "add-btn";
-      ab.textContent = "+ 項目を追加";
-      ab.onclick = ()=>openItemEditor(sec, null);
+      ab.className = "add-btn"; ab.textContent = "+ 項目を追加";
+      ab.onclick = () => openItemEditor(sec, null);
       wrap.appendChild(ab);
     }
-
     body.appendChild(wrap);
   });
 
-  // 編集モード: セクション追加
   if (S.editMode) {
     const ab = document.createElement("button");
-    ab.className = "add-btn";
-    ab.style.marginTop = "10px";
-    ab.textContent = "+ セクションを追加";
-    ab.onclick = ()=>openSecEditor(null);
+    ab.className = "add-btn"; ab.style.marginTop = "10px"; ab.textContent = "+ セクションを追加";
+    ab.onclick = () => openSecEditor(null);
     body.appendChild(ab);
+    // 並び替えのドラッグ初期化
+    initCheckDrag();
   }
-
   updateProg();
 }
 
+// 編集モード: 長押しで並び替え（iOS Safari対応）
+function initCheckDrag() {
+  const body = $("check-body"); if (!body) return;
+
+  let dragEl = null, dragType = null;
+  let ghost = null, placeholder = null;
+  let startX = 0, startY = 0;
+  let activated = false, timer = null;
+
+  function mkPlaceholder(h) {
+    const el = document.createElement("div");
+    el.style.cssText = "height:"+(h||52)+"px;background:rgba(77,208,197,.1);border:2px dashed var(--accent);border-radius:14px;margin-bottom:10px;box-sizing:border-box;";
+    return el;
+  }
+
+  function mkGhost(src) {
+    const r = src.getBoundingClientRect();
+    const g = src.cloneNode(true);
+    g.style.cssText = "position:fixed;left:"+r.left+"px;top:"+r.top+"px;width:"+r.width+"px;z-index:9999;pointer-events:none;opacity:.88;border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.55);background:var(--bg1);border:2px solid var(--accent);transform:scale(1.04);transition:none;";
+    document.body.appendChild(g);
+    return g;
+  }
+
+  function cleanup() {
+    clearTimeout(timer);
+    activated = false;
+    if (ghost) { ghost.remove(); ghost = null; }
+    if (placeholder) { placeholder.remove(); placeholder = null; }
+    if (dragEl) { dragEl.style.opacity = "1"; dragEl.style.visibility = ""; dragEl = null; }
+    dragType = null;
+  }
+
+  function moveGhost(x, y) {
+    if (!ghost) return;
+    ghost.style.left = (x - ghost.offsetWidth / 2) + "px";
+    ghost.style.top  = (y - 36) + "px";
+  }
+
+  function updatePlaceholderItem(y) {
+    const items = [...body.querySelectorAll(".ci[data-item-id]")].filter(el => el !== dragEl);
+    let placed = false;
+    for (const t of items) {
+      const r = t.getBoundingClientRect();
+      if (y < r.top + r.height * 0.5) {
+        t.parentNode.insertBefore(placeholder, t);
+        placed = true; break;
+      }
+    }
+    if (!placed) {
+      // 一番下のセクション末尾に
+      const secWraps = [...body.querySelectorAll("div[data-sec-id]")];
+      for (let i = secWraps.length - 1; i >= 0; i--) {
+        const r = secWraps[i].getBoundingClientRect();
+        if (y >= r.top) {
+          const addBtn = secWraps[i].querySelector(".add-btn");
+          secWraps[i].insertBefore(placeholder, addBtn || null);
+          placed = true; break;
+        }
+      }
+    }
+  }
+
+  function updatePlaceholderSection(y) {
+    const secs = [...body.querySelectorAll("div[data-sec-id]")].filter(el => el !== dragEl);
+    let placed = false;
+    for (const t of secs) {
+      const r = t.getBoundingClientRect();
+      if (y < r.top + r.height * 0.4) {
+        body.insertBefore(placeholder, t);
+        placed = true; break;
+      }
+    }
+    if (!placed) {
+      const lastBtn = body.querySelector(".add-btn:last-of-type");
+      body.insertBefore(placeholder, lastBtn || null);
+    }
+  }
+
+  // アイテム
+  body.querySelectorAll(".ci[data-item-id]").forEach(ci => {
+    ci.addEventListener("touchstart", e => {
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      activated = false;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        activated = true;
+        dragEl = ci; dragType = "item";
+        navigator.vibrate && navigator.vibrate([15, 30]);
+        ci.style.opacity = "0.1";
+        placeholder = mkPlaceholder(ci.offsetHeight);
+        ci.parentNode.insertBefore(placeholder, ci.nextSibling);
+        ghost = mkGhost(ci);
+      }, 500);
+    }, { passive: true });
+
+    ci.addEventListener("touchmove", e => {
+      const t = e.touches[0];
+      if (!activated) {
+        if (Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10) clearTimeout(timer);
+        return;
+      }
+      e.preventDefault();
+      moveGhost(t.clientX, t.clientY);
+      updatePlaceholderItem(t.clientY);
+    }, { passive: false });
+
+    ci.addEventListener("touchend", e => {
+      clearTimeout(timer);
+      if (!activated || dragEl !== ci) { cleanup(); return; }
+      if (placeholder && placeholder.parentNode) placeholder.parentNode.insertBefore(dragEl, placeholder);
+      cleanup();
+      saveReorderedData();
+    });
+
+    ci.addEventListener("touchcancel", () => { clearTimeout(timer); cleanup(); });
+  });
+
+  // セクション
+  body.querySelectorAll("div[data-sec-id]").forEach(wrap => {
+    const handle = wrap.querySelector(".sec-title");
+    if (!handle) return;
+
+    handle.addEventListener("touchstart", e => {
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      activated = false;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        activated = true;
+        dragEl = wrap; dragType = "section";
+        navigator.vibrate && navigator.vibrate([15, 30]);
+        wrap.style.opacity = "0.1";
+        placeholder = mkPlaceholder(80);
+        body.insertBefore(placeholder, wrap.nextSibling);
+        ghost = mkGhost(handle);
+      }, 500);
+    }, { passive: true });
+
+    handle.addEventListener("touchmove", e => {
+      const t = e.touches[0];
+      if (!activated) {
+        if (Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10) clearTimeout(timer);
+        return;
+      }
+      e.preventDefault();
+      moveGhost(t.clientX, t.clientY);
+      updatePlaceholderSection(t.clientY);
+    }, { passive: false });
+
+    handle.addEventListener("touchend", () => {
+      clearTimeout(timer);
+      if (!activated || dragEl !== wrap) { cleanup(); return; }
+      if (placeholder && placeholder.parentNode) placeholder.parentNode.insertBefore(dragEl, placeholder);
+      cleanup();
+      saveReorderedData();
+    });
+
+    handle.addEventListener("touchcancel", () => { clearTimeout(timer); cleanup(); });
+  });
+}
+
+async function saveReorderedData() {
+  const proc = getProc(); if (!proc) return;
+  const body = $("check-body"); if (!body) return;
+
+  // セクションの新しい順序を取得
+  const newSections = [];
+  body.querySelectorAll("div[data-sec-id]").forEach(wrap => {
+    const secId = wrap.dataset.secId;
+    const sec = proc.sections.find(s => s.id===secId);
+    if (!sec) return;
+    // セクション内のアイテムの新しい順序を取得
+    const newItems = [];
+    wrap.querySelectorAll(".ci[data-item-id]").forEach(ci => {
+      const itemId = ci.dataset.itemId;
+      const item = sec.items.find(i => i.id===itemId);
+      if (item) newItems.push(item);
+    });
+    newSections.push({ ...sec, items: newItems });
+  });
+
+  proc.sections = newSections;
+  await DB.set("md_data", S.data);
+  toast("順序を保存しました");
+  // UIを再描画せず（ドラッグ後のDOMがそのまま正しい状態）
+}
+
 function updateProg() {
-  const proc = getProc();
-  if (!proc) return;
-  const total = proc.sections.reduce((n,s)=>n+s.items.length, 0);
+  const proc = getProc(); if (!proc) return;
+  const total = proc.sections.reduce((n,s) => n+s.items.length, 0);
   const done = (S.checked[proc.id]||[]).length;
   $("prog-txt").textContent = `${done} / ${total}`;
   $("prog-fill").style.width = (total ? done/total*100 : 0)+"%";
 }
 
-function fmtDate(t) {
-  const d = new Date(t);
-  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-}
-
-// ===================== NOTE SHEET =====================
+// ============================================================
+// NOTE SHEET
+// ============================================================
 function openNoteSheet(proc, item, initType) {
   let typ = initType;
-
   function render() {
     const isM = typ==="mistake";
     $("sheet-body").innerHTML = `
@@ -672,114 +979,95 @@ function openNoteSheet(proc, item, initType) {
       <textarea class="form-input" id="note-ta" placeholder="${isM?"例: フットスイッチ確認を忘れた":"例: カテ進めるとき抵抗があった"}"></textarea>
       <button class="btn-main ${isM?"m":"i"}" id="note-save">保存する</button>
       <button class="btn-sub" id="note-cancel">キャンセル</button>`;
-
-    $("sw-btn").onclick = e=>{
+    $("sw-btn").onclick = e => {
       e.stopPropagation();
       const cur = $("note-ta").value;
       typ = typ==="mistake"?"insight":"mistake";
-      render();
-      $("note-ta").value = cur;
-      $("note-ta").focus();
+      render(); $("note-ta").value = cur; $("note-ta").focus();
     };
     $("note-cancel").onclick = closeSheet;
-    $("note-save").onclick = async ()=>{
+    $("note-save").onclick = async () => {
       const text = $("note-ta").value.trim();
       if (!text) { toast("内容を入力してください"); $("note-ta").focus(); return; }
-      S.notes.push({
-        id: genId("n"), t: Date.now(), type: typ,
-        modKey: S.currentMod, procId: proc.id, procTitle: proc.title,
-        itemId: item.id, itemText: item.text, text
-      });
-      LS.setNotes(S.notes);
-      closeSheet();
-      renderCheck();
+      S.notes.push({ id:genId("n"), t:Date.now(), type:typ, modKey:S.currentMod, procId:proc.id, procTitle:proc.title, itemId:item.id, itemText:item.text, text });
+      await DB.set("md_notes", S.notes);
+      closeSheet(); renderCheck();
       toast(typ==="mistake"?"⚠ ミスを記録しました":"💡 気づきを記録しました");
     };
-    setTimeout(()=>{ const ta=$("note-ta"); if(ta) ta.focus(); }, 320);
+    setTimeout(() => $("note-ta")?.focus(), 320);
   }
-
   $("scrim").classList.add("on");
   $("sheet").classList.add("on");
   render();
 }
 
-function delNote(id) {
-  S.notes = S.notes.filter(n=>n.id!==id);
-  LS.setNotes(S.notes);
+async function delNote(id) {
+  if (!confirm("この記録を削除しますか?")) return;
+  S.notes = S.notes.filter(n => n.id!==id);
+  await DB.set("md_notes", S.notes);
   renderCheck();
   if ($("v-notes").classList.contains("active")) renderNotes();
   toast("削除しました");
 }
 
-// ===================== EDITORS =====================
+// ============================================================
+// EDITORS
+// ============================================================
 function openProcEditor(proc) {
   const isNew = !proc;
   openSheet(`
     <h2>${isNew?"手順を追加":"手順を編集"}</h2>
     <label class="form-lbl">タイトル</label>
-    <input class="form-input" id="pe-title" type="text" placeholder="例: DSA (脳血管撮影)" value="${esc(proc?.title||"")}">
+    <input class="form-input" id="pe-t" type="text" placeholder="例: DSA (脳血管撮影)" value="${esc(proc?.title||"")}">
     <label class="form-lbl">サブテキスト</label>
-    <input class="form-input" id="pe-desc" type="text" placeholder="例: 大動脈分岐部 → 首撮影" value="${esc(proc?.desc||"")}">
+    <input class="form-input" id="pe-d" type="text" placeholder="例: 大動脈分岐部 → 首撮影" value="${esc(proc?.desc||"")}">
     <button class="btn-main a" id="pe-save">${isNew?"作成":"保存"}</button>
     ${!isNew?`<button class="btn-danger" id="pe-del">この手順を削除</button>`:""}
-    <button class="btn-sub" id="pe-cancel">キャンセル</button>
-  `);
+    <button class="btn-sub" id="pe-cancel">キャンセル</button>`);
   $("pe-cancel").onclick = closeSheet;
-  $("pe-save").onclick = ()=>{
-    const title = $("pe-title").value.trim();
-    const desc  = $("pe-desc").value.trim();
+  $("pe-save").onclick = async () => {
+    const title = $("pe-t").value.trim(), desc = $("pe-d").value.trim();
     if (!title) { toast("タイトルを入力してください"); return; }
-    if (isNew) {
-      S.data.procedures[S.currentMod].push({ id:genId("p"), title, desc, sections:[] });
-    } else { proc.title=title; proc.desc=desc; }
-    LS.setData(S.data);
+    if (isNew) S.data.procedures[S.currentMod].push({ id:genId("p"), title, desc, sections:[] });
+    else { proc.title=title; proc.desc=desc; }
+    await DB.set("md_data", S.data);
     closeSheet(); renderProcs(); renderHome();
     toast(isNew?"追加しました":"保存しました");
   };
-  if (!isNew) $("pe-del").onclick = ()=>{
+  if (!isNew) $("pe-del").onclick = async () => {
     if (!confirm(`「${proc.title}」を削除しますか?`)) return;
-    S.data.procedures[S.currentMod] = S.data.procedures[S.currentMod].filter(p=>p.id!==proc.id);
-    LS.setData(S.data);
-    closeSheet(); renderProcs(); renderHome();
-    toast("削除しました");
+    S.data.procedures[S.currentMod] = S.data.procedures[S.currentMod].filter(p => p.id!==proc.id);
+    await DB.set("md_data", S.data);
+    closeSheet(); renderProcs(); renderHome(); toast("削除しました");
   };
 }
 
 function openSecEditor(sec) {
-  const proc = getProc();
-  const isNew = !sec;
+  const proc = getProc(), isNew = !sec;
   openSheet(`
     <h2>${isNew?"セクションを追加":"セクションを編集"}</h2>
     <label class="form-lbl">見出し</label>
-    <input class="form-input" id="se-head" type="text" placeholder="例: 準備 / 撮影 1" value="${esc(sec?.heading||"")}">
+    <input class="form-input" id="se-h" type="text" placeholder="例: 準備 / 撮影 1" value="${esc(sec?.heading||"")}">
     <button class="btn-main a" id="se-save">${isNew?"追加":"保存"}</button>
-    <button class="btn-sub" id="se-cancel">キャンセル</button>
-  `);
+    <button class="btn-sub" id="se-cancel">キャンセル</button>`);
   $("se-cancel").onclick = closeSheet;
-  $("se-save").onclick = ()=>{
-    const heading = $("se-head").value.trim();
+  $("se-save").onclick = async () => {
+    const heading = $("se-h").value.trim();
     if (!heading) { toast("見出しを入力してください"); return; }
     if (isNew) proc.sections.push({ id:genId("s"), heading, items:[] });
     else sec.heading = heading;
-    LS.setData(S.data);
+    await DB.set("md_data", S.data);
     closeSheet(); renderCheck();
     toast(isNew?"追加しました":"保存しました");
   };
 }
 
-function editSec(secId) {
-  const sec = getProc().sections.find(s=>s.id===secId);
-  openSecEditor(sec);
-}
-
+function editSec(secId) { openSecEditor(getProc().sections.find(s => s.id===secId)); }
 function delSec(secId) {
-  const proc = getProc();
-  const sec = proc.sections.find(s=>s.id===secId);
+  const proc = getProc(), sec = proc.sections.find(s => s.id===secId);
   if (!confirm(`「${sec.heading}」を削除しますか?`)) return;
-  proc.sections = proc.sections.filter(s=>s.id!==secId);
-  LS.setData(S.data);
-  renderCheck();
-  toast("削除しました");
+  proc.sections = proc.sections.filter(s => s.id!==secId);
+  DB.set("md_data", S.data); renderCheck(); toast("削除しました");
 }
 
 function openItemEditor(sec, item) {
@@ -791,132 +1079,1209 @@ function openItemEditor(sec, item) {
     <label class="form-lbl">補足メモ（任意）</label>
     <textarea class="form-input" id="ie-note" style="min-height:60px;">${esc(item?.note||"")}</textarea>
     <div class="form-row">
-      <div>
-        <label class="form-lbl">注意ラベル（黄）</label>
-        <input class="form-input" id="ie-warn" type="text" placeholder="例: 重要" value="${esc(item?.warn||"")}">
-      </div>
-      <div>
-        <label class="form-lbl">必須ラベル（赤）</label>
-        <input class="form-input" id="ie-danger" type="text" placeholder="例: 必須" value="${esc(item?.danger||"")}">
-      </div>
+      <div><label class="form-lbl">注意ラベル（黄）</label><input class="form-input" id="ie-warn" type="text" placeholder="例: 重要" value="${esc(item?.warn||"")}"></div>
+      <div><label class="form-lbl">必須ラベル（赤）</label><input class="form-input" id="ie-danger" type="text" placeholder="例: 必須" value="${esc(item?.danger||"")}"></div>
     </div>
     <button class="btn-main a" id="ie-save">${isNew?"追加":"保存"}</button>
-    <button class="btn-sub" id="ie-cancel">キャンセル</button>
-  `);
+    <button class="btn-sub" id="ie-cancel">キャンセル</button>`);
   $("ie-cancel").onclick = closeSheet;
-  $("ie-save").onclick = ()=>{
-    const text   = $("ie-text").value.trim();
-    const note   = $("ie-note").value.trim();
-    const warn   = $("ie-warn").value.trim();
-    const danger = $("ie-danger").value.trim();
+  $("ie-save").onclick = async () => {
+    const text=$("ie-text").value.trim(), note=$("ie-note").value.trim(), warn=$("ie-warn").value.trim(), danger=$("ie-danger").value.trim();
     if (!text) { toast("本文を入力してください"); return; }
     if (isNew) sec.items.push({ id:genId("i"), text, note, warn, danger });
     else { item.text=text; item.note=note; item.warn=warn; item.danger=danger; }
-    LS.setData(S.data);
+    await DB.set("md_data", S.data);
     closeSheet(); renderCheck();
     toast(isNew?"追加しました":"保存しました");
   };
 }
 
 function delItem(secId, itemId) {
-  const proc = getProc();
-  const sec = proc.sections.find(s=>s.id===secId);
-  const item = sec.items.find(i=>i.id===itemId);
+  const proc = getProc(), sec = proc.sections.find(s => s.id===secId), item = sec.items.find(i => i.id===itemId);
   if (!confirm(`「${item.text}」を削除しますか?`)) return;
-  sec.items = sec.items.filter(i=>i.id!==itemId);
-  if (S.checked[proc.id]) {
-    S.checked[proc.id] = S.checked[proc.id].filter(id=>id!==itemId);
-    LS.setChecked(S.checked);
-  }
-  LS.setData(S.data);
-  renderCheck();
-  toast("削除しました");
+  sec.items = sec.items.filter(i => i.id!==itemId);
+  if (S.checked[proc.id]) { S.checked[proc.id] = S.checked[proc.id].filter(id => id!==itemId); DB.set("md_checked", S.checked); }
+  DB.set("md_data", S.data); renderCheck(); toast("削除しました");
 }
 
-// ===================== NOTES VIEW =====================
+// ============================================================
+// NOTES VIEW
+// ============================================================
 function renderNotes() {
-  let notes = S.notes.slice().sort((a,b)=>b.t-a.t);
-  if (S.notesFilter!=="all") notes = notes.filter(n=>n.type===S.notesFilter);
+  let notes = S.notes.slice().sort((a,b) => b.t-a.t);
+  if (S.notesFilter!=="all") notes = notes.filter(n => n.type===S.notesFilter);
+  const body = $("notes-body");
   if (!notes.length) {
-    $("notes-body").innerHTML = `<div class="empty">記録はまだありません<br>チェックリストの<br><b style="color:var(--mistake)">⚠ ミスを記録</b> / <b style="color:var(--insight)">💡 気づきを記録</b><br>ボタンから追加できます</div>`;
+    body.innerHTML = `<div class="empty">記録はまだありません<br>チェックリストの<br><b style="color:var(--mistake)">⚠ ミスを記録</b> / <b style="color:var(--insight)">💡 気づきを記録</b><br>から追加できます</div>`;
     return;
   }
-  $("notes-body").innerHTML = "";
-  notes.forEach(n=>{
+  body.innerHTML = "";
+  notes.forEach(n => {
     const c = document.createElement("div");
     c.className = `note-card ${n.type==="mistake"?"m":"i"}`;
     c.innerHTML = `
-      <div class="nc-head">
-        <span class="nc-typ ${n.type==="mistake"?"m":"i"}">${n.type==="mistake"?"⚠ ミス":"💡 気づき"}</span>
-        <span>${fmtDate(n.t)}</span>
-      </div>
+      <div class="nc-head"><span class="nc-typ ${n.type==="mistake"?"m":"i"}">${n.type==="mistake"?"⚠ ミス":"💡 気づき"}</span><span>${fmtDate(n.t)}</span></div>
       <div class="nc-ctx"><b>${esc(n.procTitle||"")}</b> · ${esc(n.itemText||"")}</div>
       <div class="nc-text">${esc(n.text)}</div>
       <div class="nc-actions">
-        <button onclick="onNoteGoto('${n.modKey}','${n.procId}')">該当項目へ</button>
+        <button onclick="openChecklist('${n.modKey}','${n.procId}')">該当項目へ</button>
         <button onclick="delNote('${n.id}')">削除</button>
       </div>`;
-    $("notes-body").appendChild(c);
+    body.appendChild(c);
   });
 }
 
-function onNoteGoto(modKey, procId) {
-  S.currentMod = modKey;
-  onProc(procId);
+function openChecklist(modKey, procId) {
+  S.currentMod = modKey; onProc(procId);
 }
 
-// ===================== EVENTS =====================
-document.querySelectorAll(".tab").forEach(t=>{
-  t.onclick = ()=>{
+// ============================================================
+// REF TAB SUBTABS
+// ============================================================
+document.querySelectorAll("#ref-tabs .nf-btn").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll("#ref-tabs .nf-btn").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    S.refTab = b.dataset.rt;
+    ["proc","pdf","memo","web","export"].forEach(t => {
+      const el = $("rt-"+t); if (el) el.style.display = t===S.refTab ? "block" : "none";
+    });
+    if (S.refTab==="pdf") renderPDFs();
+    if (S.refTab==="memo") renderMemos();
+    if (S.refTab==="web") renderLinks();
+  };
+});
+
+// ============================================================
+// 手順検索
+// ============================================================
+function searchProcs() {
+  const q = ($("proc-search-input")?.value||"").trim().toLowerCase();
+  const results = $("proc-search-results");
+  if (!results) return;
+  if (!q) { results.innerHTML = `<div class="empty" style="padding:30px 0;">キーワードを入力すると<br>手順を横断検索できます</div>`; return; }
+  const hits = [];
+  S.data.modalities.forEach(mod => {
+    (S.data.procedures[mod.key]||[]).forEach(proc => {
+      proc.sections.forEach(sec => {
+        sec.items.forEach(it => {
+          if ((it.text+" "+(it.note||"")+" "+sec.heading).toLowerCase().includes(q)) {
+            hits.push({ mod:mod.label, proc:proc.title, procId:proc.id, modKey:mod.key, sec:sec.heading, item:it });
+          }
+        });
+      });
+    });
+  });
+  if (!hits.length) { results.innerHTML = `<div class="empty" style="padding:30px 0;">「${q}」に一致する手順が見つかりません</div>`; return; }
+  results.innerHTML = `<div style="font-size:12px;color:var(--mute);margin-bottom:10px;">${hits.length} 件ヒット</div>`;
+  hits.forEach(h => {
+    const card = document.createElement("div");
+    card.style.cssText = "background:var(--bg1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;cursor:pointer;";
+    const hl = h.item.text.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"), m => `<span class="search-hl">${m}</span>`);
+    card.innerHTML = `
+      <div style="font-size:11px;color:var(--mute);margin-bottom:4px;">${esc(h.mod)} › ${esc(h.proc)} › ${esc(h.sec)}</div>
+      <div style="font-size:14px;">${hl}</div>
+      ${h.item.note?`<div style="font-size:12px;color:var(--dim);margin-top:4px;border-left:2px solid var(--line);padding-left:8px;">${esc(h.item.note)}</div>`:""}
+      <div style="font-size:11px;color:var(--accent);margin-top:6px;">→ 該当手順を開く</div>`;
+    card.onclick = () => openChecklist(h.modKey, h.procId);
+    results.appendChild(card);
+  });
+}
+
+// ============================================================
+// PDF (IndexedDB + Google Drive)
+// ============================================================
+async function addPDF(input) {
+  const file = input.files[0]; if (!file) return;
+  toast("読み込み中...");
+  const reader = new FileReader();
+  reader.onload = async e => {
+    const pdfs = await DB.get("md_pdfs", []);
+    pdfs.push({ id:genId("pdf"), name:file.name, data:e.target.result, src:"local", t:Date.now() });
+    await DB.set("md_pdfs", pdfs);
+    toast("PDFを保存しました"); renderPDFs();
+    input.value = "";
+  };
+  reader.readAsDataURL(file);
+}
+
+function openGDriveSheet() {
+  openSheet(`
+    <h2>☁️ Google DriveのPDFを追加</h2>
+    <div class="ctx-txt">Google DriveでPDFを<b>「リンクを知っている全員」</b>に共有してからURLを貼り付けてください</div>
+    <label class="form-lbl">タイトル</label>
+    <input class="form-input" id="gd-t" type="text" placeholder="例: IVR参考書 第3章">
+    <label class="form-lbl">Google Drive 共有URL</label>
+    <input class="form-input" id="gd-u" type="url" placeholder="https://drive.google.com/file/d/...">
+    <div style="background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--dim);line-height:1.8;">
+      <b style="color:var(--text);">URLの取得方法：</b><br>
+      1. DriveでPDFを長押し<br>
+      2. 「共有」→「リンクをコピー」<br>
+      3. アクセス権を「リンクを知っている全員」に変更<br>
+      4. コピーしたURLを上に貼り付け
+    </div>
+    <button class="btn-main a" id="gd-save">追加</button>
+    <button class="btn-sub" id="gd-cancel">キャンセル</button>`);
+  $("gd-cancel").onclick = closeSheet;
+  $("gd-save").onclick = async () => {
+    const title=$("gd-t").value.trim(), url=$("gd-u").value.trim();
+    if (!title||!url) { toast("タイトルとURLを入力してください"); return; }
+    let viewUrl = url;
+    const m = url.match(/\/file\/d\/([^/]+)/);
+    if (m) viewUrl = `https://drive.google.com/file/d/${m[1]}/preview`;
+    const pdfs = await DB.get("md_pdfs", []);
+    pdfs.push({ id:genId("pdf"), name:title, url:viewUrl, src:"gdrive", t:Date.now() });
+    await DB.set("md_pdfs", pdfs);
+    closeSheet(); renderPDFs(); toast("Google DriveのPDFを追加しました");
+  };
+}
+
+async function renderPDFs() {
+  const list = $("pdf-list"); if (!list) return;
+  const pdfs = await DB.get("md_pdfs", []);
+  if (!pdfs.length) { list.innerHTML = `<div class="empty" style="padding:20px 0;">PDFがまだありません</div>`; return; }
+  list.innerHTML = "";
+  pdfs.slice().reverse().forEach(pdf => {
+    const card = document.createElement("div");
+    card.style.cssText = "background:var(--bg1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;";
+    const badge = pdf.src==="gdrive"
+      ? `<span style="font-size:10px;background:rgba(106,166,255,.2);color:#6aa6ff;padding:2px 6px;border-radius:4px;font-weight:600;">Drive</span>`
+      : `<span style="font-size:10px;background:rgba(77,208,197,.2);color:var(--accent);padding:2px 6px;border-radius:4px;font-weight:600;">本体</span>`;
+    card.innerHTML = `
+      <span style="font-size:24px;flex-shrink:0;">${pdf.src==="gdrive"?"☁️":"📄"}</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(pdf.name)}</div>
+        <div style="font-size:11px;color:var(--mute);margin-top:2px;display:flex;gap:6px;align-items:center;">${fmtDate(pdf.t)} ${badge}</div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="openPDF('${pdf.id}')" style="padding:8px 12px;border-radius:8px;background:var(--accent);color:#08120f;font-size:12px;font-weight:700;">開く</button>
+        <button onclick="delPDF('${pdf.id}')" style="padding:8px 10px;border-radius:8px;border:1px solid var(--line);color:var(--mute);font-size:12px;">削除</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+async function openPDF(id) {
+  const pdfs = await DB.get("md_pdfs", []);
+  const pdf = pdfs.find(p => p.id===id); if (!pdf) return;
+  if (pdf.src==="gdrive") {
+    openSheet(`
+      <h2>${esc(pdf.name)}</h2>
+      <iframe src="${pdf.url}" style="width:100%;height:65vh;border:none;border-radius:10px;background:#000;"></iframe>
+      <button class="btn-sub" style="margin-top:12px;" onclick="closeSheet()">閉じる</button>`);
+  } else {
+    const win = window.open();
+    win.document.write(`<html><head><title>${esc(pdf.name)}</title></head><body style="margin:0;background:#000;"><embed src="${pdf.data}" type="application/pdf" width="100%" height="100%" style="position:fixed;inset:0;"></body></html>`);
+  }
+}
+
+async function delPDF(id) {
+  if (!confirm("このPDFを削除しますか?")) return;
+  const pdfs = (await DB.get("md_pdfs", [])).filter(p => p.id!==id);
+  await DB.set("md_pdfs", pdfs); renderPDFs(); toast("削除しました");
+}
+
+// ============================================================
+// MEMO (IndexedDB)
+// ============================================================
+function openMemoEditor(memo) {
+  const isNew = !memo;
+  openSheet(`
+    <h2>${isNew?"メモを追加":"メモを編集"}</h2>
+    <label class="form-lbl">タイトル</label>
+    <input class="form-input" id="me-t" type="text" placeholder="例: 造影剤の種類 / IVR手技メモ" value="${esc(memo?.title||"")}">
+    <label class="form-lbl">内容（OCRテキスト貼り付け可）</label>
+    <textarea class="form-input" id="me-b" style="min-height:160px;" placeholder="参考書のテキストや気づきをここに貼り付け...">${esc(memo?.body||"")}</textarea>
+    <label class="form-lbl">出典（任意）</label>
+    <input class="form-input" id="me-s" type="text" placeholder="例: 放射線医学テキスト p.123" value="${esc(memo?.src||"")}">
+    <button class="btn-main a" id="me-save">${isNew?"保存":"更新"}</button>
+    <button class="btn-sub" id="me-cancel">キャンセル</button>`);
+  $("me-cancel").onclick = closeSheet;
+  $("me-save").onclick = async () => {
+    const title=$("me-t").value.trim(), body=$("me-b").value.trim(), src=$("me-s").value.trim();
+    if (!title||!body) { toast("タイトルと内容を入力してください"); return; }
+    const memos = await DB.get("md_memos", []);
+    if (isNew) memos.push({ id:genId("m"), title, body, src, t:Date.now() });
+    else { const idx=memos.findIndex(m => m.id===memo.id); if(idx>=0) memos[idx]={...memo,title,body,src}; }
+    await DB.set("md_memos", memos);
+    closeSheet(); renderMemos(); toast(isNew?"保存しました":"更新しました");
+  };
+  setTimeout(() => $("me-t")?.focus(), 320);
+}
+
+async function renderMemos() {
+  const list = $("memo-list"); if (!list) return;
+  const q = ($("memo-search")?.value||"").toLowerCase();
+  let memos = await DB.get("md_memos", []);
+  if (q) memos = memos.filter(m => (m.title+m.body+(m.src||"")).toLowerCase().includes(q));
+  memos = memos.slice().reverse();
+  if (!memos.length) { list.innerHTML = `<div class="empty" style="padding:20px 0;">${q?`「${q}」に一致するメモがありません`:"メモがまだありません<br>上のボタンから追加してください"}</div>`; return; }
+  list.innerHTML = "";
+  memos.forEach(m => {
+    const card = document.createElement("div");
+    card.style.cssText = "background:var(--bg1);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;";
+    const preview = m.body.length>80 ? m.body.slice(0,80)+"..." : m.body;
+    // JSON.stringifyでシングルクォートをエスケープ
+    const mJson = JSON.stringify(m).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+    card.innerHTML = `
+      <div style="font-weight:600;font-size:14px;margin-bottom:4px;">${esc(m.title)}</div>
+      <div style="font-size:13px;color:var(--dim);margin-bottom:6px;white-space:pre-wrap;">${esc(preview)}</div>
+      ${m.src?`<div style="font-size:11px;color:var(--mute);">出典: ${esc(m.src)}</div>`:""}
+      <div style="display:flex;gap:6px;margin-top:8px;justify-content:flex-end;">
+        <button onclick="viewMemo('${m.id}')" style="padding:6px 12px;border-radius:8px;background:var(--accent);color:#08120f;font-size:12px;font-weight:700;">詳細</button>
+        <button onclick="editMemoById('${m.id}')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);color:var(--dim);font-size:12px;">編集</button>
+        <button onclick="delMemo('${m.id}')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);color:var(--mute);font-size:12px;">削除</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+async function editMemoById(id) {
+  const memos = await DB.get("md_memos", []);
+  const m = memos.find(x => x.id===id); if (m) openMemoEditor(m);
+}
+
+async function viewMemo(id) {
+  const memos = await DB.get("md_memos", []);
+  const m = memos.find(x => x.id===id); if (!m) return;
+  openSheet(`
+    <h2>${esc(m.title)}</h2>
+    ${m.src?`<p style="font-size:12px;color:var(--mute);margin-bottom:12px;">出典: ${esc(m.src)}</p>`:""}
+    <div style="font-size:14px;line-height:1.8;color:var(--text);white-space:pre-wrap;background:var(--bg2);padding:14px;border-radius:10px;margin-bottom:14px;">${esc(m.body)}</div>
+    <button class="btn-sub" onclick="closeSheet()">閉じる</button>`);
+}
+
+async function delMemo(id) {
+  if (!confirm("このメモを削除しますか?")) return;
+  const memos = (await DB.get("md_memos", [])).filter(m => m.id!==id);
+  await DB.set("md_memos", memos); renderMemos(); toast("削除しました");
+}
+
+// ============================================================
+// WEB LINKS
+// ============================================================
+const LINKS = [
+  { cat:"論文検索", c:"#6aa6ff", items:[
+    { icon:"🔬", name:"PubMed", desc:"医学論文の世界最大データベース", url:"https://pubmed.ncbi.nlm.nih.gov/" },
+    { icon:"🎓", name:"Google Scholar", desc:"あらゆる学術論文を横断検索", url:"https://scholar.google.com/" },
+    { icon:"🇯🇵", name:"J-STAGE", desc:"日本の科学技術論文", url:"https://www.jstage.jst.go.jp/browse/-char/ja" },
+    { icon:"📚", name:"CiNii Research", desc:"国内の論文・研究データ検索", url:"https://cir.nii.ac.jp/" }
+  ]},
+  { cat:"臨床情報", c:"#4dd0c5", items:[
+    { icon:"⚕️", name:"UpToDate", desc:"世界標準の臨床意思決定支援ツール", url:"https://www.uptodate.com/" },
+    { icon:"🏥", name:"今日の臨床サポート", desc:"日本語の診療・投薬情報サポート", url:"https://clinicalsup.jp/" },
+    { icon:"📖", name:"MSD マニュアル", desc:"疾患・治療の総合リファレンス", url:"https://www.msdmanuals.com/ja-jp/professional" }
+  ]},
+  { cat:"放射線・IVR専門", c:"#ffb454", items:[
+    { icon:"🩻", name:"Radiopaedia", desc:"放射線画像・症例の世界最大DB", url:"https://radiopaedia.org/" },
+    { icon:"🏛", name:"日本IVR学会", desc:"IVR学会の公式サイト・ガイドライン", url:"https://www.jsir.or.jp/" },
+    { icon:"☢️", name:"日本医学放射線学会", desc:"放射線医学の学会・専門情報", url:"https://www.jrs.or.jp/" }
+  ]},
+  { cat:"医学書・教材", c:"#b48cff", items:[
+    { icon:"📕", name:"医学書院", desc:"日本最大の医学専門出版社", url:"https://www.igaku-shoin.co.jp/" },
+    { icon:"📗", name:"南江堂", desc:"医学・看護の専門書籍", url:"https://www.nankodo.co.jp/" }
+  ]}
+];
+
+function renderLinks() {
+  const list = $("link-list"); if (!list) return;
+  list.innerHTML = "";
+  LINKS.forEach(cat => {
+    const sec = document.createElement("div");
+    sec.style.marginBottom = "20px";
+    sec.innerHTML = `<div class="shdr" style="color:${cat.c};">${cat.cat}</div>`;
+    cat.items.forEach(item => {
+      const a = document.createElement("a");
+      a.href = item.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.className = "ref-card";
+      a.style.borderLeft = `3px solid ${cat.c}`;
+      a.innerHTML = `
+        <span class="ri">${item.icon}</span>
+        <div class="rb"><div class="rt">${item.name}</div><div class="rd">${item.desc}</div></div>
+        <span style="color:var(--mute);font-size:18px;">›</span>`;
+      sec.appendChild(a);
+    });
+    list.appendChild(sec);
+  });
+}
+
+function doSearch(engine) {
+  const q = ($("web-search-input")?.value||"").trim();
+  if (!q) { toast("キーワードを入力してください"); return; }
+  const url = engine==="pubmed"
+    ? `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(q)}`
+    : `https://scholar.google.com/scholar?q=${encodeURIComponent(q)}`;
+  window.open(url, "_blank");
+}
+
+// ============================================================
+// データ出力 / インポート
+// ============================================================
+function exportText() {
+  let txt = `■ 検査補助アプリ 手順データ\n出力日時: ${new Date().toLocaleString("ja-JP")}\n\n`;
+  S.data.modalities.forEach(mod => {
+    const procs = S.data.procedures[mod.key]||[];
+    if (!procs.length) return;
+    txt += `\n▼ ${mod.label} (${mod.sub})\n${"=".repeat(40)}\n`;
+    procs.forEach(proc => {
+      txt += `\n【${proc.title}】\n`;
+      if (proc.desc) txt += `${proc.desc}\n`;
+      proc.sections.forEach(sec => {
+        txt += `\n◆ ${sec.heading}\n`;
+        sec.items.forEach((it, i) => {
+          let line = `  ${i+1}. ${it.text}`;
+          if (it.warn) line += ` [${it.warn}]`;
+          if (it.danger) line += ` [${it.danger}]`;
+          txt += line + "\n";
+          if (it.note) txt += `     ↳ ${it.note}\n`;
+        });
+      });
+    });
+  });
+
+  $("export-preview").innerHTML = `
+    <div class="shdr">プレビュー</div>
+    <pre style="background:var(--bg1);border:1px solid var(--line);border-radius:var(--r);padding:14px;font-size:11px;color:var(--dim);overflow-x:auto;white-space:pre-wrap;word-break:break-all;max-height:300px;overflow-y:auto;">${esc(txt)}</pre>
+    <button class="btn-main a" style="margin-top:10px;" onclick="copyText(${JSON.stringify(txt).replace(/</g,'&lt;')})">📋 クリップボードにコピー</button>`;
+  window._exportTxt = txt;
+  $("rt-export").querySelector("button[onclick='exportText()']").textContent = "✅ テキスト出力完了（下にプレビュー）";
+}
+
+function copyText(txt) {
+  const t = txt || window._exportTxt;
+  if (!t) return;
+  navigator.clipboard.writeText(t).then(() => toast("コピーしました！")).catch(() => {
+    // フォールバック
+    const ta = document.createElement("textarea");
+    ta.value = t; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
+    toast("コピーしました！");
+  });
+}
+
+function exportJSON() {
+  const json = JSON.stringify({ version:1, exportedAt: new Date().toISOString(), data: S.data }, null, 2);
+  const blob = new Blob([json], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `kensa_data_${new Date().toLocaleDateString("ja-JP").replace(/\//g,"-")}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("JSONをダウンロードしました");
+}
+
+function openImportSheet() {
+  openSheet(`
+    <h2>📥 JSONをインポート</h2>
+    <div class="ctx-txt">エクスポートしたJSONファイルを選択してください。<b>現在のデータは上書きされます。</b></div>
+    <label style="display:block;width:100%;padding:14px;border:1.5px dashed var(--line);border-radius:var(--r);color:var(--mute);font-size:13px;text-align:center;cursor:pointer;margin-bottom:14px;">
+      📂 JSONファイルを選択
+      <input type="file" accept=".json,application/json" id="import-input" style="display:none;" onchange="importJSON(this)">
+    </label>
+    <button class="btn-sub" onclick="closeSheet()">キャンセル</button>`);
+}
+
+function importJSON(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed.data || !parsed.data.modalities) { toast("無効なファイルです"); return; }
+      S.data = parsed.data;
+      await DB.set("md_data", S.data);
+      closeSheet(); renderHome();
+      toast("インポートしました！");
+    } catch { toast("ファイルの読み込みに失敗しました"); }
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+document.querySelectorAll(".tab").forEach(t => {
+  t.onclick = () => {
     const tab = t.dataset.t;
     if (tab==="home") showView("home");
     else if (tab==="checklist") {
       if (!S.currentProc) {
-        const m = S.data.modalities.find(m=>(S.data.procedures[m.key]||[]).length>0);
+        const m = S.data.modalities.find(m => (S.data.procedures[m.key]||[]).length>0);
         if (m) onMod(m.key); else onMod(S.data.modalities[0].key);
       } else showView("check");
-    } else if (tab==="notes") { renderNotes(); showView("notes"); }
-  };
+    }
+    else if (tab==="notes") { renderNotes(); showView("notes"); }
+    else if (tab==="quiz") { renderQuizHome(); showView("quiz"); }
+    else if (tab==="links") { showView("links"); }  };
 });
 
-$("backBtn").onclick = ()=>{
+$("backBtn").onclick = () => {
   const a = document.querySelector(".view.active");
   if (!a) return;
   if (a.id==="v-check") { if(S.editMode){ S.editMode=false; renderCheck(); showView("check"); return; } renderProcs(); showView("procs"); }
   else if (a.id==="v-procs") showView("home");
   else showView("home");
 };
-
-$("editBtn").onclick = ()=>{ S.editMode=true; renderCheck(); showView("check"); };
-$("doneBtn").onclick = ()=>{ S.editMode=false; renderCheck(); showView("check"); };
-
-$("resetBtn").onclick = ()=>{
-  if (!S.currentProc) return;
-  if (!confirm("チェックをすべてリセットしますか?")) return;
-  S.checked[S.currentProc] = [];
-  LS.setChecked(S.checked);
-  renderCheck();
-  toast("リセットしました");
+$("editBtn").onclick = () => { S.editMode=true; renderCheck(); showView("check"); };
+$("doneBtn").onclick = () => { S.editMode=false; renderCheck(); showView("check"); };
+$("resetBtn").onclick = async () => {
+  if (!S.currentProc||!confirm("チェックをすべてリセットしますか?")) return;
+  S.checked[S.currentProc]=[];
+  await DB.set("md_checked", S.checked); renderCheck(); toast("リセットしました");
 };
-
-$("addProcBtn").onclick = ()=> openProcEditor(null);
-
-document.querySelectorAll(".nf-btn").forEach(b=>{
-  b.onclick = ()=>{
-    document.querySelectorAll(".nf-btn").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");
-    S.notesFilter = b.dataset.f;
-    renderNotes();
+$("addProcBtn").onclick = () => openProcEditor(null);
+document.querySelectorAll(".nf-btn[data-f]").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".nf-btn[data-f]").forEach(x => x.classList.remove("active"));
+    b.classList.add("active"); S.notesFilter=b.dataset.f; renderNotes();
   };
 });
+document.addEventListener("keydown", e => {
+  if (e.key==="Enter" && $("web-search-input")===document.activeElement) doSearch("pubmed");
+  if (e.key==="Enter" && $("proc-search-input")===document.activeElement) searchProcs();
+});
 
-// ===================== INIT =====================
-(function init() {
-  const saved = LS.getData();
+// 気づきタブからの直接追加（手順・項目を選択して入力）
+// 気づきタブからの直接追加（クロージャ問題修正版）
+const _dns = { typ:"mistake", mod:null, proc:null };
+
+function openDirectNoteSheet(initType) {
+  _dns.typ = initType; _dns.mod = null; _dns.proc = null;
+  $("scrim").classList.add("on");
+  $("sheet").classList.add("on");
+  _dnsStep1();
+}
+
+function _dnsStep1() {
+  const isM = _dns.typ === "mistake";
+  $("sheet-body").innerHTML = `
+    <h2>${isM ? "⚠ ミスを記録" : "💡 気づきを記録"}</h2>
+    <div class="type-banner ${isM ? "m" : "i"}">
+      <span>${isM ? "⚠ ミス" : "💡 気づき"}</span>
+      <button class="sw" id="sw-btn">${isM ? "→ 気づきに変更" : "→ ミスに変更"}</button>
+    </div>
+    <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">どの手順に関する記録ですか？</p>
+    <div class="shdr">手順を選択</div>
+    <div id="dns-proc-list"></div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);">
+      <button class="btn-main ${isM ? "m" : "i"}" id="dns-no-proc">📝 手順を指定しない</button>
+    </div>
+    <button class="btn-sub" id="dns-cancel" style="margin-top:8px;">キャンセル</button>`;
+
+  $("sw-btn").onclick = e => {
+    e.stopPropagation();
+    _dns.typ = _dns.typ === "mistake" ? "insight" : "mistake";
+    _dnsStep1();
+  };
+  $("dns-cancel").onclick = closeSheet;
+  $("dns-no-proc").onclick = () => { _dns.mod = null; _dns.proc = null; _dnsStep3(null); };
+
+  const list = $("dns-proc-list");
+  S.data.modalities.forEach(mod => {
+    const procs = S.data.procedures[mod.key] || [];
+    if (!procs.length) return;
+    const g = document.createElement("div");
+    g.innerHTML = `<div style="font-size:11px;color:${mod.c||"var(--accent)"};font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:10px 2px 6px;">${esc(mod.label)}</div>`;
+    procs.forEach(proc => {
+      const btn = document.createElement("button");
+      btn.style.cssText = "width:100%;background:var(--bg2);border:1px solid var(--line);border-left:3px solid "+(mod.c||"var(--accent)")+";border-radius:10px;padding:11px 14px;text-align:left;font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text);";
+      btn.textContent = proc.title;
+      btn.onclick = () => { _dns.mod = mod; _dns.proc = proc; _dnsStep2(); };
+      g.appendChild(btn);
+    });
+    list.appendChild(g);
+  });
+}
+
+function _dnsStep2() {
+  const isM = _dns.typ === "mistake";
+  $("sheet-body").innerHTML = `
+    <h2>${isM ? "⚠ ミスを記録" : "💡 気づきを記録"}</h2>
+    <div class="ctx-txt"><b>${esc(_dns.mod.label)} / ${esc(_dns.proc.title)}</b></div>
+    <p style="color:var(--dim);font-size:13px;margin-bottom:12px;">どの項目に関する記録ですか？</p>
+    <div id="dns-item-list" style="max-height:42vh;overflow-y:auto;"></div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line);">
+      <button class="btn-main a" style="background:var(--bg2);color:var(--dim);border:1px solid var(--line);" id="dns-no-item">📝 項目を指定しない</button>
+    </div>
+    <button class="btn-sub" onclick="_dnsStep1()" style="margin-top:8px;">‹ 戻る</button>`;
+
+  $("dns-no-item").onclick = () => _dnsStep3(null);
+
+  const list = $("dns-item-list");
+  _dns.proc.sections.forEach(sec => {
+    const g = document.createElement("div");
+    g.innerHTML = `<div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:10px 2px 6px;">${esc(sec.heading)}</div>`;
+    sec.items.forEach(it => {
+      const btn = document.createElement("button");
+      btn.style.cssText = "width:100%;background:var(--bg1);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:left;font-size:13px;line-height:1.45;margin-bottom:6px;color:var(--text);";
+      btn.innerHTML = esc(it.text) + (it.warn ? `<span class="tag" style="margin-left:6px;">${esc(it.warn)}</span>` : "") + (it.danger ? `<span class="tag d">${esc(it.danger)}</span>` : "");
+      btn.onclick = () => _dnsStep3(it);
+      g.appendChild(btn);
+    });
+    list.appendChild(g);
+  });
+}
+
+function _dnsStep3(item) {
+  const isM = _dns.typ === "mistake";
+  const hasProc = !!_dns.proc;
+  $("sheet-body").innerHTML = `
+    <h2>${isM ? "⚠ ミスを記録" : "💡 気づきを記録"}</h2>
+    <div class="type-banner ${isM ? "m" : "i"}">
+      <span>${isM ? "⚠ ミス" : "💡 気づき"}</span>
+    </div>
+    <div class="ctx-txt">
+      ${hasProc
+        ? `<b>${esc(_dns.mod?.label||"")} / ${esc(_dns.proc?.title||"")}</b>${item ? `<br><span style="font-size:12px;">${esc(item.text)}</span>` : " · 項目指定なし"}`
+        : "手順・項目の指定なし"}
+    </div>
+    <label class="form-lbl">${isM ? "何を間違えた / 忘れた?" : "何に気づいた?"}</label>
+    <textarea class="form-input" id="dns-text" placeholder="${isM ? "例: フットスイッチ確認を忘れた" : "例: カテ進めるとき抵抗があった"}"></textarea>
+    <button class="btn-main ${isM ? "m" : "i"}" id="dns-save">保存する</button>
+    <button class="btn-sub" id="dns-back" style="margin-top:8px;">${hasProc ? "‹ 戻る" : "キャンセル"}</button>`;
+
+  $("dns-back").onclick = () => { hasProc ? _dnsStep2() : closeSheet(); };
+  $("dns-save").onclick = async () => {
+    const text = $("dns-text")?.value.trim();
+    if (!text) { toast("内容を入力してください"); $("dns-text")?.focus(); return; }
+    const note = {
+      id: genId("n"), t: Date.now(), type: _dns.typ,
+      modKey:    _dns.mod?.key   || "",
+      procId:    _dns.proc?.id   || "",
+      procTitle: _dns.proc?.title || "（手順指定なし）",
+      itemId:    item?.id   || "",
+      itemText:  item?.text || "（項目指定なし）",
+      text
+    };
+    S.notes.push(note);
+    await DB.set("md_notes", S.notes);
+    closeSheet(); renderNotes();
+    toast(_dns.typ === "mistake" ? "⚠ ミスを記録しました" : "💡 気づきを記録しました");
+  };
+  setTimeout(() => $("dns-text")?.focus(), 320);
+}
+
+
+// ============================================================
+// 目標管理
+// ============================================================
+async function loadGoals()    { return await DB.get("md_goals",     { today:"", week:"", month:"" }); }
+async function saveGoals(g)   { await DB.set("md_goals", g); }
+async function loadGoalLogs() { return await DB.get("md_goal_logs", []); }
+async function saveGoalLogs(l){ await DB.set("md_goal_logs", l); }
+
+async function renderGoals() {
+  const wrap = $("goal-wrap"); if (!wrap) return;
+  const goals = await loadGoals();
+  const logs  = await loadGoalLogs();
+  const today = new Date().toLocaleDateString("ja-JP");
+
+  wrap.innerHTML = `
+    <div class="shdr" style="margin-top:20px;">
+      🎯 目標
+      <div style="display:flex;gap:4px;">
+        <button class="al" onclick="openGoalEditor()">設定・編集</button>
+        <button class="al" onclick="showGoalLogs()" style="color:var(--dim);">振り返り</button>
+      </div>
+    </div>
+    <div id="goal-cards"></div>
+    <div class="shdr" style="margin-top:20px;">
+      ✅ 今日の達成チェック
+      <button class="al" onclick="openGoalCheck()">チェック</button>
+    </div>
+    <div id="goal-today-log"></div>`;
+
+  const cards = $("goal-cards");
+  const defs = [
+    { key:"today", label:"今日の目標", icon:"📅", color:"var(--accent)" },
+    { key:"week",  label:"今週の目標", icon:"📆", color:"var(--insight)" },
+    { key:"month", label:"今月の目標", icon:"🗓️", color:"#b48cff" }
+  ];
+  defs.forEach(d => {
+    const c = document.createElement("div");
+    c.style.cssText = `background:var(--bg1);border:1px solid var(--line);border-left:3px solid ${d.color};border-radius:var(--r);padding:12px 14px;margin-bottom:8px;`;
+    c.innerHTML = `
+      <div style="font-size:11px;color:${d.color};font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">${d.icon} ${d.label}</div>
+      <div style="font-size:14px;color:${goals[d.key] ? "var(--text)" : "var(--mute)"};">${goals[d.key] ? esc(goals[d.key]) : "未設定 — 右上「設定・編集」から入力"}</div>`;
+    cards.appendChild(c);
+  });
+
+  // 今日のログ
+  const todayLogs = logs.filter(l => l.date === today);
+  const logEl = $("goal-today-log");
+  if (!todayLogs.length) {
+    logEl.innerHTML = `<div style="color:var(--mute);font-size:13px;padding:8px 2px;">まだ記録がありません</div>`;
+  } else {
+    todayLogs.slice().reverse().forEach(l => {
+      const pct = Math.round((l.done / l.total) * 100);
+      const color = pct===100?"#5ed29a":pct>=50?"var(--insight)":"var(--danger)";
+      const labelMap = { today:"今日の目標", week:"今週の目標", month:"今月の目標" };
+      const c = document.createElement("div");
+      c.style.cssText = "background:var(--bg1);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:8px;";
+      c.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-size:12px;color:var(--mute);">${l.time} の記録</span>
+          <span style="font-size:22px;font-weight:800;color:${color};">${pct}%</span>
+        </div>
+        ${["today","week","month"].filter(k => l.checks[k] !== undefined).map(k => `
+          <div style="background:var(--bg2);border-radius:10px;padding:10px 12px;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="font-size:18px;flex-shrink:0;">${l.checks[k] ? "✅" : "❌"}</span>
+              <span style="font-size:12px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;">${labelMap[k]}</span>
+            </div>
+            <div style="font-size:14px;color:var(--text);line-height:1.5;padding-left:26px;">${esc(l.goals?.[k]||"（目標未記録）")}</div>
+            ${!l.checks[k] && l.reasons[k] ? `
+              <div style="margin-top:8px;padding:8px 10px;background:rgba(255,107,138,.1);border-left:2px solid var(--mistake);border-radius:0 8px 8px 0;font-size:12.5px;color:var(--mistake);padding-left:26px;">
+                💬 理由: ${esc(l.reasons[k])}
+              </div>` : ""}
+          </div>`).join("")}`;
+      logEl.appendChild(c);
+    });
+  }
+
+  // 明日の検査予定エリア
+  const tmr = await DB.get("md_tomorrow", { plan:"", updatedAt:"" });
+  const tomorrowEl = document.createElement("div");
+  tomorrowEl.innerHTML = `
+    <div class="shdr" style="margin-top:20px;">
+      🗒️ 明日の検査予定
+      <button class="al" onclick="openTomorrowEditor()">編集</button>
+    </div>
+    <div style="background:var(--bg1);border:1px solid var(--line);border-left:3px solid #6aa6ff;border-radius:var(--r);padding:14px;">
+      ${tmr.plan
+        ? `<div style="font-size:14px;white-space:pre-wrap;line-height:1.7;">${esc(tmr.plan)}</div>
+           ${tmr.updatedAt ? `<div style="font-size:11px;color:var(--mute);margin-top:8px;">更新: ${tmr.updatedAt}</div>` : ""}`
+        : `<div style="font-size:13px;color:var(--mute);">未入力 — 右上の「編集」からタップして入力</div>`}
+    </div>`;
+  wrap.appendChild(tomorrowEl);
+}
+
+function openGoalEditor() {
+  DB.get("md_goals", { today:"", week:"", month:"" }).then(goals => {
+    openSheet(`
+      <h2>🎯 目標を設定</h2>
+      <label class="form-lbl">📅 今日の目標</label>
+      <textarea class="form-input" id="g-today" style="min-height:70px;" placeholder="例: DSA の準備手順を完璧に覚える">${esc(goals.today||"")}</textarea>
+      <label class="form-lbl">📆 今週の目標</label>
+      <textarea class="form-input" id="g-week" style="min-height:70px;" placeholder="例: IVR の全手順をチェックなしで言えるようにする">${esc(goals.week||"")}</textarea>
+      <label class="form-lbl">🗓️ 今月の目標</label>
+      <textarea class="form-input" id="g-month" style="min-height:70px;" placeholder="例: 参考書のIVR章を読み込む">${esc(goals.month||"")}</textarea>
+      <button class="btn-main a" id="g-save">保存する</button>
+      <button class="btn-sub" onclick="closeSheet()" style="margin-top:8px;">キャンセル</button>`);
+    $("g-save").onclick = async () => {
+      const g = {
+        today: $("g-today").value.trim(),
+        week:  $("g-week").value.trim(),
+        month: $("g-month").value.trim()
+      };
+      await saveGoals(g);
+      closeSheet(); renderGoals();
+      toast("目標を保存しました");
+    };
+  });
+}
+
+function openGoalCheck() {
+  DB.get("md_goals", { today:"", week:"", month:"" }).then(goals => {
+    const defs = [
+      { key:"today", label:"今日の目標", icon:"📅" },
+      { key:"week",  label:"今週の目標", icon:"📆" },
+      { key:"month", label:"今月の目標", icon:"🗓️" }
+    ].filter(d => goals[d.key]);
+
+    if (!defs.length) { toast("目標が設定されていません"); return; }
+
+    const st = {};
+    defs.forEach(d => { st[d.key] = null; });
+
+    function rc() {
+      $("sheet-body").innerHTML = `
+        <h2>✅ 達成チェック</h2>
+        <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">各目標の達成状況を記録します</p>
+        ${defs.map(d => `
+          <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;">
+            <div style="font-size:12px;font-weight:700;margin-bottom:4px;">${d.icon} ${d.label}</div>
+            <div style="font-size:14px;margin-bottom:10px;">${esc(goals[d.key])}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <button data-k="${d.key}" data-v="1" class="gc-btn"
+                style="padding:10px;border-radius:8px;border:1.5px solid ${st[d.key]===true?"#5ed29a":"var(--line)"};background:${st[d.key]===true?"rgba(94,210,154,.15)":"var(--bg1)"};color:${st[d.key]===true?"#5ed29a":"var(--dim)"};font-weight:700;">
+                ✅ 達成
+              </button>
+              <button data-k="${d.key}" data-v="0" class="gc-btn"
+                style="padding:10px;border-radius:8px;border:1.5px solid ${st[d.key]===false?"var(--danger)":"var(--line)"};background:${st[d.key]===false?"rgba(245,101,101,.1)":"var(--bg1)"};color:${st[d.key]===false?"var(--danger)":"var(--dim)"};font-weight:700;">
+                ❌ 未達成
+              </button>
+            </div>
+            ${st[d.key]===false ? `<textarea class="form-input" id="rsn-${d.key}" style="margin-top:8px;min-height:70px;margin-bottom:0;" placeholder="なぜ達成できなかったか…"></textarea>` : ""}
+          </div>`).join("")}
+        <button class="btn-main a" id="gc-save">記録する</button>
+        <button class="btn-sub" onclick="closeSheet()" style="margin-top:8px;">キャンセル</button>`;
+
+      $("sheet-body").querySelectorAll(".gc-btn").forEach(btn => {
+        btn.onclick = () => { st[btn.dataset.k] = btn.dataset.v === "1"; rc(); };
+      });
+
+      $("gc-save").onclick = async () => {
+        if (defs.some(d => st[d.key] === null)) { toast("すべての目標にチェックを入れてください"); return; }
+        const reasons = {};
+        defs.forEach(d => { if (st[d.key] === false) reasons[d.key] = $(`rsn-${d.key}`)?.value.trim() || ""; });
+        const now = new Date();
+        const log = {
+          id: genId("gl"), t: Date.now(),
+          date: now.toLocaleDateString("ja-JP"),
+          time: now.toLocaleTimeString("ja-JP", { hour:"2-digit", minute:"2-digit" }),
+          checks: { ...st }, reasons,
+          goals: { today: goals.today, week: goals.week, month: goals.month },
+          done: defs.filter(d => st[d.key]).length,
+          total: defs.length
+        };
+        const logs = await loadGoalLogs();
+        logs.push(log);
+        await saveGoalLogs(logs);
+        closeSheet(); renderGoals();
+        const pct = Math.round(log.done / log.total * 100);
+        toast(pct === 100 ? "🏆 全目標達成！" : `記録しました（${pct}%達成）`);
+      };
+    }
+    openSheet(""); rc();
+  });
+}
+
+function showGoalLogs() {
+  renderGoalLogPage();
+  showView("goals");
+}
+
+async function renderGoalLogPage() {
+  const logs = await loadGoalLogs();
+  const el = $("goal-log-body"); if (!el) return;
+  if (!logs.length) {
+    el.innerHTML = `<div class="empty">まだ記録がありません<br>ホームの「達成チェック」から記録できます</div>`;
+    return;
+  }
+  el.innerHTML = "";
+  logs.slice().reverse().forEach(log => {
+    const pct = Math.round((log.done / log.total) * 100);
+    const color = pct===100 ? "#5ed29a" : pct>=50 ? "var(--insight)" : "var(--danger)";
+    const c = document.createElement("div");
+    c.style.cssText = "background:var(--bg1);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px;";
+    c.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div>
+          <div style="font-weight:700;font-size:15px;">${log.date}</div>
+          <div style="font-size:11px;color:var(--mute);">${log.time}</div>
+        </div>
+        <div style="font-size:28px;font-weight:800;color:${color};">${pct}%</div>
+      </div>
+      ${["today","week","month"].filter(k => log.checks[k] !== undefined).map(k => `
+        <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;padding:10px;background:var(--bg2);border-radius:10px;">
+          <span style="font-size:18px;flex-shrink:0;">${log.checks[k] ? "✅" : "❌"}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:12px;color:var(--dim);margin-bottom:2px;">${{today:"今日の目標",week:"今週の目標",month:"今月の目標"}[k]}</div>
+            <div style="font-size:13px;">${esc(log.goals?.[k]||"")}</div>
+            ${!log.checks[k] && log.reasons[k] ? `<div style="font-size:12px;color:var(--mistake);margin-top:4px;border-left:2px solid var(--mistake);padding-left:6px;">理由: ${esc(log.reasons[k])}</div>` : ""}
+          </div>
+        </div>`).join("")}`;
+    el.appendChild(c);
+  });
+}
+
+function openTomorrowEditor() {
+  DB.get("md_tomorrow", { plan:"", updatedAt:"" }).then(tmr => {
+    openSheet(`
+      <h2>🗒️ 明日の検査予定</h2>
+      <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">明日の検査・準備の流れを自由に入力してください</p>
+      <label class="form-lbl">検査の流れ・準備メモ</label>
+      <textarea class="form-input" id="tmr-plan" style="min-height:200px;font-size:14px;line-height:1.7;"
+        placeholder="例:&#10;8:30 DSA（患者Aさん）&#10;- 造影剤: イオパミドール準備&#10;- 担当: 〇〇先生&#10;&#10;10:00 CT 腹部造影&#10;- 前処置確認&#10;&#10;13:00 MRI 脳&#10;- 金属チェック">${esc(tmr.plan||"")}</textarea>
+      <button class="btn-main a" id="tmr-save">保存する</button>
+      <button class="btn-sub" onclick="closeSheet()" style="margin-top:8px;">キャンセル</button>`);
+    $("tmr-save").onclick = async () => {
+      const plan = $("tmr-plan").value.trim();
+      const now = new Date();
+      const updatedAt = now.toLocaleDateString("ja-JP") + " " + now.toLocaleTimeString("ja-JP", { hour:"2-digit", minute:"2-digit" });
+      await DB.set("md_tomorrow", { plan, updatedAt });
+      closeSheet(); renderGoals();
+      toast("明日の予定を保存しました");
+    };
+    setTimeout(() => $("tmr-plan")?.focus(), 320);
+  });
+}
+
+
+// ============================================================
+const QUIZ_BANK = {
+  "ivr-dsa": {
+    title: "DSA 脳血管撮影",
+    sets: [
+      {
+        id:"q1", name:"準備手順の順序", type:"order",
+        desc:"準備フェーズの手順を正しい順序に並び替えてください",
+        items:[
+          { id:"a", text:"イオパミドール 300/100 を 150 入れる" },
+          { id:"b", text:"インジェクター取り付け" },
+          { id:"c", text:"造影チューブ繋げて 1/3 くらい造影剤を流す" },
+          { id:"d", text:"取り付け時、声掛けてから造影剤を繋げる" },
+          { id:"e", text:"ペアンで気泡除去" },
+          { id:"f", text:"一気にダブル矢印で気泡除去" }
+        ],
+        correctOrder:["b","a","d","c","e","f"],
+        explanation:"インジェクター取り付け → 造影剤準備 → 声掛けして接続 → 造影剤を流す → ペアンで気泡除去 → ダブル矢印で気泡除去、の順番です。"
+      },
+      {
+        id:"q2", name:"撮影手順の知識確認", type:"truefalse",
+        questions:[
+          { id:"tf1", text:"気泡除去は1回言ってきたタイミングでハンドルを勢いよく回す", answer:false, explanation:"2回言ってくる → 2回目のタイミングでハンドルを勢いよく回します" },
+          { id:"tf2", text:"首撮影時はインジェクター接続の際に A・B 管球両方の接続を確認する", answer:true, explanation:"A・B 管球の両方が繋がっているか確認することは必須です" },
+          { id:"tf3", text:"撮影終了後はフットスイッチが元に戻っているか確認する", answer:true, explanation:"安全確認として必ず確認します" },
+          { id:"tf4", text:"造影剤チューブを繋げる際は先端から外す", answer:false, explanation:"根本から外します" },
+          { id:"tf5", text:"リファレンスはラテラルのみ貼り付ければ十分", answer:false, explanation:"通常リファレンスとラテラルのリファレンスの両方を貼り付けます" }
+        ]
+      },
+      {
+        id:"q3", name:"造影剤・数値の穴埋め", type:"fill",
+        questions:[
+          { id:"f1", text:"使用する造影剤は【　】300/100 で、量は【　】mL 入れる", blanks:["イオパミドール","150"], hint:"造影剤名と使用量を答えてください" },
+          { id:"f2", text:"造影チューブを繋げた後、【　】くらい造影剤を流す", blanks:["1/3"], hint:"分数で答えてください" }
+        ]
+      },
+      {
+        id:"q4", name:"3D血管・後処理の知識", type:"choice",
+        questions:[
+          { id:"c1", text:"3D血管撮影後に脳動脈を追う正しい順序はどれですか？", choices:["SCA → PCA → IC → MCA → ACA","IC → MCA → ACA → SCA → PCA","ACA → MCA → IC → PCA → SCA","MCA → ACA → IC → SCA → PCA"], answer:0, explanation:"SCA → PCA → IC → MCA → ACA の順に追います" },
+          { id:"c2", text:"脳実質に入っている蛇行気味の血管は基本的に何ですか？", choices:["静脈","動脈","毛細血管","リンパ管"], answer:1, explanation:"脳実質に入っている蛇行気味のものは基本的に動脈です" },
+          { id:"c3", text:"MCA（中大脳動脈）の付近にあるのは？", choices:["動脈のみ","毛細血管","静脈","リンパ管"], answer:2, explanation:"MCA の付近には静脈があります。見落とし注意です" },
+          { id:"c4", text:"後処理でエクステンダーを塗った後に行う操作は？", choices:["縮小2でなめらか","拡大1でなめらか","拡大2でなめらか","縮小1でなめらか"], answer:1, explanation:"エクステンダー塗り、最後に拡大1でなめらかにします" }
+        ]
+      },
+      {
+        id:"q5", name:"総合問題（ランダム8問）", type:"mixed",
+        desc:"全セクションから出題します", questionCount:8
+      }
+    ]
+  }
+};
+
+const QS = {
+  currentBank:null, currentSet:null,
+  questions:[], current:0, answers:[], score:0,
+  sortOrder:[]
+};
+
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function renderQuizHome() {
+  const list=$("quiz-select-list"); if(!list)return;
+  list.innerHTML="";
+  S.data.modalities.forEach(mod=>{
+    (S.data.procedures[mod.key]||[]).forEach(proc=>{
+      const bank=QUIZ_BANK[proc.id];
+      const history=JSON.parse(localStorage.getItem("quiz_history_"+proc.id)||"[]");
+      const best=history.length?Math.max(...history.map(h=>h.pct)):null;
+      const card=document.createElement("div");
+      card.className="quiz-card";
+      card.innerHTML=`
+        <div class="qc-title">${esc(proc.title)}</div>
+        <div class="qc-meta">
+          <span style="color:var(--accent);">${esc(mod.label)}</span>
+          ${bank?`<span class="qc-badge" style="background:rgba(77,208,197,.15);color:var(--accent);">${bank.sets.length} セット</span>`:""}
+          ${best!==null?`<span class="qc-badge" style="background:rgba(94,210,154,.15);color:#5ed29a;">ベスト ${best}%</span>`:""}
+          ${!bank?`<span class="qc-badge" style="background:var(--bg2);color:var(--mute);">問題準備中</span>`:""}
+        </div>`;
+      if(bank) card.onclick=()=>showQuizSets(proc.id);
+      else card.style.opacity="0.5";
+      list.appendChild(card);
+    });
+  });
+}
+
+function showQuizSets(procId) {
+  const bank=QUIZ_BANK[procId]; if(!bank)return;
+  QS.currentBank=procId;
+  const list=$("quiz-select-list");
+  list.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+    <button onclick="renderQuizHome()" style="color:var(--accent);font-size:13px;padding:4px 8px;border-radius:6px;">‹ 戻る</button>
+    <span style="font-weight:700;font-size:15px;">${esc(bank.title)}</span>
+  </div>`;
+  const typeLabel={order:"並び替え",truefalse:"○×問題",fill:"穴埋め",choice:"4択問題",mixed:"総合問題"};
+  const typeColor={order:"var(--accent)",truefalse:"#b48cff",fill:"var(--insight)",choice:"#6aa6ff",mixed:"var(--mistake)"};
+  bank.sets.forEach(set=>{
+    const h=JSON.parse(localStorage.getItem(`quiz_${procId}_${set.id}`)||"[]");
+    const best=h.length?Math.max(...h.map(x=>x.pct)):null;
+    const qCount=set.type==="order"?1:(set.questions?.length||set.questionCount||0);
+    const card=document.createElement("div");
+    card.className="quiz-card";
+    card.innerHTML=`
+      <div class="qc-title">${esc(set.name)}</div>
+      <div class="qc-meta" style="margin-top:6px;">
+        <span class="qc-badge" style="background:rgba(255,255,255,.06);color:${typeColor[set.type]};">${typeLabel[set.type]}</span>
+        <span style="color:var(--mute);">${qCount} 問</span>
+        ${best!==null?`<span class="qc-badge" style="background:rgba(94,210,154,.15);color:#5ed29a;">ベスト ${best}%</span>`:""}
+      </div>
+      ${set.desc?`<div style="font-size:12px;color:var(--dim);margin-top:8px;">${esc(set.desc)}</div>`:""}`;
+    card.onclick=()=>startQuiz(procId,set.id);
+    list.appendChild(card);
+  });
+  const history=JSON.parse(localStorage.getItem("quiz_history_"+procId)||"[]");
+  if(history.length){
+    const hw=document.createElement("div");
+    hw.innerHTML=`<div class="shdr" style="margin-top:20px;">過去の結果（直近5件）</div>`;
+    history.slice(-5).reverse().forEach(h=>{
+      const c=document.createElement("div");
+      c.className="history-card";
+      c.innerHTML=`
+        <div><div style="font-weight:600;font-size:14px;">${esc(h.setName)}</div><div style="font-size:11px;color:var(--mute);margin-top:2px;">${fmtDate(h.t)} · ${h.correct}/${h.total} 問正解</div></div>
+        <div class="history-score" style="color:${h.pct>=80?"#5ed29a":h.pct>=60?"var(--insight)":"var(--danger)"};">${h.pct}%</div>`;
+      hw.appendChild(c);
+    });
+    list.appendChild(hw);
+  }
+}
+
+function startQuiz(procId, setId) {
+  const bank=QUIZ_BANK[procId];
+  const set=bank.sets.find(s=>s.id===setId);
+  QS.currentBank=procId; QS.currentSet=set;
+  QS.current=0; QS.answers=[]; QS.score=0;
+  if(set.type==="order"){ QS.questions=[{type:"order",...set}]; QS.sortOrder=shuffle([...set.items]); }
+  else if(set.type==="truefalse") QS.questions=shuffle(set.questions).map(q=>({type:"truefalse",...q}));
+  else if(set.type==="choice") QS.questions=shuffle(set.questions).map(q=>({type:"choice",...q}));
+  else if(set.type==="fill") QS.questions=set.questions.map(q=>({type:"fill",...q}));
+  else if(set.type==="mixed") QS.questions=buildMixed(procId,set.questionCount);
+  $("quiz-home").style.display="none";
+  $("quiz-result").style.display="none";
+  $("quiz-body").style.display="block";
+  renderQuestion();
+}
+
+function buildMixed(procId,count){
+  const bank=QUIZ_BANK[procId];
+  const pool=[];
+  bank.sets.forEach(set=>{
+    if(set.type==="truefalse") set.questions.forEach(q=>pool.push({type:"truefalse",...q}));
+    if(set.type==="choice") set.questions.forEach(q=>pool.push({type:"choice",...q}));
+    if(set.type==="fill") set.questions.forEach(q=>pool.push({type:"fill",...q}));
+  });
+  return shuffle(pool).slice(0,count);
+}
+
+function renderQuestion(){
+  const body=$("quiz-body"); if(!body)return;
+  const q=QS.questions[QS.current];
+  const total=QS.questions.length;
+  const pct=Math.round((QS.current/total)*100);
+  const tLabel={order:"並び替え",truefalse:"○×問題",fill:"穴埋め",choice:"4択問題"}[q.type];
+  let html="";
+  if(q.type==="order") html=renderOrderQ(q);
+  else if(q.type==="truefalse") html=renderTFQ(q);
+  else if(q.type==="choice") html=renderChoiceQ(q);
+  else if(q.type==="fill") html=renderFillQ(q);
+  body.innerHTML=`
+    <div class="q-prog-row">
+      <span class="q-num">${QS.current+1} / ${total}</span>
+      <div class="q-prog-bar"><div class="q-prog-fill" style="width:${pct}%"></div></div>
+      <span class="q-type-badge q-type-${q.type}">${tLabel}</span>
+    </div>${html}`;
+  if(q.type==="order") initSortDrag();
+}
+
+function renderOrderQ(q){
+  return `<div class="q-question">以下の手順を正しい順序に並び替えてください<div style="font-size:13px;color:var(--dim);font-weight:400;margin-top:4px;">${esc(q.desc||"")}</div></div>
+  <div class="sort-list" id="sort-list">${QS.sortOrder.map((it,i)=>`
+    <div class="sort-item" draggable="true" data-id="${it.id}">
+      <span class="sort-handle">⠿</span><span class="sort-num">${i+1}</span><span class="sort-text">${esc(it.text)}</span>
+    </div>`).join("")}</div>
+  <button class="btn-main a" onclick="checkOrder()">この順序で確認</button>`;
+}
+
+function initSortDrag(){
+  const list=$("sort-list"); if(!list)return;
+  let dragSrc=null;
+  const updateNums=()=>list.querySelectorAll(".sort-item").forEach((el,i)=>el.querySelector(".sort-num").textContent=i+1);
+  const updateOrder=()=>{ QS.sortOrder=[...list.querySelectorAll(".sort-item")].map(el=>QS.questions[QS.current].items.find(it=>it.id===el.dataset.id)); };
+  list.querySelectorAll(".sort-item").forEach(item=>{
+    item.addEventListener("dragstart",()=>{ dragSrc=item; setTimeout(()=>item.style.opacity=".4",0); });
+    item.addEventListener("dragend",()=>{ item.style.opacity="1"; list.querySelectorAll(".sort-item").forEach(i=>i.classList.remove("drag-over")); });
+    item.addEventListener("dragover",e=>{ e.preventDefault(); item.classList.add("drag-over"); });
+    item.addEventListener("dragleave",()=>item.classList.remove("drag-over"));
+    item.addEventListener("drop",e=>{
+      e.preventDefault(); item.classList.remove("drag-over");
+      if(dragSrc===item)return;
+      const all=[...list.querySelectorAll(".sort-item")];
+      if(all.indexOf(dragSrc)<all.indexOf(item)) list.insertBefore(dragSrc,item.nextSibling);
+      else list.insertBefore(dragSrc,item);
+      updateNums(); updateOrder();
+    });
+    // Touch対応
+    let touchTarget=null;
+    item.addEventListener("touchstart",()=>{ dragSrc=item; },{passive:true});
+    item.addEventListener("touchmove",e=>{
+      e.preventDefault();
+      const t=e.touches[0];
+      const el=document.elementFromPoint(t.clientX,t.clientY)?.closest(".sort-item");
+      list.querySelectorAll(".sort-item").forEach(i=>i.classList.remove("drag-over"));
+      if(el&&el!==dragSrc){ el.classList.add("drag-over"); touchTarget=el; }
+    },{passive:false});
+    item.addEventListener("touchend",()=>{
+      list.querySelectorAll(".sort-item").forEach(i=>i.classList.remove("drag-over"));
+      if(touchTarget&&touchTarget!==dragSrc){
+        const all=[...list.querySelectorAll(".sort-item")];
+        if(all.indexOf(dragSrc)<all.indexOf(touchTarget)) list.insertBefore(dragSrc,touchTarget.nextSibling);
+        else list.insertBefore(dragSrc,touchTarget);
+        updateNums(); updateOrder();
+      }
+      touchTarget=null;
+    });
+  });
+}
+
+function checkOrder(){
+  const q=QS.questions[QS.current];
+  const userOrder=[...$("sort-list").querySelectorAll(".sort-item")].map(el=>el.dataset.id);
+  const correct=JSON.stringify(userOrder)===JSON.stringify(q.correctOrder);
+  if(correct)QS.score++;
+  QS.answers.push({type:"order",correct,question:q.desc||q.name});
+  const body=$("quiz-body");
+  const fb=document.createElement("div");
+  fb.className=`q-feedback ${correct?"ok":"ng"}`;
+  fb.innerHTML=`<div>${correct?"✅ 正解！":"❌ 不正解"}</div>
+    ${!correct?`<div style="margin-top:6px;font-size:13px;color:var(--text);">正しい順序:</div><ol style="margin:6px 0 0 16px;font-size:13px;color:var(--dim);">${q.correctOrder.map(id=>{const it=q.items.find(i=>i.id===id);return`<li style="margin-bottom:2px;">${esc(it.text)}</li>`;}).join("")}</ol>`:""}
+    <div style="font-size:13px;color:var(--dim);margin-top:6px;">${esc(q.explanation||"")}</div>`;
+  body.appendChild(fb);
+  appendNextBtn();
+  body.querySelector(".btn-main[onclick='checkOrder()']").style.display="none";
+}
+
+function renderTFQ(q){
+  return `<div class="q-question">${esc(q.text)}</div>
+  <div class="choice-list">
+    <button class="choice-btn" onclick="answerTF(true,this)">⭕ 正しい</button>
+    <button class="choice-btn" onclick="answerTF(false,this)">❌ 間違い</button>
+  </div>`;
+}
+
+function answerTF(ans,btn){
+  const q=QS.questions[QS.current];
+  const correct=ans===q.answer;
+  if(correct)QS.score++;
+  QS.answers.push({type:"truefalse",correct,question:q.text});
+  $("quiz-body").querySelectorAll(".choice-btn").forEach(b=>{
+    b.disabled=true;
+    if((b.textContent.includes("正しい")&&q.answer===true)||(b.textContent.includes("間違い")&&q.answer===false)) b.classList.add("correct");
+    else b.classList.add("wrong");
+  });
+  showFB(correct,`正解: ${q.answer?"⭕ 正しい":"❌ 間違い"}`,q.explanation);
+}
+
+function renderChoiceQ(q){
+  return `<div class="q-question">${esc(q.text)}</div>
+  <div class="choice-list">${q.choices.map((c,i)=>`<button class="choice-btn" onclick="answerChoice(${i},this)">${esc(c)}</button>`).join("")}</div>`;
+}
+
+function answerChoice(idx,btn){
+  const q=QS.questions[QS.current];
+  const correct=idx===q.answer;
+  if(correct)QS.score++;
+  QS.answers.push({type:"choice",correct,question:q.text});
+  $("quiz-body").querySelectorAll(".choice-btn").forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.answer)b.classList.add("correct");
+    else if(i===idx&&!correct)b.classList.add("wrong");
+  });
+  showFB(correct,`正解: ${esc(q.choices[q.answer])}`,q.explanation);
+}
+
+function renderFillQ(q){
+  return `<div class="q-question">${esc(q.text)}</div>
+  <div style="font-size:12px;color:var(--dim);margin-bottom:12px;">ヒント: ${esc(q.hint||"")}</div>
+  ${q.blanks.map((b,i)=>`<input class="fill-input" id="fill-${i}" type="text" placeholder="${i+1}番目の答えを入力..." autocomplete="off" spellcheck="false">`).join("")}
+  <button class="btn-main a" onclick="checkFill()">答え合わせ</button>`;
+}
+
+function checkFill(){
+  const q=QS.questions[QS.current];
+  let allOk=true;
+  q.blanks.forEach((ans,i)=>{
+    const inp=$(`fill-${i}`);
+    const ok=inp.value.trim()===ans||inp.value.trim().toLowerCase()===ans.toLowerCase();
+    inp.classList.add(ok?"correct":"wrong"); inp.disabled=true;
+    if(!ok)allOk=false;
+  });
+  if(allOk)QS.score++;
+  QS.answers.push({type:"fill",correct:allOk,question:q.text});
+  showFB(allOk,`正解: ${q.blanks.join(" / ")}`, "");
+  $("quiz-body").querySelector(".btn-main[onclick='checkFill()']").style.display="none";
+}
+
+function showFB(correct,ansText,exp){
+  const body=$("quiz-body");
+  const fb=document.createElement("div");
+  fb.className=`q-feedback ${correct?"ok":"ng"}`;
+  fb.innerHTML=`<div style="font-weight:700;">${correct?"✅ 正解！":"❌ 不正解"}</div>
+    <div style="margin-top:4px;">${ansText}</div>
+    ${exp?`<div style="font-size:13px;color:var(--dim);margin-top:4px;">${esc(exp)}</div>`:""}`;
+  body.appendChild(fb);
+  appendNextBtn();
+}
+
+function appendNextBtn(){
+  const body=$("quiz-body");
+  const btn=document.createElement("button");
+  btn.className="btn-main a"; btn.style.marginTop="8px";
+  btn.textContent=QS.current+1<QS.questions.length?"次の問題 →":"結果を見る";
+  btn.onclick=()=>{ QS.current++; QS.current<QS.questions.length?renderQuestion():showResult(); };
+  body.appendChild(btn);
+}
+
+function showResult(){
+  $("quiz-body").style.display="none";
+  const result=$("quiz-result"); result.style.display="block";
+  const total=QS.questions.length;
+  const pct=Math.round((QS.score/total)*100);
+  const msg=pct>=90?"🏆 完璧です！":pct>=70?"👍 よくできました！":pct>=50?"📖 もう少し復習しましょう":"💪 しっかり復習が必要です";
+  const color=pct>=80?"#5ed29a":pct>=60?"var(--insight)":"var(--danger)";
+  const hKey="quiz_history_"+QS.currentBank;
+  const hist=JSON.parse(localStorage.getItem(hKey)||"[]");
+  hist.push({t:Date.now(),setName:QS.currentSet.name,correct:QS.score,total,pct});
+  localStorage.setItem(hKey,JSON.stringify(hist.slice(-20)));
+  localStorage.setItem(`quiz_${QS.currentBank}_${QS.currentSet.id}`,JSON.stringify([{t:Date.now(),pct}]));
+  result.innerHTML=`
+    <div class="result-score">
+      <div class="score-num" style="color:${color};">${QS.score}<span class="score-max"> / ${total}</span></div>
+      <div style="font-size:18px;color:${color};margin-top:4px;font-weight:700;">${pct}%</div>
+      <div class="score-msg">${msg}</div>
+    </div>
+    <div class="shdr" style="margin-top:8px;">問題ごとの結果</div>
+    ${QS.answers.map((a,i)=>`
+      <div class="result-item">
+        <span style="font-size:18px;flex-shrink:0;">${a.correct?"✅":"❌"}</span>
+        <div style="font-size:13px;color:var(--dim);flex:1;"><b style="color:var(--text);">Q${i+1}.</b> ${esc(a.question.length>60?a.question.slice(0,60)+"...":a.question)}</div>
+      </div>`).join("")}
+    <button class="btn-main a" style="margin-top:16px;" onclick="startQuiz(QS.currentBank,QS.currentSet.id)">もう一度挑戦</button>
+    <button class="btn-sub" onclick="backToQuizHome()">テスト一覧に戻る</button>`;
+}
+
+function backToQuizHome(){
+  $("quiz-result").style.display="none";
+  $("quiz-body").style.display="none";
+  $("quiz-home").style.display="block";
+  renderQuizHome();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(async function init() {
+  const saved = await DB.get("md_data", null);
   S.data = saved || JSON.parse(JSON.stringify(DEFAULT));
-  S.checked = LS.getChecked();
-  S.notes   = LS.getNotes();
+  S.checked = await DB.get("md_checked", {});
+  S.notes = await DB.get("md_notes", []);
   renderHome();
+  renderGoals();
 })();
 </script>
 </body>
