@@ -2276,6 +2276,42 @@ function backToQuizHome(){
 // INIT
 // ============================================================
 (async function init() {
+
+  // ── localStorage → IndexedDB 自動移行 ──────────────────
+  const migrated = await DB.get("ls_migrated", false);
+  if (!migrated) {
+    try {
+      // 手順データ
+      const lsData = localStorage.getItem("md_data");
+      if (lsData) await DB.set("md_data", JSON.parse(lsData));
+
+      // チェック状態
+      const lsChecked = localStorage.getItem("md_checked");
+      if (lsChecked) await DB.set("md_checked", JSON.parse(lsChecked));
+
+      // 気づき・ミス
+      const lsNotes = localStorage.getItem("md_notes");
+      if (lsNotes) await DB.set("md_notes", JSON.parse(lsNotes));
+
+      // PDF
+      const lsPdfs = localStorage.getItem("md_pdfs");
+      if (lsPdfs) await DB.set("md_pdfs", JSON.parse(lsPdfs));
+
+      // メモ
+      const lsMemos = localStorage.getItem("md_memos");
+      if (lsMemos) await DB.set("md_memos", JSON.parse(lsMemos));
+
+      await DB.set("ls_migrated", true);
+
+      if (lsData || lsNotes || lsChecked) {
+        console.log("✅ localStorageからデータを移行しました");
+      }
+    } catch(e) {
+      console.warn("移行エラー:", e);
+    }
+  }
+  // ────────────────────────────────────────────────────────
+
   const saved = await DB.get("md_data", null);
   S.data = saved || JSON.parse(JSON.stringify(DEFAULT));
   S.checked = await DB.get("md_checked", {});
