@@ -130,12 +130,16 @@
   .note-card { background: var(--bg1); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; margin-bottom: 10px; }
   .note-card.m { border-left: 3px solid var(--mistake); }
   .note-card.i { border-left: 3px solid var(--insight); }
+  .note-card.q { border-left: 3px solid var(--accent); }
   .nc-head { display: flex; justify-content: space-between; font-size: 11px; color: var(--mute); margin-bottom: 6px; }
   .nc-typ.m { color: var(--mistake); font-weight: 700; }
   .nc-typ.i { color: var(--insight); font-weight: 700; }
+  .nc-typ.q { color: var(--accent); font-weight: 700; }
   .nc-ctx { font-size: 12px; color: var(--dim); margin-bottom: 6px; }
   .nc-ctx b { color: var(--text); }
   .nc-text { font-size: 14px; word-break: break-word; }
+  .nc-question { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: rgba(77,208,197,.08); border-left: 3px solid var(--accent); color: var(--text); font-size: 13px; word-break: break-word; }
+  .nc-question b { color: var(--accent); font-size: 11px; margin-right: 4px; }
   .nc-actions { display: flex; gap: 6px; margin-top: 8px; justify-content: flex-end; }
   .nc-actions button { font-size: 11px; color: var(--mute); padding: 4px 8px; border-radius: 6px; }
   .nc-actions button:active { background: var(--bg2); }
@@ -177,6 +181,10 @@
   .type-banner.i { background: rgba(255,180,84,.12); color: var(--insight); border: 1px solid rgba(255,180,84,.3); }
   .type-banner .sw { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--dim); padding: 4px 10px; border: 1px solid var(--line); border-radius: 99px; }
   .type-banner .sw:active { background: var(--bg2); }
+  .target-change { display: flex; gap: 8px; align-items: flex-start; justify-content: space-between; }
+  .target-change .ctx-txt { flex: 1; margin-bottom: 14px; }
+  .target-btn { flex-shrink: 0; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); color: var(--accent); font-size: 12px; font-weight: 600; }
+  .target-btn:active { background: rgba(77,208,197,.08); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .btn-main { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; transition: opacity .1s; }
   .btn-main:active { opacity: .9; }
@@ -299,15 +307,17 @@
   <p style="color:var(--dim);font-size:13px;margin-bottom:12px;">すべての記録を横断表示</p>
 
   <!-- 直接追加ボタン -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
     <button onclick="openDirectNoteSheet('mistake')" style="padding:11px;border-radius:10px;background:rgba(255,107,138,.12);border:1px solid rgba(255,107,138,.3);color:var(--mistake);font-size:13px;font-weight:700;">⚠ ミスを追加</button>
     <button onclick="openDirectNoteSheet('insight')" style="padding:11px;border-radius:10px;background:rgba(255,180,84,.12);border:1px solid rgba(255,180,84,.3);color:var(--insight);font-size:13px;font-weight:700;">💡 気づきを追加</button>
+    <button onclick="openDirectNoteSheet('question')" style="padding:11px;border-radius:10px;background:rgba(77,208,197,.12);border:1px solid rgba(77,208,197,.3);color:var(--accent);font-size:13px;font-weight:700;">？疑問を追加</button>
   </div>
 
   <div class="notes-filter">
     <button class="nf-btn active" data-f="all">すべて</button>
     <button class="nf-btn" data-f="mistake">⚠ ミス</button>
     <button class="nf-btn" data-f="insight">💡 気づき</button>
+    <button class="nf-btn" data-f="question">？疑問</button>
   </div>
   <div id="notes-body"></div>
 </div>
@@ -675,7 +685,7 @@ function renderCheck() {
     wrap.appendChild(sh);
 
     sec.items.forEach(it => {
-      const notes = S.notes.filter(n => n.itemId===it.id);
+      const notes = S.notes.filter(n => n.procId===proc.id && n.itemId===it.id);
       const hasM = notes.some(n => n.type==="mistake");
       const hasI = notes.some(n => n.type==="insight");
       const ci = document.createElement("div");
@@ -734,10 +744,19 @@ function renderCheck() {
         bd.innerHTML = notes.map(n => `
           <div class="badge ${n.type==="mistake"?"m":"i"}">
             <span>${n.type==="mistake"?"⚠":"💡"}</span>
-            <div class="badge-body">${esc(n.text)}<div class="badge-meta">${fmtDate(n.t)}</div></div>
+            <div class="badge-body">
+              ${esc(n.text)}
+              ${n.question ? `<div class="nc-question" style="margin-top:6px;"><b>疑問</b>${esc(n.question)}</div>` : ""}
+              <div class="badge-meta">${fmtDate(n.t)}</div>
+            </div>
+            <button class="badge-del" data-edit="${n.id}" style="font-size:12px;">編集</button>
             <button class="badge-del" data-nid="${n.id}">×</button>
           </div>`).join("");
+        bd.querySelectorAll("[data-edit]").forEach(b => {
+          b.addEventListener("click", e => { e.stopPropagation(); openEditNoteSheet(b.dataset.edit); });
+        });
         bd.querySelectorAll(".badge-del").forEach(b => {
+          if (!b.dataset.nid) return;
           b.addEventListener("click", e => { e.stopPropagation(); delNote(b.dataset.nid); });
         });
         ci.appendChild(bd);
@@ -964,38 +983,216 @@ function updateProg() {
 // ============================================================
 // NOTE SHEET
 // ============================================================
+function findProcById(modKey, procId) {
+  return (S.data.procedures[modKey]||[]).find(p => p.id===procId) || null;
+}
+
+function findItemInProc(proc, itemId) {
+  if (!proc || !itemId) return null;
+  for (const sec of proc.sections||[]) {
+    const item = (sec.items||[]).find(it => it.id===itemId);
+    if (item) return item;
+  }
+  return null;
+}
+
+function noteTargetFrom(mod, proc, item) {
+  return {
+    modKey: mod?.key || "",
+    procId: proc?.id || "",
+    procTitle: proc?.title || "（手順指定なし）",
+    itemId: item?.id || "",
+    itemText: item?.text || "（項目指定なし）"
+  };
+}
+
+function noteTargetFromNote(note) {
+  const proc = findProcById(note.modKey, note.procId);
+  const item = findItemInProc(proc, note.itemId);
+  return {
+    modKey: note.modKey || "",
+    procId: note.procId || "",
+    procTitle: proc?.title || note.procTitle || "（手順指定なし）",
+    itemId: item?.id || note.itemId || "",
+    itemText: item?.text || note.itemText || "（項目指定なし）"
+  };
+}
+
+function noteTargetHtml(target) {
+  if (!target?.procId) return "手順・項目の指定なし";
+  const mod = S.data.modalities.find(m => m.key===target.modKey);
+  return `<b>${esc(mod?.label || "")} / ${esc(target.procTitle || "")}</b>${target.itemId ? `<br><span style="font-size:12px;">${esc(target.itemText || "")}</span>` : " · 項目指定なし"}`;
+}
+
+function noteTypeClass(type) {
+  return type==="mistake" ? "m" : type==="question" ? "q" : "i";
+}
+
+function noteTypeLabel(type) {
+  return type==="mistake" ? "⚠ ミス" : type==="question" ? "？疑問" : "💡 気づき";
+}
+
+function noteTextLabel(type) {
+  return type==="mistake" ? "何を間違えた / 忘れた?" : type==="question" ? "疑問点" : "何に気づいた?";
+}
+
+function noteTextPlaceholder(type) {
+  return type==="mistake" ? "例: フットスイッチ確認を忘れた" : type==="question" ? "例: この手順で確認する理由を後で調べたい" : "例: カテ進めるとき抵抗があった";
+}
+
+function noteButtonClass(type) {
+  return type==="mistake" ? "m" : type==="question" ? "a" : "i";
+}
+
+function renderNoteTargetPicker(target, onSelect, onBack) {
+  $("sheet-body").innerHTML = `
+    <h2>検査項目を変更</h2>
+    <div class="ctx-txt">${noteTargetHtml(target)}</div>
+    <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">記録に紐づける手順・項目を選んでください。</p>
+    <div id="note-target-list"></div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);">
+      <button class="btn-main a" style="background:var(--bg2);color:var(--dim);border:1px solid var(--line);" id="note-no-target">📝 手順・項目を指定しない</button>
+    </div>
+    <button class="btn-sub" id="note-target-back" style="margin-top:8px;">‹ 戻る</button>`;
+
+  $("note-target-back").onclick = onBack;
+  $("note-no-target").onclick = () => onSelect(noteTargetFrom(null, null, null));
+
+  const list = $("note-target-list");
+  S.data.modalities.forEach(mod => {
+    const procs = S.data.procedures[mod.key] || [];
+    if (!procs.length) return;
+    const g = document.createElement("div");
+    g.innerHTML = `<div style="font-size:11px;color:${mod.c||"var(--accent)"};font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:10px 2px 6px;">${esc(mod.label)}</div>`;
+    procs.forEach(proc => {
+      const procBtn = document.createElement("button");
+      procBtn.style.cssText = "width:100%;background:var(--bg2);border:1px solid var(--line);border-left:3px solid "+(mod.c||"var(--accent)")+";border-radius:10px;padding:11px 14px;text-align:left;font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text);";
+      procBtn.textContent = proc.title + "（項目指定なし）";
+      procBtn.onclick = () => onSelect(noteTargetFrom(mod, proc, null));
+      g.appendChild(procBtn);
+
+      proc.sections.forEach(sec => {
+        sec.items.forEach(it => {
+          const itemBtn = document.createElement("button");
+          itemBtn.style.cssText = "width:100%;background:var(--bg1);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:left;font-size:13px;line-height:1.45;margin-bottom:6px;color:var(--text);";
+          itemBtn.innerHTML = `<span style="display:block;color:var(--mute);font-size:10px;margin-bottom:2px;">${esc(proc.title)} / ${esc(sec.heading)}</span>${esc(it.text)}`;
+          itemBtn.onclick = () => onSelect(noteTargetFrom(mod, proc, it));
+          g.appendChild(itemBtn);
+        });
+      });
+    });
+    list.appendChild(g);
+  });
+}
+
 function openNoteSheet(proc, item, initType) {
   let typ = initType;
+  let target = noteTargetFrom(S.data.modalities.find(m => m.key===S.currentMod), proc, item);
   function render() {
     const isM = typ==="mistake";
+    const textValue = $("note-ta")?.value || "";
+    const questionValue = $("note-question")?.value || "";
     $("sheet-body").innerHTML = `
       <h2>${isM?"⚠ ミスを記録":"💡 気づきを記録"}</h2>
       <div class="type-banner ${isM?"m":"i"}">
         <span>${isM?"⚠ ミス":"💡 気づき"}</span>
         <button class="sw" id="sw-btn">${isM?"→ 気づきに変更":"→ ミスに変更"}</button>
       </div>
-      <div class="ctx-txt"><b>対象:</b> ${esc(item.text)}</div>
+      <div class="target-change">
+        <div class="ctx-txt"><b>対象:</b><br>${noteTargetHtml(target)}</div>
+        <button class="target-btn" id="note-change-target">変更</button>
+      </div>
       <label class="form-lbl">${isM?"何を間違えた / 忘れた?":"何に気づいた?"}</label>
       <textarea class="form-input" id="note-ta" placeholder="${isM?"例: フットスイッチ確認を忘れた":"例: カテ進めるとき抵抗があった"}"></textarea>
+      <label class="form-lbl">疑問点（任意）</label>
+      <textarea class="form-input" id="note-question" style="min-height:72px;" placeholder="例: この手順で確認する理由を後で調べたい"></textarea>
       <button class="btn-main ${isM?"m":"i"}" id="note-save">保存する</button>
       <button class="btn-sub" id="note-cancel">キャンセル</button>`;
+    $("note-ta").value = textValue;
+    $("note-question").value = questionValue;
     $("sw-btn").onclick = e => {
       e.stopPropagation();
-      const cur = $("note-ta").value;
       typ = typ==="mistake"?"insight":"mistake";
-      render(); $("note-ta").value = cur; $("note-ta").focus();
+      render(); $("note-ta").focus();
+    };
+    $("note-change-target").onclick = () => {
+      const text = $("note-ta").value;
+      const question = $("note-question").value;
+      renderNoteTargetPicker(target, next => { target = next; render(); $("note-ta").value = text; $("note-question").value = question; }, () => { render(); $("note-ta").value = text; $("note-question").value = question; });
     };
     $("note-cancel").onclick = closeSheet;
     $("note-save").onclick = async () => {
       const text = $("note-ta").value.trim();
+      const question = $("note-question").value.trim();
       if (!text) { toast("内容を入力してください"); $("note-ta").focus(); return; }
-      S.notes.push({ id:genId("n"), t:Date.now(), type:typ, modKey:S.currentMod, procId:proc.id, procTitle:proc.title, itemId:item.id, itemText:item.text, text });
+      S.notes.push({ id:genId("n"), t:Date.now(), type:typ, ...target, text, question });
       await DB.set("md_notes", S.notes);
       closeSheet(); renderCheck();
       toast(typ==="mistake"?"⚠ ミスを記録しました":"💡 気づきを記録しました");
     };
     setTimeout(() => $("note-ta")?.focus(), 320);
   }
+  $("scrim").classList.add("on");
+  $("sheet").classList.add("on");
+  render();
+}
+
+function openEditNoteSheet(id) {
+  const note = S.notes.find(n => n.id===id);
+  if (!note) return;
+  let typ = note.type || "insight";
+  let target = noteTargetFromNote(note);
+
+  function render() {
+    const isM = typ==="mistake";
+    const isQ = typ==="question";
+    const textValue = $("edit-note-ta")?.value ?? note.text ?? "";
+    const questionValue = $("edit-note-question")?.value ?? note.question ?? "";
+    $("sheet-body").innerHTML = `
+      <h2>${noteTypeLabel(typ)}を編集</h2>
+      <div class="type-banner ${isM?"m":"i"}" style="${isQ ? "background:rgba(77,208,197,.12);color:var(--accent);border-color:rgba(77,208,197,.3);" : ""}">
+        <span>${noteTypeLabel(typ)}</span>
+        ${isQ ? "" : `<button class="sw" id="edit-sw-btn">${isM?"→ 気づきに変更":"→ ミスに変更"}</button>`}
+      </div>
+      <div class="target-change">
+        <div class="ctx-txt"><b>対象:</b><br>${noteTargetHtml(target)}</div>
+        <button class="target-btn" id="edit-change-target">変更</button>
+      </div>
+      <label class="form-lbl">${noteTextLabel(typ)}</label>
+      <textarea class="form-input" id="edit-note-ta" placeholder="${noteTextPlaceholder(typ)}"></textarea>
+      ${isQ ? "" : `
+        <label class="form-lbl">疑問点（任意）</label>
+        <textarea class="form-input" id="edit-note-question" style="min-height:72px;" placeholder="例: この手順で確認する理由を後で調べたい"></textarea>
+      `}
+      <button class="btn-main ${noteButtonClass(typ)}" id="edit-note-save">保存する</button>
+      <button class="btn-sub" id="edit-note-cancel">キャンセル</button>`;
+    $("edit-note-ta").value = textValue;
+    if ($("edit-note-question")) $("edit-note-question").value = questionValue;
+    if ($("edit-sw-btn")) $("edit-sw-btn").onclick = e => {
+        e.stopPropagation();
+        typ = typ==="mistake"?"insight":"mistake";
+        render(); $("edit-note-ta").focus();
+      };
+    $("edit-change-target").onclick = () => {
+      const text = $("edit-note-ta").value;
+      const question = $("edit-note-question")?.value || "";
+      renderNoteTargetPicker(target, next => { target = next; render(); $("edit-note-ta").value = text; if ($("edit-note-question")) $("edit-note-question").value = question; }, () => { render(); $("edit-note-ta").value = text; if ($("edit-note-question")) $("edit-note-question").value = question; });
+    };
+    $("edit-note-cancel").onclick = closeSheet;
+    $("edit-note-save").onclick = async () => {
+      const text = $("edit-note-ta").value.trim();
+      const question = isQ ? "" : $("edit-note-question").value.trim();
+      if (!text) { toast("内容を入力してください"); $("edit-note-ta").focus(); return; }
+      Object.assign(note, { type:typ, ...target, text, question });
+      await DB.set("md_notes", S.notes);
+      closeSheet();
+      if ($("v-check").classList.contains("active")) renderCheck();
+      if ($("v-notes").classList.contains("active")) renderNotes();
+      toast("保存しました");
+    };
+    setTimeout(() => $("edit-note-ta")?.focus(), 320);
+  }
+
   $("scrim").classList.add("on");
   $("sheet").classList.add("on");
   render();
@@ -1118,13 +1315,15 @@ function renderNotes() {
   body.innerHTML = "";
   notes.forEach(n => {
     const c = document.createElement("div");
-    c.className = `note-card ${n.type==="mistake"?"m":"i"}`;
+    c.className = `note-card ${noteTypeClass(n.type)}`;
     c.innerHTML = `
-      <div class="nc-head"><span class="nc-typ ${n.type==="mistake"?"m":"i"}">${n.type==="mistake"?"⚠ ミス":"💡 気づき"}</span><span>${fmtDate(n.t)}</span></div>
+      <div class="nc-head"><span class="nc-typ ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</span><span>${fmtDate(n.t)}</span></div>
       <div class="nc-ctx"><b>${esc(n.procTitle||"")}</b> · ${esc(n.itemText||"")}</div>
       <div class="nc-text">${esc(n.text)}</div>
+      ${n.question && n.type!=="question" ? `<div class="nc-question"><b>疑問</b>${esc(n.question)}</div>` : ""}
       <div class="nc-actions">
-        <button onclick="openChecklist('${n.modKey}','${n.procId}')">該当項目へ</button>
+        ${n.procId ? `<button onclick="openChecklist('${n.modKey}','${n.procId}')">該当項目へ</button>` : ""}
+        <button onclick="openEditNoteSheet('${n.id}')">編集</button>
         <button onclick="delNote('${n.id}')">削除</button>
       </div>`;
     body.appendChild(c);
@@ -1543,38 +1742,39 @@ document.addEventListener("keydown", e => {
 
 // 気づきタブからの直接追加（手順・項目を選択して入力）
 // 気づきタブからの直接追加（クロージャ問題修正版）
-const _dns = { typ:"mistake", mod:null, proc:null };
+const _dns = { typ:"mistake", mod:null, proc:null, item:null };
 
 function openDirectNoteSheet(initType) {
-  _dns.typ = initType; _dns.mod = null; _dns.proc = null;
+  _dns.typ = initType; _dns.mod = null; _dns.proc = null; _dns.item = null;
   $("scrim").classList.add("on");
   $("sheet").classList.add("on");
-  _dnsStep1();
+  _dnsStep3(null);
 }
 
 function _dnsStep1() {
   const isM = _dns.typ === "mistake";
+  const isQ = _dns.typ === "question";
   $("sheet-body").innerHTML = `
-    <h2>${isM ? "⚠ ミスを記録" : "💡 気づきを記録"}</h2>
-    <div class="type-banner ${isM ? "m" : "i"}">
-      <span>${isM ? "⚠ ミス" : "💡 気づき"}</span>
-      <button class="sw" id="sw-btn">${isM ? "→ 気づきに変更" : "→ ミスに変更"}</button>
+    <h2>${noteTypeLabel(_dns.typ)}を記録</h2>
+    <div class="type-banner ${isM ? "m" : "i"}" style="${isQ ? "background:rgba(77,208,197,.12);color:var(--accent);border-color:rgba(77,208,197,.3);" : ""}">
+      <span>${noteTypeLabel(_dns.typ)}</span>
+      ${isQ ? "" : `<button class="sw" id="sw-btn">${isM ? "→ 気づきに変更" : "→ ミスに変更"}</button>`}
     </div>
-    <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">どの手順に関する記録ですか？</p>
+    <p style="color:var(--dim);font-size:13px;margin-bottom:14px;">どの手順に関する記録ですか？<br>次の入力画面で「内容」と「疑問点（任意）」を入力できます。</p>
     <div class="shdr">手順を選択</div>
     <div id="dns-proc-list"></div>
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);">
-      <button class="btn-main ${isM ? "m" : "i"}" id="dns-no-proc">📝 手順を指定しない</button>
+      <button class="btn-main ${noteButtonClass(_dns.typ)}" id="dns-no-proc">📝 手順を指定しない</button>
     </div>
     <button class="btn-sub" id="dns-cancel" style="margin-top:8px;">キャンセル</button>`;
 
-  $("sw-btn").onclick = e => {
+  if ($("sw-btn")) $("sw-btn").onclick = e => {
     e.stopPropagation();
     _dns.typ = _dns.typ === "mistake" ? "insight" : "mistake";
     _dnsStep1();
   };
   $("dns-cancel").onclick = closeSheet;
-  $("dns-no-proc").onclick = () => { _dns.mod = null; _dns.proc = null; _dnsStep3(null); };
+  $("dns-no-proc").onclick = () => { _dns.mod = null; _dns.proc = null; _dns.item = null; _dnsStep3(null); };
 
   const list = $("dns-proc-list");
   S.data.modalities.forEach(mod => {
@@ -1594,18 +1794,17 @@ function _dnsStep1() {
 }
 
 function _dnsStep2() {
-  const isM = _dns.typ === "mistake";
   $("sheet-body").innerHTML = `
-    <h2>${isM ? "⚠ ミスを記録" : "💡 気づきを記録"}</h2>
+    <h2>${noteTypeLabel(_dns.typ)}を記録</h2>
     <div class="ctx-txt"><b>${esc(_dns.mod.label)} / ${esc(_dns.proc.title)}</b></div>
-    <p style="color:var(--dim);font-size:13px;margin-bottom:12px;">どの項目に関する記録ですか？</p>
+    <p style="color:var(--dim);font-size:13px;margin-bottom:12px;">どの項目に関する記録ですか？<br>次の入力画面で「内容」と「疑問点（任意）」を入力できます。</p>
     <div id="dns-item-list" style="max-height:42vh;overflow-y:auto;"></div>
     <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line);">
       <button class="btn-main a" style="background:var(--bg2);color:var(--dim);border:1px solid var(--line);" id="dns-no-item">📝 項目を指定しない</button>
     </div>
     <button class="btn-sub" onclick="_dnsStep1()" style="margin-top:8px;">‹ 戻る</button>`;
 
-  $("dns-no-item").onclick = () => _dnsStep3(null);
+  $("dns-no-item").onclick = () => { _dns.item = null; _dnsStep3(null); };
 
   const list = $("dns-item-list");
   _dns.proc.sections.forEach(sec => {
@@ -1615,7 +1814,7 @@ function _dnsStep2() {
       const btn = document.createElement("button");
       btn.style.cssText = "width:100%;background:var(--bg1);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:left;font-size:13px;line-height:1.45;margin-bottom:6px;color:var(--text);";
       btn.innerHTML = esc(it.text) + (it.warn ? `<span class="tag" style="margin-left:6px;">${esc(it.warn)}</span>` : "") + (it.danger ? `<span class="tag d">${esc(it.danger)}</span>` : "");
-      btn.onclick = () => _dnsStep3(it);
+      btn.onclick = () => { _dns.item = it; _dnsStep3(it); };
       g.appendChild(btn);
     });
     list.appendChild(g);
@@ -1624,25 +1823,42 @@ function _dnsStep2() {
 
 function _dnsStep3(item) {
   const isM = _dns.typ === "mistake";
+  const isQ = _dns.typ === "question";
   const hasProc = !!_dns.proc;
+  _dns.item = item;
   $("sheet-body").innerHTML = `
-    <h2>${isM ? "⚠ ミスを記録" : "💡 気づきを記録"}</h2>
-    <div class="type-banner ${isM ? "m" : "i"}">
-      <span>${isM ? "⚠ ミス" : "💡 気づき"}</span>
+    <h2>${noteTypeLabel(_dns.typ)}を記録</h2>
+    <div class="type-banner ${isM ? "m" : "i"}" style="${isQ ? "background:rgba(77,208,197,.12);color:var(--accent);border-color:rgba(77,208,197,.3);" : ""}">
+      <span>${noteTypeLabel(_dns.typ)}</span>
     </div>
-    <div class="ctx-txt">
-      ${hasProc
-        ? `<b>${esc(_dns.mod?.label||"")} / ${esc(_dns.proc?.title||"")}</b>${item ? `<br><span style="font-size:12px;">${esc(item.text)}</span>` : " · 項目指定なし"}`
-        : "手順・項目の指定なし"}
+    <div class="target-change">
+      <div class="ctx-txt">
+        ${hasProc
+          ? `<b>${esc(_dns.mod?.label||"")} / ${esc(_dns.proc?.title||"")}</b>${item ? `<br><span style="font-size:12px;">${esc(item.text)}</span>` : " · 項目指定なし"}`
+          : "手順・項目の指定なし"}
+      </div>
+      <button class="target-btn" id="dns-change-target">${hasProc ? "変更" : "検査項目を選ぶ"}</button>
     </div>
-    <label class="form-lbl">${isM ? "何を間違えた / 忘れた?" : "何に気づいた?"}</label>
-    <textarea class="form-input" id="dns-text" placeholder="${isM ? "例: フットスイッチ確認を忘れた" : "例: カテ進めるとき抵抗があった"}"></textarea>
-    <button class="btn-main ${isM ? "m" : "i"}" id="dns-save">保存する</button>
-    <button class="btn-sub" id="dns-back" style="margin-top:8px;">${hasProc ? "‹ 戻る" : "キャンセル"}</button>`;
+    <label class="form-lbl">${noteTextLabel(_dns.typ)}</label>
+    <textarea class="form-input" id="dns-text" placeholder="${noteTextPlaceholder(_dns.typ)}"></textarea>
+    ${isQ ? "" : `
+      <label class="form-lbl">疑問点（任意）</label>
+      <textarea class="form-input" id="dns-question" style="min-height:72px;" placeholder="例: この手順で確認する理由を後で調べたい"></textarea>
+    `}
+    <button class="btn-main ${noteButtonClass(_dns.typ)}" id="dns-save">保存する</button>
+    <button class="btn-sub" id="dns-back" style="margin-top:8px;">キャンセル</button>`;
 
-  $("dns-back").onclick = () => { hasProc ? _dnsStep2() : closeSheet(); };
+  $("dns-change-target").onclick = () => {
+    const text = $("dns-text")?.value || "";
+    const question = $("dns-question")?.value || "";
+    _dnsStep1();
+    window._pendingDnsText = text;
+    window._pendingDnsQuestion = question;
+  };
+  $("dns-back").onclick = closeSheet;
   $("dns-save").onclick = async () => {
     const text = $("dns-text")?.value.trim();
+    const question = isQ ? "" : $("dns-question")?.value.trim();
     if (!text) { toast("内容を入力してください"); $("dns-text")?.focus(); return; }
     const note = {
       id: genId("n"), t: Date.now(), type: _dns.typ,
@@ -1651,13 +1867,20 @@ function _dnsStep3(item) {
       procTitle: _dns.proc?.title || "（手順指定なし）",
       itemId:    item?.id   || "",
       itemText:  item?.text || "（項目指定なし）",
-      text
+      text,
+      question
     };
     S.notes.push(note);
     await DB.set("md_notes", S.notes);
     closeSheet(); renderNotes();
-    toast(_dns.typ === "mistake" ? "⚠ ミスを記録しました" : "💡 気づきを記録しました");
+    toast(`${noteTypeLabel(_dns.typ)}を記録しました`);
   };
+  if (window._pendingDnsText || window._pendingDnsQuestion) {
+    $("dns-text").value = window._pendingDnsText || "";
+    if ($("dns-question")) $("dns-question").value = window._pendingDnsQuestion || "";
+    window._pendingDnsText = "";
+    window._pendingDnsQuestion = "";
+  }
   setTimeout(() => $("dns-text")?.focus(), 320);
 }
 
@@ -2278,34 +2501,29 @@ function backToQuizHome(){
 (async function init() {
 
   // ── localStorage → IndexedDB 自動移行 ──────────────────
-  const migrated = await DB.get("ls_migrated", false);
+  // 移行フラグを一度リセットして確実に再移行
+  const migrated = await DB.get("ls_migrated_v2", false);
   if (!migrated) {
     try {
-      // 手順データ
-      const lsData = localStorage.getItem("md_data");
-      if (lsData) await DB.set("md_data", JSON.parse(lsData));
-
-      // チェック状態
-      const lsChecked = localStorage.getItem("md_checked");
-      if (lsChecked) await DB.set("md_checked", JSON.parse(lsChecked));
-
-      // 気づき・ミス
-      const lsNotes = localStorage.getItem("md_notes");
-      if (lsNotes) await DB.set("md_notes", JSON.parse(lsNotes));
-
-      // PDF
-      const lsPdfs = localStorage.getItem("md_pdfs");
-      if (lsPdfs) await DB.set("md_pdfs", JSON.parse(lsPdfs));
-
-      // メモ
-      const lsMemos = localStorage.getItem("md_memos");
-      if (lsMemos) await DB.set("md_memos", JSON.parse(lsMemos));
-
-      await DB.set("ls_migrated", true);
-
-      if (lsData || lsNotes || lsChecked) {
-        console.log("✅ localStorageからデータを移行しました");
+      // 旧バージョンで使われていたキー名を全パターン試す
+      const keys = [
+        ["md_data",    "md_data"],
+        ["md_checked", "md_checked"],
+        ["md_notes",   "md_notes"],
+        ["md_pdfs",    "md_pdfs"],
+        ["md_memos",   "md_memos"],
+      ];
+      let found = false;
+      for (const [lsKey, dbKey] of keys) {
+        const val = localStorage.getItem(lsKey);
+        if (val) {
+          await DB.set(dbKey, JSON.parse(val));
+          found = true;
+          console.log("移行:", lsKey);
+        }
       }
+      await DB.set("ls_migrated_v2", true);
+      if (found) console.log("✅ 移行完了");
     } catch(e) {
       console.warn("移行エラー:", e);
     }
@@ -2313,9 +2531,10 @@ function backToQuizHome(){
   // ────────────────────────────────────────────────────────
 
   const saved = await DB.get("md_data", null);
-  S.data = saved || JSON.parse(JSON.stringify(DEFAULT));
+  S.data    = saved || JSON.parse(JSON.stringify(DEFAULT));
   S.checked = await DB.get("md_checked", {});
-  S.notes = await DB.get("md_notes", []);
+  S.notes   = await DB.get("md_notes",   []);
+
   renderHome();
   renderGoals();
 })();
