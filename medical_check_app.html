@@ -254,6 +254,53 @@
   .result-item { background:var(--bg1); border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; }
   .history-card { background:var(--bg1); border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
   .history-score { font-size:22px; font-weight:800; }
+
+  /* Disease / 疾患・知識 */
+  .dz-card { background:var(--bg1); border:1px solid var(--line); border-radius:var(--r); padding:13px 15px; margin-bottom:10px; }
+  .dz-head { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
+  .dz-name { font-size:16px; font-weight:700; }
+  .dz-tag { display:inline-block; font-size:10px; font-weight:800; padding:2px 7px; border-radius:6px; margin-right:7px; vertical-align:middle; color:#08120f; }
+  .dz-sec { display:flex; gap:9px; align-items:flex-start; margin-top:7px; }
+  .dz-lbl { flex:0 0 auto; font-size:10px; font-weight:700; padding:2px 9px; border-radius:999px; white-space:nowrap; margin-top:3px; }
+  .dz-txt { margin:0; font-size:13px; line-height:1.6; color:var(--text); white-space:pre-wrap; }
+  .dz-l-sym { background:rgba(255,107,138,.16); color:var(--mistake); }
+  .dz-l-flow { background:rgba(77,208,197,.16); color:var(--accent); }
+  .dz-l-img { background:rgba(106,166,255,.16); color:#6aa6ff; }
+  .dz-l-pt { background:rgba(255,180,84,.16); color:var(--insight); }
+  .dz-actions { display:flex; gap:6px; flex-shrink:0; }
+  .dz-actions button { padding:5px 10px; border-radius:8px; border:1px solid var(--line); color:var(--dim); font-size:12px; }
+  .dz-actions button:active { background:var(--bg2); }
+  .dz-slides { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .dz-thumb { width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--line); cursor:pointer; }
+  .dz-thumb-pdf { display:flex; align-items:center; justify-content:center; font-size:26px; background:var(--bg2); color:var(--dim); }
+  @media (max-width:480px) { .dz-sec { flex-direction:column; gap:2px; } }
+
+  /* Reflection / 振り返り */
+  .rf-card { background:var(--bg1); border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:8px; }
+  .rf-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
+  .rf-meta { display:flex; align-items:center; gap:8px; }
+  .rf-date { font-size:11px; color:var(--mute); }
+  .rf-text { font-size:14px; line-height:1.6; white-space:pre-wrap; color:var(--text); }
+  .rf-tag { display:inline-block; font-size:10px; font-weight:800; padding:2px 7px; border-radius:6px; color:#08120f; }
+  .rf-del { font-size:12px; color:var(--mute); padding:4px 8px; border-radius:8px; border:1px solid var(--line); }
+
+  /* Calendar / カレンダー */
+  .cal-card { background:var(--bg1); border:1px solid var(--line); border-radius:var(--r); padding:14px; }
+  .cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .cal-nav .cal-mlabel { font-size:15px; font-weight:700; }
+  .cal-nav button { padding:6px 12px; border-radius:8px; color:var(--dim); border:1px solid var(--line); font-size:13px; }
+  .cal-nav button:active { background:var(--bg2); }
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .cal-h { text-align:center; font-size:10px; color:var(--mute); padding:2px 0; }
+  .cal-cell { aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:12px; border-radius:8px; color:var(--dim); background:var(--bg2); }
+  .cal-cell.blank { background:transparent; }
+  .cal-cell.has { background:var(--accent); color:#08120f; font-weight:800; }
+  .cal-cell.has:active { opacity:.7; }
+  .cal-cell.today { outline:2px solid var(--insight); outline-offset:-2px; }
+  .cal-stats { display:flex; gap:10px; margin-top:12px; }
+  .cal-stat { flex:1; background:var(--bg2); border-radius:10px; padding:10px; text-align:center; }
+  .cal-stat .n { font-size:22px; font-weight:800; }
+  .cal-stat .l { font-size:10px; color:var(--mute); letter-spacing:.06em; }
 </style>
 </head>
 <body>
@@ -274,6 +321,10 @@
   <div class="mod-grid" id="mod-grid"></div>
   <!-- 目標管理 -->
   <div id="goal-wrap"></div>
+  <!-- モダリティ別 振り返り（復習） -->
+  <div id="reflect-wrap"></div>
+  <!-- 振り返りカレンダー -->
+  <div id="calendar-wrap"></div>
 </div>
 
 <!-- 手順一覧 -->
@@ -330,6 +381,7 @@
     <button class="nf-btn" data-rt="pdf">📄 PDF</button>
     <button class="nf-btn" data-rt="memo">📝 メモ</button>
     <button class="nf-btn" data-rt="web">🌐 Web</button>
+    <button class="nf-btn" data-rt="abbr">📚 略語</button>
     <button class="nf-btn" data-rt="export">📤 出力</button>
   </div>
 
@@ -378,6 +430,19 @@
     <div id="link-list"></div>
   </div>
 
+  <!-- 略語 -->
+  <div id="rt-abbr" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <button class="btn-main a" onclick="openAbbrEditor(null)">+ 略語を追加</button>
+      <button class="btn-main a" style="background:var(--bg2);color:#6aa6ff;border:1px solid #6aa6ff;" onclick="openAbbrImport()">📥 取り込み</button>
+    </div>
+    <button class="btn-main a" style="background:var(--bg2);color:#b48cff;border:1px solid #b48cff;margin-bottom:12px;" onclick="startAbbrQuiz()">🧠 略語クイズ</button>
+    <input id="abbr-search" type="text" placeholder="略語・正式名称で検索"
+      style="width:100%;background:var(--bg1);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 14px;font:inherit;font-size:14px;margin-bottom:12px;"
+      oninput="onAbbrSearch(this.value)">
+    <div id="abbr-list"></div>
+  </div>
+
   <!-- データ出力 -->
   <div id="rt-export" style="display:none;">
     <p style="color:var(--dim);font-size:13px;margin-bottom:16px;">手順データをテキストまたはJSONで出力できます。バックアップや別端末への移行に使えます。</p>
@@ -409,8 +474,28 @@
   <div id="goal-log-body"></div>
 </div>
 
+<!-- 疾患・知識ビュー -->
+<div class="view" id="v-disease">
+  <h2 style="font-size:20px;margin-bottom:4px;">疾患・知識</h2>
+  <p style="color:var(--dim);font-size:13px;margin-bottom:12px;">モダリティ別の主訴・検査の流れ・画像所見</p>
+  <div class="notes-filter" id="dz-mod-filter"></div>
+  <input id="dz-search" type="text" placeholder="疾患名・キーワードで検索" oninput="onDiseaseSearch(this.value)"
+    style="width:100%;background:var(--bg1);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 14px;font:inherit;font-size:14px;margin:12px 0;">
+  <button class="add-btn" id="dz-add-btn" style="margin-bottom:14px;" onclick="openDiseaseEditor(null)">+ 疾患を追加</button>
+  <div id="dz-list"></div>
+</div>
+
+<!-- 実習生 指導項目ビュー -->
+<div class="view" id="v-teach">
+  <h2 style="font-size:20px;margin-bottom:4px;">実習生 指導項目</h2>
+  <p style="color:var(--dim);font-size:13px;margin-bottom:12px;">実習生に教える項目をモダリティ別に整理できます</p>
+  <div class="notes-filter" id="teach-filter"></div>
+  <button class="add-btn" id="teach-add-btn" style="margin:12px 0 14px;" onclick="openTeachEditor(null)">+ 指導項目を追加</button>
+  <div id="teach-list"></div>
+</div>
+
 <!-- Tabbar -->
-<nav class="tabbar" style="grid-template-columns:repeat(5,1fr);">
+<nav class="tabbar" style="grid-template-columns:repeat(7,1fr);">
   <button class="tab active" data-t="home">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
     <span>ホーム</span>
@@ -422,6 +507,14 @@
   <button class="tab" data-t="notes">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><circle cx="12" cy="17" r=".5" fill="currentColor"/><path d="M10.3 3.86l-8.18 14a2 2 0 001.71 3h16.34a2 2 0 001.71-3l-8.18-14a2 2 0 00-3.4 0z"/></svg>
     <span>気づき</span>
+  </button>
+  <button class="tab" data-t="disease">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg>
+    <span>疾患</span>
+  </button>
+  <button class="tab" data-t="teach">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1 2.5 3 6 3s6-2 6-3v-5.5"/></svg>
+    <span>指導</span>
   </button>
   <button class="tab" data-t="quiz">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
@@ -494,6 +587,144 @@ const DEFAULT = {
 };
 
 // ============================================================
+// DEFAULT DISEASE DATA (モダリティ別 疾患・知識)
+// ============================================================
+const DEFAULT_DISEASES = {
+  xp: [
+    { id:"dz-xp-pneumothorax", name:"気胸",
+      symptoms:"突然の片側胸痛・呼吸困難・乾性咳。緊張性気胸ではショック・血圧低下・頸静脈怒張。",
+      flow:"バイタル確認 → 立位胸部正面（可能なら呼気時）→ 必要に応じ側面。緊張性が疑われれば撮影より緊急脱気を優先。",
+      imaging:"肺尖部〜外側に肺紋理のない透亮域、虚脱肺との境界に細い臓側胸膜線。臥位では肋骨横隔膜角が深く見えるdeep sulcus sign。",
+      points:"立位・呼気で少量気胸も検出しやすい。撮影で処置を遅らせない。" },
+    { id:"dz-xp-pneumonia", name:"肺炎",
+      symptoms:"発熱・咳・膿性痰・呼吸困難・胸痛。",
+      flow:"立位胸部正面 ＋ 側面。経過観察で再検し陰影の推移を確認。",
+      imaging:"肺胞性のair-space consolidation、内部にair bronchogram。区域性に分布。左下葉は心陰影に重なる。",
+      points:"含気と陰影のコントラストが出る条件。側面で心陰影裏の病変も確認。" },
+    { id:"dz-xp-heart-failure", name:"心不全（うっ血性）",
+      symptoms:"労作時呼吸困難・起座呼吸・夜間発作性呼吸困難・下腿浮腫。",
+      flow:"立位正面でCTR（心胸郭比）評価。経時的にうっ血の改善を追う。",
+      imaging:"心拡大（CTR>50%）、肺門部うっ血（bat wing）、Kerley B線、胸水、上肺野血管陰影の増強（cephalization）。",
+      points:"立位正面が基本。臥位ではCTRを過大評価しやすいので注意。" },
+    { id:"dz-xp-fracture", name:"骨折",
+      symptoms:"受傷後の疼痛・腫脹・変形・運動制限。",
+      flow:"受傷部を2方向以上で撮影。長管骨は隣接関節を含める。必要に応じCT。",
+      imaging:"皮質連続性の途絶、骨透亮線、転位、関節面の不整。",
+      points:"2方向＋斜位で見落とし防止。小児は健側比較も有用。" }
+  ],
+  ct: [
+    { id:"dz-ct-infarction", name:"急性脳梗塞",
+      symptoms:"突然発症の片麻痺・構音障害・失語・意識障害。",
+      flow:"まず単純CTで出血除外 → 適応あればCTA/CT灌流 → t-PA・血栓回収の判断。",
+      imaging:"超急性期は所見に乏しい。early CT sign（レンズ核不明瞭化、皮髄境界不明瞭、insular ribbon消失、hyperdense MCA sign）。",
+      points:"造影前にアレルギー・腎機能・発症時刻を確認。時間が勝負。" },
+    { id:"dz-ct-hemorrhage", name:"脳出血",
+      symptoms:"突然の頭痛・嘔吐・意識障害・片麻痺。",
+      flow:"単純CTで診断。血腫量・進展・正中偏位を評価。必要によりCTAでspot sign。",
+      imaging:"発症直後から高吸収域。周囲に低吸収（浮腫）、脳室穿破。",
+      points:"単純CTで十分。経時的再検で血腫増大を確認。" },
+    { id:"dz-ct-dissection", name:"急性大動脈解離",
+      symptoms:"突然の引き裂かれるような胸背部痛。血圧左右差・ショック。",
+      flow:"造影CT（単純→造影、心電図同期が望ましい）で頸部〜骨盤の全大動脈を撮影。",
+      imaging:"内膜フラップで真腔/偽腔に分離、偽腔の血栓化、分枝灌流不全、心嚢液。単純で内膜石灰化の内方偏位。",
+      points:"撮影範囲は広めに。造影禁忌・腎機能を確認。緊急。" },
+    { id:"dz-ct-pe", name:"肺塞栓症",
+      symptoms:"突然の呼吸困難・胸痛・頻呼吸・失神。D-dimer上昇。",
+      flow:"造影CT（CTPA）。bolus trackingを肺動脈本幹に設定。",
+      imaging:"肺動脈内の造影欠損（filling defect）、右心負荷（右室拡大）。",
+      points:"肺動脈が最も濃染するタイミングで撮影。腎機能・造影禁忌を確認。" }
+  ],
+  mri: [
+    { id:"dz-mri-hyperacute", name:"超急性期脳梗塞",
+      symptoms:"突然発症の神経脱落症状（麻痺・失語など）。",
+      flow:"DWI/ADC → FLAIR → MRA → 必要によりperfusion。",
+      imaging:"DWI高信号・ADC低下（拡散制限）。FLAIR高信号は数時間後から。MRAで血管閉塞。",
+      points:"出血はT2*/SWIで確認。発症時刻不明はDWI/FLAIRミスマッチを参考。" },
+    { id:"dz-mri-tumor", name:"脳腫瘍",
+      symptoms:"頭痛・痙攣・神経脱落症状・人格変化。",
+      flow:"単純（T1/T2/FLAIR）→ 造影T1 → 必要によりperfusion/MRS。",
+      imaging:"腫瘤・周囲浮腫・造影効果（リング状など）・mass effect。",
+      points:"造影前に腎機能・ガドリニウム禁忌を確認。" },
+    { id:"dz-mri-disc", name:"椎間板ヘルニア",
+      symptoms:"腰下肢痛・坐骨神経痛・しびれ・筋力低下。",
+      flow:"腰椎T2矢状断 ＋ 横断、T1。",
+      imaging:"髄核の後方突出、神経根・硬膜嚢の圧迫、椎間板変性（T2低信号）。",
+      points:"責任高位を症状と対応づけ。横断で側方/正中を評価。" },
+    { id:"dz-mri-contra", name:"MRI禁忌チェック",
+      symptoms:"（撮影前の安全スクリーニング項目）",
+      flow:"問診票 → 金属・体内デバイス確認 → 撮影可否の判断。",
+      imaging:"—（画像所見ではなく安全管理項目）",
+      points:"ペースメーカー・体内金属・妊娠初期・閉所恐怖・刺青等を確認。MRI対応デバイスか必ず確認。" }
+  ],
+  ivr: [
+    { id:"dz-ivr-aneurysm", name:"脳動脈瘤（コイル塞栓術）",
+      symptoms:"未破裂は無症状/頭痛。破裂はくも膜下出血（突然の激しい頭痛）。",
+      flow:"全身麻酔/鎮静 → 大腿動脈穿刺 → 3D-RAでネック評価 → コイル塞栓 → 最終造影。",
+      imaging:"DSA/3D-RAで瘤の大きさ・ネック・親動脈との関係。塞栓後は瘤内の造影が消失。",
+      points:"ヘパリン化・ACT管理。造影剤量を管理。" },
+    { id:"dz-ivr-thrombectomy", name:"急性脳梗塞（血栓回収術）",
+      symptoms:"主幹動脈閉塞による高度の麻痺・失語・意識障害。",
+      flow:"穿刺 → 閉塞部造影 → ステントリトリーバー/吸引で血栓回収 → 再開通確認。",
+      imaging:"DSAで閉塞部位を同定。再開通の程度はTICIで評価。",
+      points:"発症〜再開通の時間が予後を左右。迅速な準備。" },
+    { id:"dz-ivr-tace", name:"肝細胞癌（TACE）",
+      symptoms:"多くは無症状（検診・経過観察で発見）。進行すると腹痛・腹部膨満。",
+      flow:"大腿動脈穿刺 → 腹腔/肝動脈造影 → 腫瘍栄養動脈を選択 → 抗癌剤＋塞栓物質を注入。",
+      imaging:"動脈相で濃染する多血性腫瘍と栄養動脈。リピオドールの腫瘍内集積。",
+      points:"選択的造影。リピオドール・塞栓物質を準備。" },
+    { id:"dz-ivr-gibleed", name:"消化管出血（塞栓術）",
+      symptoms:"吐血・下血・血便、循環動態の不安定。",
+      flow:"造影CTで出血源を推定 → 血管造影で責任血管を同定 → 選択的塞栓。",
+      imaging:"造影剤の血管外漏出（extravasation）が活動性出血の所見。",
+      points:"選択的に塞栓し、虚血合併症に注意。" }
+  ]
+};
+
+// ============================================================
+// DEFAULT ABBREVIATIONS (略語)
+// ============================================================
+const DEFAULT_ABBR = [
+  { id:"ab-dsa",   abbr:"DSA",   full:"Digital Subtraction Angiography", note:"デジタル差分血管造影" },
+  { id:"ab-dwi",   abbr:"DWI",   full:"Diffusion Weighted Image", note:"拡散強調画像。急性期脳梗塞で高信号" },
+  { id:"ab-flair", abbr:"FLAIR", full:"Fluid Attenuated Inversion Recovery", note:"水（脳脊髄液）信号を抑制したMRI" },
+  { id:"ab-mra",   abbr:"MRA",   full:"MR Angiography", note:"MRによる血管撮影" },
+  { id:"ab-cta",   abbr:"CTA",   full:"CT Angiography", note:"造影CTによる血管撮影" },
+  { id:"ab-tace",  abbr:"TACE",  full:"Transcatheter Arterial Chemoembolization", note:"肝動脈化学塞栓療法" },
+  { id:"ab-roi",   abbr:"ROI",   full:"Region Of Interest", note:"関心領域" },
+  { id:"ab-fov",   abbr:"FOV",   full:"Field Of View", note:"撮影視野" },
+  { id:"ab-kvp",   abbr:"kVp",   full:"peak KiloVoltage", note:"管電圧（X線のエネルギー）" },
+  { id:"ab-mas",   abbr:"mAs",   full:"MilliAmpere-seconds", note:"管電流時間積（X線量に比例）" },
+  { id:"ab-sah",   abbr:"SAH",   full:"SubArachnoid Hemorrhage", note:"くも膜下出血" },
+  { id:"ab-ctr",   abbr:"CTR",   full:"CardioThoracic Ratio", note:"心胸郭比。心不全評価" }
+];
+
+// ============================================================
+// DEFAULT TEACHING ITEMS (実習生 指導項目)
+// ============================================================
+const DEFAULT_TEACH = {
+  xp: [
+    { id:"tc-xp-1", title:"ポジショニングの基本", detail:"左右・回旋・正中合わせ。骨指標の触知と再現性。" },
+    { id:"tc-xp-2", title:"撮影条件(kVp/mAs)の考え方", detail:"被写体厚と部位での条件選択、コントラストと被ばくの関係。" },
+    { id:"tc-xp-3", title:"防護・被ばく低減", detail:"照射野を絞る、増感紙/グリッドの適切な使用、防護具。" }
+  ],
+  ct: [
+    { id:"tc-ct-1", title:"造影剤の禁忌・腎機能確認", detail:"eGFR・アレルギー歴・喘息、ヨード造影剤の確認。" },
+    { id:"tc-ct-2", title:"撮影範囲とプロトコル選択", detail:"目的に応じた範囲・相（単純/動脈相/平衡相）の設定。" },
+    { id:"tc-ct-3", title:"被ばく低減", detail:"AEC、逐次近似再構成、必要最小限の範囲。" }
+  ],
+  mri: [
+    { id:"tc-mri-1", title:"金属・体内デバイスの問診", detail:"ペースメーカー・体内金属・刺青、対応可否の判断。" },
+    { id:"tc-mri-2", title:"シーケンスの意味", detail:"T1/T2/FLAIR/DWIの基本と使い分け。" },
+    { id:"tc-mri-3", title:"騒音・閉所への声かけ", detail:"検査時間・騒音の説明、不安の軽減。" }
+  ],
+  ivr: [
+    { id:"tc-ivr-1", title:"清潔操作と被ばく防護", detail:"清潔野の維持、術者・スタッフの防護、線量管理。" },
+    { id:"tc-ivr-2", title:"造影剤・気泡除去の手順", detail:"インジェクター接続、気泡除去のタイミングと声かけ。" },
+    { id:"tc-ivr-3", title:"緊急時対応", detail:"急変・造影剤アレルギー時の役割分担と物品。" }
+  ]
+};
+
+// ============================================================
 // STORAGE (IndexedDB)
 // ============================================================
 const DB = (() => {
@@ -546,11 +777,33 @@ const S = {
   notes: [],
   editMode: false,
   notesFilter: "all",
-  refTab: "proc"
+  refTab: "proc",
+  diseases: null,
+  diseaseMod: "all",
+  diseaseQuery: "",
+  reflections: [],
+  reflectMod: "all",
+  calMonth: null,
+  abbr: [],
+  abbrQuery: "",
+  srs: {},
+  teach: null,
+  teachMod: "all"
 };
 
 function genId(p) { return p+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
 const $ = id => document.getElementById(id);
+
+// #region agent log
+function DZLOG(location, message, data, hypothesisId) {
+  fetch('http://127.0.0.1:7312/ingest/d3f6cbba-6d45-4876-beaf-d70634c79cce', {
+    method:'POST', headers:{'Content-Type':'application/json','X-Debug-Session-Id':'9ae60b'},
+    body: JSON.stringify({ sessionId:'9ae60b', runId:'run1', hypothesisId, location, message, data, timestamp:Date.now() })
+  }).catch(()=>{});
+}
+window.addEventListener('error', e => DZLOG('global:error','uncaught error',{ message:e.message, source:e.filename, line:e.lineno, col:e.colno },'E'));
+window.addEventListener('unhandledrejection', e => DZLOG('global:rejection','promise rejection',{ reason:String(e.reason) },'E'));
+// #endregion
 
 // ============================================================
 // VIEW CONTROL
@@ -558,9 +811,9 @@ const $ = id => document.getElementById(id);
 function showView(name) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
   $("v-"+name).classList.add("active");
-  const map = { home:"home", procs:"home", check:"checklist", notes:"notes", quiz:"quiz", links:"links", goals:"home" };
+  const map = { home:"home", procs:"home", check:"checklist", notes:"notes", quiz:"quiz", links:"links", goals:"home", disease:"disease", teach:"teach" };
   document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.t===(map[name]||"home")));
-  $("backBtn").style.display = (name==="home"||name==="notes"||name==="links") ? "none" : "";
+  $("backBtn").style.display = (name==="home"||name==="notes"||name==="links"||name==="disease"||name==="teach") ? "none" : "";
   $("editBtn").style.display = (name==="check" && !S.editMode) ? "" : "none";
   $("doneBtn").style.display = (name==="check" && S.editMode) ? "" : "none";
   if (name==="check") $("check-hint").style.display = localStorage.getItem("md_hint")==="1" ? "none" : "";
@@ -1342,12 +1595,13 @@ document.querySelectorAll("#ref-tabs .nf-btn").forEach(b => {
     document.querySelectorAll("#ref-tabs .nf-btn").forEach(x => x.classList.remove("active"));
     b.classList.add("active");
     S.refTab = b.dataset.rt;
-    ["proc","pdf","memo","web","export"].forEach(t => {
+    ["proc","pdf","memo","web","abbr","export"].forEach(t => {
       const el = $("rt-"+t); if (el) el.style.display = t===S.refTab ? "block" : "none";
     });
     if (S.refTab==="pdf") renderPDFs();
     if (S.refTab==="memo") renderMemos();
     if (S.refTab==="web") renderLinks();
+    if (S.refTab==="abbr") renderAbbr();
   };
 });
 
@@ -1557,6 +1811,584 @@ async function delMemo(id) {
 }
 
 // ============================================================
+// DISEASE / 疾患・知識
+// ============================================================
+const DZ_SECTIONS = [
+  { key:"symptoms", label:"主訴", cls:"dz-l-sym" },
+  { key:"flow",     label:"検査の流れ", cls:"dz-l-flow" },
+  { key:"imaging",  label:"画像所見", cls:"dz-l-img" },
+  { key:"points",   label:"注意点", cls:"dz-l-pt" }
+];
+
+const DZ_EXTRA_MOD = { key:"none", label:"該当なし", c:"#8a96a8" };
+function dzMods() { return [...S.data.modalities, DZ_EXTRA_MOD]; }
+function modLabel(key) { if (key===DZ_EXTRA_MOD.key) return DZ_EXTRA_MOD.label; const m = S.data.modalities.find(x => x.key===key); return m ? m.label : key; }
+function modColor(key) { if (key===DZ_EXTRA_MOD.key) return DZ_EXTRA_MOD.c; const m = S.data.modalities.find(x => x.key===key); return m ? m.c : "var(--accent)"; }
+
+function renderDiseases() {
+  // #region agent log
+  DZLOG('renderDiseases','enter',{ diseaseMod:S.diseaseMod, modalities:S.data?S.data.modalities.map(m=>m.key):null, diseasesType:typeof S.diseases, filterEl:!!$("dz-mod-filter"), listEl:!!$("dz-list") },'C');
+  // #endregion
+  renderDiseaseFilter();
+  renderDiseaseList();
+}
+
+function renderDiseaseFilter() {
+  const wrap = $("dz-mod-filter"); if (!wrap) return;
+  const mods = [{ key:"all", label:"ALL" }, ...dzMods().map(m => ({ key:m.key, label:m.label }))];
+  wrap.innerHTML = mods.map(m =>
+    `<button class="nf-btn${S.diseaseMod===m.key?" active":""}" data-dz="${m.key}" onclick="setDiseaseMod('${m.key}')">${esc(m.label)}</button>`
+  ).join("");
+}
+
+function setDiseaseMod(key) { S.diseaseMod = key; renderDiseaseFilter(); renderDiseaseList(); }
+function onDiseaseSearch(v) { S.diseaseQuery = v; renderDiseaseList(); }
+
+function renderDiseaseList() {
+  const list = $("dz-list"); if (!list) return;
+  const isAll = S.diseaseMod==="all";
+  const keys = isAll ? dzMods().map(m => m.key) : [S.diseaseMod];
+  let pairs = [];
+  keys.forEach(k => (S.diseases[k]||[]).forEach(d => pairs.push({ d, mod:k })));
+  const q = (S.diseaseQuery||"").trim().toLowerCase();
+  if (q) pairs = pairs.filter(({ d }) =>
+    [d.name, d.symptoms, d.flow, d.imaging, d.points].filter(Boolean).join("\n").toLowerCase().includes(q));
+
+  // #region agent log
+  DZLOG('renderDiseaseList','computed',{ listFound:!!list, isAll, keys, pairCount:pairs.length, query:q },'A');
+  // #endregion
+
+  if (!pairs.length) {
+    list.innerHTML = `<div class="empty" style="padding:26px 0;">${q?`「${esc(q)}」に一致する疾患がありません`:"疾患がまだありません<br>「+ 疾患を追加」から作成"}</div>`;
+    return;
+  }
+  list.innerHTML = "";
+  pairs.forEach(({ d, mod }) => {
+    const body = DZ_SECTIONS.filter(s => d[s.key]).map(s =>
+      `<div class="dz-sec"><span class="dz-lbl ${s.cls}">${s.label}</span><p class="dz-txt">${esc(d[s.key])}</p></div>`
+    ).join("");
+    const slides = Array.isArray(d.slides) ? d.slides : [];
+    const slideHtml = slides.length ? `<div class="dz-slides">${slides.map(s =>
+      s.type==="image"
+        ? `<img src="${s.data}" class="dz-thumb" onclick="viewSlide('${d.id}','${mod}','${s.id}')">`
+        : `<div class="dz-thumb dz-thumb-pdf" onclick="viewSlide('${d.id}','${mod}','${s.id}')">📄</div>`
+    ).join("")}</div>` : "";
+    const tag = isAll ? `<span class="dz-tag" style="background:${esc(modColor(mod))}">${esc(modLabel(mod))}</span>` : "";
+    const card = document.createElement("div");
+    card.className = "dz-card";
+    card.innerHTML = `
+      <div class="dz-head">
+        <div class="dz-name">${tag}${esc(d.name)}</div>
+        <div class="dz-actions">
+          <button onclick="editDisease('${mod}','${d.id}')">編集</button>
+          <button onclick="delDisease('${mod}','${d.id}')">削除</button>
+        </div>
+      </div>${body}${slideHtml}`;
+    list.appendChild(card);
+  });
+}
+
+function openDiseaseEditor(d) {
+  const isNew = !d;
+  const curMod = d ? d._mod : (S.diseaseMod!=="all" ? S.diseaseMod : S.data.modalities[0].key);
+  const opts = dzMods().map(m =>
+    `<option value="${m.key}"${m.key===curMod?" selected":""}>${esc(m.label)}</option>`
+  ).join("");
+  openSheet(`
+    <h2>${isNew?"疾患を追加":"疾患を編集"}</h2>
+    <button type="button" class="btn-sub" id="dz-f-nblm" style="margin-bottom:14px;color:#6aa6ff;border-color:#6aa6ff;font-weight:600;">🔗 NotebookLM で調べる</button>
+    <label class="form-lbl">モダリティ</label>
+    <select class="form-input" id="dz-f-mod">${opts}</select>
+    <label class="form-lbl">疾患名</label>
+    <input class="form-input" id="dz-f-name" type="text" placeholder="例: 気胸" value="${esc(d?.name||"")}">
+    <label class="form-lbl">主な主訴・症状</label>
+    <textarea class="form-input" id="dz-f-sym" style="min-height:64px;" placeholder="例: 突然の胸痛・呼吸困難">${esc(d?.symptoms||"")}</textarea>
+    <label class="form-lbl">検査の流れ</label>
+    <textarea class="form-input" id="dz-f-flow" style="min-height:64px;" placeholder="例: 立位胸部正面 → 必要に応じ側面">${esc(d?.flow||"")}</textarea>
+    <label class="form-lbl">画像所見（どう写るか）</label>
+    <textarea class="form-input" id="dz-f-img" style="min-height:64px;" placeholder="例: 肺紋理のない透亮域、臓側胸膜線">${esc(d?.imaging||"")}</textarea>
+    <label class="form-lbl">注意点</label>
+    <textarea class="form-input" id="dz-f-pt" style="min-height:64px;" placeholder="例: 立位・呼気で少量気胸も検出しやすい">${esc(d?.points||"")}</textarea>
+    <label class="form-lbl">スライド（NotebookLMの画像・PDF）</label>
+    <label class="btn-sub" style="display:block;text-align:center;cursor:pointer;margin-bottom:10px;color:#6aa6ff;border-color:#6aa6ff;font-weight:600;">
+      ＋ スライドを追加（画像・PDF）
+      <input type="file" accept="image/*,application/pdf" multiple style="display:none;" id="dz-f-slide-input">
+    </label>
+    <div id="dz-f-slides" style="margin-bottom:14px;"></div>
+    <button class="btn-main a" id="dz-f-save">${isNew?"保存":"更新"}</button>
+    <button class="btn-sub" id="dz-f-cancel">キャンセル</button>`);
+  _dzSlides = d && Array.isArray(d.slides) ? d.slides.slice() : [];
+  renderDzSlideEditor();
+  $("dz-f-slide-input").onchange = e => addDzSlides(e.target);
+  $("dz-f-cancel").onclick = closeSheet;
+  $("dz-f-nblm").onclick = () => window.open("https://notebooklm.google.com/", "_blank", "noopener");
+  $("dz-f-save").onclick = async () => {
+    const name = $("dz-f-name").value.trim();
+    if (!name) { toast("疾患名を入力してください"); return; }
+    const targetMod = $("dz-f-mod").value;
+    const rec = {
+      name,
+      symptoms: $("dz-f-sym").value.trim(),
+      flow: $("dz-f-flow").value.trim(),
+      imaging: $("dz-f-img").value.trim(),
+      points: $("dz-f-pt").value.trim(),
+      slides: _dzSlides.slice()
+    };
+    if (!S.diseases[targetMod]) S.diseases[targetMod] = [];
+    if (isNew) {
+      S.diseases[targetMod].push({ id:genId("dz"), ...rec });
+    } else if (d._mod !== targetMod) {
+      S.diseases[d._mod] = (S.diseases[d._mod]||[]).filter(x => x.id!==d.id);
+      S.diseases[targetMod].push({ id:d.id, ...rec });
+    } else {
+      const idx = S.diseases[targetMod].findIndex(x => x.id===d.id);
+      if (idx>=0) S.diseases[targetMod][idx] = { id:d.id, ...rec };
+    }
+    await DB.set("md_diseases", S.diseases);
+    closeSheet(); renderDiseases(); toast(isNew?"保存しました":"更新しました");
+  };
+  setTimeout(() => $("dz-f-name")?.focus(), 320);
+}
+
+let _dzSlides = [];
+function renderDzSlideEditor() {
+  const el = $("dz-f-slides"); if (!el) return;
+  if (!_dzSlides.length) { el.innerHTML = `<div style="color:var(--mute);font-size:12px;">まだスライドがありません</div>`; return; }
+  el.innerHTML = _dzSlides.map((s, i) => `
+    <div style="display:flex;align-items:center;gap:10px;background:var(--bg2);border-radius:10px;padding:8px;margin-bottom:6px;">
+      ${s.type==="image" ? `<img src="${s.data}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;flex-shrink:0;">` : `<span style="font-size:24px;flex-shrink:0;">📄</span>`}
+      <span style="flex:1;min-width:0;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(s.name)}</span>
+      <button type="button" class="rf-del" onclick="rmDzSlide(${i})">削除</button>
+    </div>`).join("");
+}
+
+function addDzSlides(input) {
+  const files = [...input.files]; if (!files.length) return;
+  toast("読み込み中...");
+  let pending = files.length;
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      _dzSlides.push({ id:genId("sl"), name:file.name, data:e.target.result, type: file.type.startsWith("image/") ? "image" : "pdf" });
+      if (--pending === 0) { renderDzSlideEditor(); toast("スライドを追加しました"); }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = "";
+}
+
+function rmDzSlide(i) { _dzSlides.splice(i, 1); renderDzSlideEditor(); }
+
+function viewSlide(diseaseId, mod, slideId) {
+  const d = (S.diseases[mod]||[]).find(x => x.id===diseaseId); if (!d) return;
+  const s = (d.slides||[]).find(x => x.id===slideId); if (!s) return;
+  if (s.type==="image") {
+    openSheet(`
+      <h2 style="font-size:15px;word-break:break-all;">${esc(s.name)}</h2>
+      <img src="${s.data}" style="width:100%;border-radius:10px;">
+      <button class="btn-sub" style="margin-top:12px;" onclick="closeSheet()">閉じる</button>`);
+  } else {
+    const win = window.open();
+    if (win) win.document.write(`<html><head><title>${esc(s.name)}</title></head><body style="margin:0;background:#000;"><embed src="${s.data}" type="application/pdf" width="100%" height="100%" style="position:fixed;inset:0;"></body></html>`);
+  }
+}
+
+function editDisease(mod, id) {
+  const d = (S.diseases[mod]||[]).find(x => x.id===id);
+  if (d) openDiseaseEditor({ ...d, _mod:mod });
+}
+
+async function delDisease(mod, id) {
+  if (!confirm("この疾患を削除しますか?")) return;
+  S.diseases[mod] = (S.diseases[mod]||[]).filter(x => x.id!==id);
+  await DB.set("md_diseases", S.diseases);
+  renderDiseases(); toast("削除しました");
+}
+
+// ============================================================
+// 実習生 指導項目 (モダリティ別)
+// ============================================================
+function renderTeach() {
+  // #region agent log
+  DZLOG('renderTeach','enter',{ teachMod:S.teachMod, teachType:typeof S.teach, mods:S.data?S.data.modalities.map(m=>m.key):null, filterEl:!!$("teach-filter"), listEl:!!$("teach-list") },'B');
+  // #endregion
+  renderTeachFilter();
+  renderTeachList();
+}
+
+function renderTeachFilter() {
+  const wrap = $("teach-filter"); if (!wrap) return;
+  const mods = [{ key:"all", label:"ALL" }, ...S.data.modalities.map(m => ({ key:m.key, label:m.label }))];
+  wrap.innerHTML = mods.map(m =>
+    `<button class="nf-btn${S.teachMod===m.key?" active":""}" onclick="setTeachMod('${m.key}')">${esc(m.label)}</button>`
+  ).join("");
+}
+
+function setTeachMod(key) { S.teachMod = key; renderTeach(); }
+
+function renderTeachList() {
+  const list = $("teach-list"); if (!list) return;
+  const isAll = S.teachMod === "all";
+  const keys = isAll ? S.data.modalities.map(m => m.key) : [S.teachMod];
+  let pairs = [];
+  keys.forEach(k => (S.teach[k]||[]).forEach(it => pairs.push({ it, mod:k })));
+  // #region agent log
+  DZLOG('renderTeachList','built pairs',{ teachMod:S.teachMod, keys, pairCount:pairs.length, teachKeys:S.teach?Object.keys(S.teach):null },'C');
+  // #endregion
+  if (!pairs.length) {
+    list.innerHTML = `<div class="empty" style="padding:24px 0;">指導項目がまだありません<br>「+ 指導項目を追加」から作成</div>`;
+    return;
+  }
+  list.innerHTML = "";
+  pairs.forEach(({ it, mod }) => {
+    const tag = isAll ? `<span class="dz-tag" style="background:${esc(modColor(mod))}">${esc(modLabel(mod))}</span>` : "";
+    const card = document.createElement("div");
+    card.className = "dz-card";
+    card.innerHTML = `
+      <div class="dz-head">
+        <div class="dz-name">${tag}${esc(it.title)}</div>
+        <div class="dz-actions">
+          <button onclick="editTeach('${mod}','${it.id}')">編集</button>
+          <button onclick="delTeach('${mod}','${it.id}')">削除</button>
+        </div>
+      </div>
+      ${it.detail?`<p class="dz-txt">${esc(it.detail)}</p>`:""}`;
+    list.appendChild(card);
+  });
+}
+
+function openTeachEditor(d) {
+  const isNew = !d;
+  const curMod = d ? d._mod : (S.teachMod!=="all" ? S.teachMod : S.data.modalities[0].key);
+  const opts = S.data.modalities.map(m => `<option value="${m.key}"${m.key===curMod?" selected":""}>${esc(m.label)}</option>`).join("");
+  openSheet(`
+    <h2>${isNew?"指導項目を追加":"指導項目を編集"}</h2>
+    <label class="form-lbl">モダリティ</label>
+    <select class="form-input" id="tc-mod">${opts}</select>
+    <label class="form-lbl">教える項目</label>
+    <input class="form-input" id="tc-title" type="text" placeholder="例: ポジショニングの基本" value="${esc(d?.title||"")}">
+    <label class="form-lbl">指導のポイント・補足（任意）</label>
+    <textarea class="form-input" id="tc-detail" style="min-height:90px;" placeholder="例: 左右・回旋・正中合わせ。骨指標の触知と再現性。">${esc(d?.detail||"")}</textarea>
+    <button class="btn-main a" id="tc-save">${isNew?"保存":"更新"}</button>
+    <button class="btn-sub" id="tc-cancel" style="margin-top:8px;">キャンセル</button>`);
+  $("tc-cancel").onclick = closeSheet;
+  $("tc-save").onclick = async () => {
+    const title = $("tc-title").value.trim();
+    if (!title) { toast("項目名を入力してください"); return; }
+    const detail = $("tc-detail").value.trim();
+    const targetMod = $("tc-mod").value;
+    if (!S.teach[targetMod]) S.teach[targetMod] = [];
+    if (isNew) {
+      S.teach[targetMod].push({ id:genId("tc"), title, detail });
+    } else if (d._mod !== targetMod) {
+      S.teach[d._mod] = (S.teach[d._mod]||[]).filter(x => x.id!==d.id);
+      S.teach[targetMod].push({ id:d.id, title, detail });
+    } else {
+      const idx = S.teach[targetMod].findIndex(x => x.id===d.id);
+      if (idx>=0) S.teach[targetMod][idx] = { id:d.id, title, detail };
+    }
+    await DB.set("md_teach", S.teach);
+    // #region agent log
+    DZLOG('openTeachEditor:save','persisted',{ isNew, targetMod, title, counts:Object.fromEntries(Object.entries(S.teach).map(([k,v])=>[k,Array.isArray(v)?v.length:typeof v])) },'D');
+    // #endregion
+    closeSheet(); renderTeach(); toast(isNew?"保存しました":"更新しました");
+  };
+  setTimeout(() => $("tc-title")?.focus(), 320);
+}
+
+function editTeach(mod, id) {
+  const it = (S.teach[mod]||[]).find(x => x.id===id);
+  if (it) openTeachEditor({ ...it, _mod:mod });
+}
+
+async function delTeach(mod, id) {
+  if (!confirm("この指導項目を削除しますか?")) return;
+  S.teach[mod] = (S.teach[mod]||[]).filter(x => x.id!==id);
+  await DB.set("md_teach", S.teach);
+  renderTeach(); toast("削除しました");
+}
+
+// ============================================================
+// ABBREVIATION / 略語 + クイズ
+// ============================================================
+function renderAbbr() { renderAbbrList(); }
+function onAbbrSearch(v) { S.abbrQuery = v; renderAbbrList(); }
+
+function renderAbbrList() {
+  const list = $("abbr-list"); if (!list) return;
+  const q = (S.abbrQuery||"").trim().toLowerCase();
+  let items = S.abbr.slice();
+  if (q) items = items.filter(a => (a.abbr+" "+a.full+" "+(a.note||"")).toLowerCase().includes(q));
+  items.sort((a, b) => a.abbr.localeCompare(b.abbr));
+  if (!items.length) {
+    list.innerHTML = `<div class="empty" style="padding:24px 0;">${q?`「${esc(q)}」に一致する略語がありません`:"略語がまだありません<br>「+ 略語を追加」から登録"}</div>`;
+    return;
+  }
+  list.innerHTML = "";
+  items.forEach(a => {
+    const card = document.createElement("div");
+    card.style.cssText = "background:var(--bg1);border:1px solid var(--line);border-left:3px solid #b48cff;border-radius:var(--r);padding:12px 14px;margin-bottom:8px;";
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:800;font-size:16px;color:#c4a6ff;">${esc(a.abbr)}</div>
+          <div style="font-size:13px;color:var(--text);margin-top:2px;">${esc(a.full)}</div>
+          ${a.note?`<div style="font-size:12px;color:var(--dim);margin-top:4px;">${esc(a.note)}</div>`:""}
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="rf-del" onclick="openAbbrEditor('${a.id}')">編集</button>
+          <button class="rf-del" onclick="delAbbr('${a.id}')">削除</button>
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function openAbbrEditor(id) {
+  const a = id ? S.abbr.find(x => x.id===id) : null;
+  openSheet(`
+    <h2>${a?"略語を編集":"略語を追加"}</h2>
+    <button type="button" class="btn-sub" id="ab-nblm" style="margin-bottom:14px;color:#6aa6ff;border-color:#6aa6ff;font-weight:600;">🔗 NotebookLM で調べる</button>
+    <label class="form-lbl">略語</label>
+    <input class="form-input" id="ab-abbr" type="text" placeholder="例: DSA" value="${esc(a?.abbr||"")}">
+    <label class="form-lbl">正式名称</label>
+    <input class="form-input" id="ab-full" type="text" placeholder="例: Digital Subtraction Angiography" value="${esc(a?.full||"")}">
+    <label class="form-lbl">意味・補足（任意）</label>
+    <textarea class="form-input" id="ab-note" style="min-height:70px;" placeholder="例: デジタル差分血管造影">${esc(a?.note||"")}</textarea>
+    <button class="btn-main a" id="ab-save">${a?"更新":"保存"}</button>
+    <button class="btn-sub" id="ab-cancel" style="margin-top:8px;">キャンセル</button>`);
+  $("ab-cancel").onclick = closeSheet;
+  $("ab-nblm").onclick = () => window.open("https://notebooklm.google.com/", "_blank", "noopener");
+  $("ab-save").onclick = async () => {
+    const abbr = $("ab-abbr").value.trim();
+    const full = $("ab-full").value.trim();
+    if (!abbr || !full) { toast("略語と正式名称を入力してください"); return; }
+    const note = $("ab-note").value.trim();
+    if (a) { a.abbr=abbr; a.full=full; a.note=note; }
+    else { S.abbr.push({ id:genId("ab"), abbr, full, note, t:Date.now() }); }
+    await DB.set("md_abbr", S.abbr);
+    closeSheet(); renderAbbr(); toast(a?"更新しました":"保存しました");
+  };
+  setTimeout(() => $("ab-abbr")?.focus(), 320);
+}
+
+async function delAbbr(id) {
+  if (!confirm("この略語を削除しますか?")) return;
+  S.abbr = S.abbr.filter(a => a.id!==id);
+  await DB.set("md_abbr", S.abbr);
+  renderAbbr(); toast("削除しました");
+}
+
+function parseAbbrImport(text) {
+  const out = [];
+  (text || "").split(/\r?\n/).forEach(raw => {
+    let line = raw.trim();
+    if (!line) return;
+    line = line.replace(/^[-*・●]\s+/, "").replace(/^\d+[.)]\s+/, "");
+    const m = line.match(/^(.+?)\s*[,\t:：=]\s*(.+)$/);
+    if (!m) return;
+    const abbr = m[1].trim();
+    let rest = m[2].trim();
+    let full = rest, note = "";
+    const mSplit = rest.match(/^(.+?)\s*[,\t／/]\s*(.+)$/);
+    const mParen = rest.match(/^(.+?)[（(](.+?)[）)]\s*$/);
+    if (mSplit) { full = mSplit[1].trim(); note = mSplit[2].trim(); }
+    else if (mParen) { full = mParen[1].trim(); note = mParen[2].trim(); }
+    if (abbr && full) out.push({ abbr, full, note });
+  });
+  return out;
+}
+
+function openAbbrImport() {
+  openSheet(`
+    <h2>📥 略語の取り込み</h2>
+    <button type="button" class="btn-sub" id="abi-nblm" style="margin-bottom:12px;color:#6aa6ff;border-color:#6aa6ff;font-weight:600;">🔗 NotebookLM / Gemini を開く</button>
+    <div style="background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--dim);line-height:1.8;">
+      <b style="color:var(--text);">対応フォーマット（1行1語）：</b><br>
+      ・<code>DSA, Digital Subtraction Angiography, デジタル差分血管造影</code><br>
+      ・<code>DWI: Diffusion Weighted Image ／ 拡散強調画像</code><br>
+      ・<code>MRA = MR Angiography（MR血管撮影）</code><br>
+      区切りは <b>カンマ / コロン / =</b>、意味は <b>3列目・スラッシュ・カッコ</b>で指定できます。
+    </div>
+    <textarea class="form-input" id="abi-text" style="min-height:180px;font-size:13px;" placeholder="DSA, Digital Subtraction Angiography, デジタル差分血管造影&#10;DWI: Diffusion Weighted Image ／ 拡散強調画像&#10;TACE = Transcatheter Arterial Chemoembolization（肝動脈化学塞栓療法）"></textarea>
+    <div id="abi-preview" style="font-size:12px;color:var(--accent);margin-bottom:10px;"></div>
+    <button class="btn-main a" id="abi-run">取り込む</button>
+    <button class="btn-sub" id="abi-cancel" style="margin-top:8px;">キャンセル</button>`);
+  $("abi-nblm").onclick = () => window.open("https://notebooklm.google.com/", "_blank", "noopener");
+  $("abi-cancel").onclick = closeSheet;
+  $("abi-text").oninput = () => {
+    const n = parseAbbrImport($("abi-text").value).length;
+    $("abi-preview").textContent = n ? `${n} 件を取り込めます` : "";
+  };
+  $("abi-run").onclick = async () => {
+    const parsed = parseAbbrImport($("abi-text").value);
+    if (!parsed.length) { toast("取り込める行がありません。書式を確認してください"); return; }
+    const existing = new Set(S.abbr.map(a => a.abbr.toLowerCase()));
+    let added = 0, skipped = 0;
+    parsed.forEach(p => {
+      if (existing.has(p.abbr.toLowerCase())) { skipped++; return; }
+      S.abbr.push({ id:genId("ab"), abbr:p.abbr, full:p.full, note:p.note, t:Date.now() });
+      existing.add(p.abbr.toLowerCase());
+      added++;
+    });
+    await DB.set("md_abbr", S.abbr);
+    closeSheet(); renderAbbr();
+    toast(`${added}件を追加${skipped?`（重複${skipped}件はスキップ）`:""}`);
+  };
+  setTimeout(() => $("abi-text")?.focus(), 320);
+}
+
+const AQ = { qs:[], i:0, score:0 };
+function startAbbrQuiz() {
+  if (S.abbr.length < 4) { toast("クイズには略語が4つ以上必要です"); return; }
+  const pool = shuffle(S.abbr.slice());
+  AQ.qs = pool.slice(0, Math.min(10, pool.length));
+  AQ.i = 0; AQ.score = 0;
+  openSheet("");
+  renderAbbrQuiz();
+}
+
+function renderAbbrQuiz() {
+  if (AQ.i >= AQ.qs.length) { renderAbbrQuizResult(); return; }
+  const q = AQ.qs[AQ.i];
+  const distractors = shuffle(S.abbr.filter(a => a.id!==q.id)).slice(0, 3);
+  const options = shuffle([q, ...distractors]);
+  $("sheet-body").innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:12px;color:var(--mute);">第 ${AQ.i+1} / ${AQ.qs.length} 問</span>
+      <span style="font-size:12px;color:var(--accent);">正解 ${AQ.score}</span>
+    </div>
+    <h2 style="font-size:14px;color:var(--dim);font-weight:600;">この略語の意味は？</h2>
+    <div style="font-size:40px;font-weight:800;color:#c4a6ff;text-align:center;padding:18px 0;">${esc(q.abbr)}</div>
+    <div id="aq-options" style="display:grid;gap:8px;"></div>`;
+  const optEl = $("aq-options");
+  options.forEach(opt => {
+    const b = document.createElement("button");
+    b.style.cssText = "text-align:left;background:var(--bg2);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--text);";
+    b.innerHTML = `<div class="aq-full" style="font-weight:600;">${esc(opt.full)}</div>${opt.note?`<div style="font-size:12px;color:var(--dim);margin-top:2px;">${esc(opt.note)}</div>`:""}`;
+    b.onclick = () => answerAbbrQuiz(opt.id===q.id, b, q);
+    optEl.appendChild(b);
+  });
+}
+
+function answerAbbrQuiz(correct, btn, q) {
+  const buttons = [...$("aq-options").querySelectorAll("button")];
+  buttons.forEach(b => b.disabled = true);
+  if (correct) {
+    AQ.score++;
+    btn.style.borderColor = "#5ed29a"; btn.style.background = "rgba(94,210,154,.15)";
+  } else {
+    btn.style.borderColor = "var(--danger)"; btn.style.background = "rgba(245,101,101,.12)";
+    buttons.forEach(b => {
+      if (b.querySelector(".aq-full")?.textContent === q.full) {
+        b.style.borderColor = "#5ed29a"; b.style.background = "rgba(94,210,154,.15)";
+      }
+    });
+  }
+  const nav = document.createElement("button");
+  nav.className = "btn-main a";
+  nav.style.marginTop = "14px";
+  nav.textContent = AQ.i+1 >= AQ.qs.length ? "結果を見る" : "次の問題 ›";
+  nav.onclick = () => { AQ.i++; renderAbbrQuiz(); };
+  $("sheet-body").appendChild(nav);
+}
+
+function renderAbbrQuizResult() {
+  const pct = Math.round(AQ.score / AQ.qs.length * 100);
+  const color = pct>=80 ? "#5ed29a" : pct>=60 ? "var(--insight)" : "var(--danger)";
+  $("sheet-body").innerHTML = `
+    <h2 style="text-align:center;">略語クイズ 結果</h2>
+    <div style="text-align:center;padding:16px 0;">
+      <div style="font-size:56px;font-weight:800;color:${color};">${pct}%</div>
+      <div style="font-size:14px;color:var(--dim);margin-top:6px;">${AQ.qs.length}問中 ${AQ.score}問正解</div>
+    </div>
+    <button class="btn-main a" id="aq-again">もう一度</button>
+    <button class="btn-sub" id="aq-close" style="margin-top:8px;">閉じる</button>`;
+  $("aq-again").onclick = startAbbrQuiz;
+  $("aq-close").onclick = closeSheet;
+}
+
+// ============================================================
+// 忘却曲線 復習（SRS / 間隔反復）— 略語
+// ============================================================
+const SRS_INTERVALS = [1, 3, 7, 16, 35, 90]; // レベル到達時の次回までの日数
+
+function srsGet(id) { return S.srs[id] || { level:0, due:dateKey(new Date()), last:0 }; }
+function srsDueItems() {
+  const today = dateKey(new Date());
+  return S.abbr.filter(a => srsGet(a.id).due <= today);
+}
+function srsDueCount() { return srsDueItems().length; }
+
+async function srsAnswer(id, ok) {
+  const cur = srsGet(id);
+  const level = ok ? Math.min(cur.level + 1, SRS_INTERVALS.length) : 0;
+  const interval = ok ? SRS_INTERVALS[level - 1] : 1; // わからない→翌日
+  const d = new Date(); d.setDate(d.getDate() + interval);
+  S.srs[id] = { level, due:dateKey(d), last:Date.now() };
+  await DB.set("md_srs", S.srs);
+}
+
+const SR = { queue:[], i:0, done:0 };
+function startSrsReview() {
+  const due = srsDueItems();
+  if (!due.length) { toast("今日の復習はありません 🎉"); return; }
+  SR.queue = shuffle(due.slice()); SR.i = 0; SR.done = 0;
+  openSheet(""); renderSrsCard();
+}
+
+function renderSrsCard() {
+  if (SR.i >= SR.queue.length) { renderSrsDone(); return; }
+  const a = SR.queue[SR.i];
+  const lvl = srsGet(a.id).level;
+  $("sheet-body").innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:12px;color:var(--mute);">${SR.i+1} / ${SR.queue.length} 件</span>
+      <span style="font-size:12px;color:#c4a6ff;">レベル ${lvl}</span>
+    </div>
+    <div style="font-size:13px;color:var(--dim);text-align:center;">この略語の意味は？</div>
+    <div style="font-size:42px;font-weight:800;color:#c4a6ff;text-align:center;padding:18px 0;">${esc(a.abbr)}</div>
+    <div id="sr-answer"></div>
+    <button class="btn-main a" id="sr-reveal">答えを見る</button>`;
+  $("sr-reveal").onclick = () => revealSrs(a);
+}
+
+function revealSrs(a) {
+  $("sr-answer").innerHTML = `
+    <div style="background:var(--bg2);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:15px;font-weight:600;">${esc(a.full)}</div>
+      ${a.note?`<div style="font-size:13px;color:var(--dim);margin-top:6px;">${esc(a.note)}</div>`:""}
+    </div>`;
+  const reveal = $("sr-reveal"); if (reveal) reveal.style.display = "none";
+  const btns = document.createElement("div");
+  btns.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:8px;";
+  btns.innerHTML = `
+    <button class="btn-main" style="background:rgba(245,101,101,.15);color:var(--danger);border:1px solid var(--danger);" id="sr-ng">✗ わからない</button>
+    <button class="btn-main" style="background:rgba(94,210,154,.15);color:#5ed29a;border:1px solid #5ed29a;" id="sr-ok">✓ わかった</button>`;
+  $("sheet-body").appendChild(btns);
+  $("sr-ng").onclick = () => srsNext(a, false);
+  $("sr-ok").onclick = () => srsNext(a, true);
+}
+
+async function srsNext(a, ok) {
+  await srsAnswer(a.id, ok);
+  if (ok) SR.done++;
+  SR.i++; renderSrsCard();
+}
+
+function renderSrsDone() {
+  $("sheet-body").innerHTML = `
+    <h2 style="text-align:center;">復習完了 🎉</h2>
+    <div style="text-align:center;padding:14px 0;">
+      <div style="font-size:44px;font-weight:800;color:#5ed29a;">${SR.done} / ${SR.queue.length}</div>
+      <div style="font-size:13px;color:var(--dim);margin-top:6px;">「わかった」と答えた数</div>
+    </div>
+    <p style="font-size:12px;color:var(--mute);text-align:center;margin-bottom:14px;">忘却曲線に合わせて次回の復習日が設定されました。明日また確認しましょう。</p>
+    <button class="btn-sub" id="sr-done-close">閉じる</button>`;
+  $("sr-done-close").onclick = () => { closeSheet(); renderQuizHome(); };
+}
+
+// ============================================================
 // WEB LINKS
 // ============================================================
 const LINKS = [
@@ -1710,6 +2542,8 @@ document.querySelectorAll(".tab").forEach(t => {
       } else showView("check");
     }
     else if (tab==="notes") { renderNotes(); showView("notes"); }
+    else if (tab==="disease") { /* #region agent log */ DZLOG('tab:click','disease tab tapped',{ renderFn: typeof renderDiseases, hasView: !!$("v-disease") },'B'); /* #endregion */ renderDiseases(); showView("disease"); }
+    else if (tab==="teach") { /* #region agent log */ DZLOG('tab:click','teach tab tapped',{ renderFn: typeof renderTeach, hasView: !!$("v-teach") },'B'); /* #endregion */ renderTeach(); showView("teach"); }
     else if (tab==="quiz") { renderQuizHome(); showView("quiz"); }
     else if (tab==="links") { showView("links"); }  };
 });
@@ -2109,6 +2943,165 @@ async function renderGoalLogPage() {
   });
 }
 
+// ============================================================
+// REFLECTION (モダリティ別 振り返り) + CALENDAR
+// ============================================================
+async function loadReflections() { return await DB.get("md_reflections", []); }
+async function saveReflections(r) { await DB.set("md_reflections", r); }
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function fmtDateKey(key) { const [, m, d] = key.split("-"); return `${Number(m)}/${Number(d)}`; }
+
+function renderReflect() {
+  const wrap = $("reflect-wrap"); if (!wrap) return;
+  const mods = [{ key:"all", label:"ALL" }, ...S.data.modalities.map(m => ({ key:m.key, label:m.label }))];
+  wrap.innerHTML = `
+    <div class="shdr" style="margin-top:20px;">
+      📝 振り返り（復習）
+      <button class="al" onclick="openReflectEditor(null)">+ 追加</button>
+    </div>
+    <div class="notes-filter" id="rf-filter">
+      ${mods.map(m => `<button class="nf-btn${S.reflectMod===m.key?" active":""}" onclick="setReflectMod('${m.key}')">${esc(m.label)}</button>`).join("")}
+    </div>
+    <div id="rf-list"></div>`;
+  renderReflectList();
+}
+
+function setReflectMod(key) { S.reflectMod = key; renderReflect(); }
+
+function renderReflectList() {
+  const list = $("rf-list"); if (!list) return;
+  let items = S.reflections.slice();
+  if (S.reflectMod !== "all") items = items.filter(r => r.mod === S.reflectMod);
+  items.sort((a, b) => b.t - a.t);
+  if (!items.length) {
+    list.innerHTML = `<div style="color:var(--mute);font-size:13px;padding:10px 2px;">まだ振り返りがありません。検査後の気づき・復習ポイントを記録しましょう。</div>`;
+    return;
+  }
+  list.innerHTML = "";
+  items.forEach(r => {
+    const card = document.createElement("div");
+    card.className = "rf-card";
+    card.innerHTML = `
+      <div class="rf-top">
+        <div class="rf-meta">
+          <span class="rf-tag" style="background:${esc(modColor(r.mod))}">${esc(modLabel(r.mod))}</span>
+          <span class="rf-date">${esc(fmtDateKey(r.date))}</span>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="rf-del" onclick="openReflectEditor('${r.id}')">編集</button>
+          <button class="rf-del" onclick="delReflection('${r.id}')">削除</button>
+        </div>
+      </div>
+      <div class="rf-text">${esc(r.text)}</div>`;
+    list.appendChild(card);
+  });
+}
+
+function openReflectEditor(id) {
+  const r = id ? S.reflections.find(x => x.id === id) : null;
+  const curMod = r ? r.mod : (S.reflectMod !== "all" ? S.reflectMod : S.data.modalities[0].key);
+  const opts = S.data.modalities.map(m => `<option value="${m.key}"${m.key===curMod?" selected":""}>${esc(m.label)}</option>`).join("");
+  openSheet(`
+    <h2>${r?"振り返りを編集":"振り返りを記録"}</h2>
+    <label class="form-lbl">モダリティ</label>
+    <select class="form-input" id="rf-f-mod">${opts}</select>
+    <label class="form-lbl">振り返り・復習ポイント</label>
+    <textarea class="form-input" id="rf-f-text" style="min-height:120px;" placeholder="例: DSAの気泡除去は次回2回目の声掛けで合わせる / 造影剤量の確認を忘れない">${esc(r?.text||"")}</textarea>
+    <button class="btn-main a" id="rf-f-save">${r?"更新":"保存"}</button>
+    <button class="btn-sub" id="rf-f-cancel" style="margin-top:8px;">キャンセル</button>`);
+  $("rf-f-cancel").onclick = closeSheet;
+  $("rf-f-save").onclick = async () => {
+    const text = $("rf-f-text").value.trim();
+    if (!text) { toast("内容を入力してください"); return; }
+    const mod = $("rf-f-mod").value;
+    if (r) { r.mod = mod; r.text = text; }
+    else { S.reflections.push({ id:genId("rf"), mod, text, date:dateKey(new Date()), t:Date.now() }); }
+    await saveReflections(S.reflections);
+    closeSheet(); renderReflect(); renderCalendar();
+    toast(r ? "更新しました" : "記録しました 🎉");
+  };
+  setTimeout(() => $("rf-f-text")?.focus(), 320);
+}
+
+async function delReflection(id) {
+  if (!confirm("この振り返りを削除しますか?")) return;
+  S.reflections = S.reflections.filter(r => r.id !== id);
+  await saveReflections(S.reflections);
+  renderReflect(); renderCalendar(); toast("削除しました");
+}
+
+function renderCalendar() {
+  const wrap = $("calendar-wrap"); if (!wrap) return;
+  if (!S.calMonth) { const n = new Date(); S.calMonth = new Date(n.getFullYear(), n.getMonth(), 1); }
+  const y = S.calMonth.getFullYear(), m = S.calMonth.getMonth();
+  const todayKey = dateKey(new Date());
+  const daySet = new Set(S.reflections.map(r => r.date));
+
+  const startDow = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const monthPrefix = `${y}-${String(m+1).padStart(2,"0")}`;
+  const monthDays = new Set([...daySet].filter(k => k.startsWith(monthPrefix))).size;
+  const streak = calcStreak(daySet);
+
+  const heads = ["日","月","火","水","木","金","土"];
+  let cells = "";
+  for (let i = 0; i < startDow; i++) cells += `<div class="cal-cell blank"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${monthPrefix}-${String(d).padStart(2,"0")}`;
+    const has = daySet.has(key);
+    const isToday = key === todayKey;
+    cells += `<div class="cal-cell${has?" has":""}${isToday?" today":""}"${has?` onclick="showDayReflections('${key}')"`:""}>${d}</div>`;
+  }
+
+  wrap.innerHTML = `
+    <div class="shdr" style="margin-top:20px;">🗓️ 振り返りカレンダー</div>
+    <div class="cal-card">
+      <div class="cal-nav">
+        <button onclick="calShift(-1)">‹ 前月</button>
+        <span class="cal-mlabel">${y}年 ${m+1}月</span>
+        <button onclick="calShift(1)">翌月 ›</button>
+      </div>
+      <div class="cal-grid">
+        ${heads.map(h => `<div class="cal-h">${h}</div>`).join("")}
+        ${cells}
+      </div>
+      <div class="cal-stats">
+        <div class="cal-stat"><div class="n" style="color:var(--accent);">${monthDays}</div><div class="l">今月の振り返り日数</div></div>
+        <div class="cal-stat"><div class="n" style="color:var(--insight);">${streak}</div><div class="l">連続日数 🔥</div></div>
+        <div class="cal-stat"><div class="n" style="color:#b48cff;">${S.reflections.length}</div><div class="l">累計件数</div></div>
+      </div>
+    </div>`;
+}
+
+function calShift(delta) {
+  const base = S.calMonth || new Date();
+  S.calMonth = new Date(base.getFullYear(), base.getMonth()+delta, 1);
+  renderCalendar();
+}
+
+function calcStreak(daySet) {
+  let streak = 0;
+  const d = new Date();
+  if (!daySet.has(dateKey(d))) d.setDate(d.getDate()-1);
+  while (daySet.has(dateKey(d))) { streak++; d.setDate(d.getDate()-1); }
+  return streak;
+}
+
+function showDayReflections(key) {
+  const items = S.reflections.filter(r => r.date === key).sort((a, b) => b.t - a.t);
+  openSheet(`
+    <h2>${fmtDateKey(key)} の振り返り</h2>
+    ${items.length ? items.map(r => `
+      <div class="rf-card" style="margin-bottom:10px;">
+        <div class="rf-top"><span class="rf-tag" style="background:${esc(modColor(r.mod))}">${esc(modLabel(r.mod))}</span></div>
+        <div class="rf-text">${esc(r.text)}</div>
+      </div>`).join("") : `<p style="color:var(--mute);">記録がありません</p>`}
+    <button class="btn-sub" onclick="closeSheet()" style="margin-top:8px;">閉じる</button>`);
+}
+
 function openTomorrowEditor() {
   DB.get("md_tomorrow", { plan:"", updatedAt:"" }).then(tmr => {
     openSheet(`
@@ -2200,6 +3193,29 @@ function shuffle(arr) {
 function renderQuizHome() {
   const list=$("quiz-select-list"); if(!list)return;
   list.innerHTML="";
+  const dueN=srsDueCount();
+  const srsCard=document.createElement("div");
+  srsCard.className="quiz-card";
+  srsCard.style.borderColor=dueN?"#b48cff":"var(--line)";
+  srsCard.innerHTML=`
+    <div class="qc-title">🔁 忘却曲線 復習（略語）</div>
+    <div class="qc-meta">
+      ${dueN
+        ? `<span class="qc-badge" style="background:rgba(180,140,255,.2);color:#c4a6ff;">今日 ${dueN} 件</span>`
+        : `<span class="qc-badge" style="background:rgba(94,210,154,.15);color:#5ed29a;">今日の復習は完了 ✓</span>`}
+    </div>`;
+  srsCard.onclick=()=>startSrsReview();
+  list.appendChild(srsCard);
+  const aqCard=document.createElement("div");
+  aqCard.className="quiz-card";
+  aqCard.innerHTML=`
+    <div class="qc-title">📚 略語クイズ</div>
+    <div class="qc-meta">
+      <span style="color:#b48cff;">略語</span>
+      <span class="qc-badge" style="background:rgba(180,140,255,.15);color:#b48cff;">${S.abbr.length} 語</span>
+    </div>`;
+  aqCard.onclick=()=>startAbbrQuiz();
+  list.appendChild(aqCard);
   S.data.modalities.forEach(mod=>{
     (S.data.procedures[mod.key]||[]).forEach(proc=>{
       const bank=QUIZ_BANK[proc.id];
@@ -2534,9 +3550,26 @@ function backToQuizHome(){
   S.data    = saved || JSON.parse(JSON.stringify(DEFAULT));
   S.checked = await DB.get("md_checked", {});
   S.notes   = await DB.get("md_notes",   []);
+  S.diseases = await DB.get("md_diseases", null) || JSON.parse(JSON.stringify(DEFAULT_DISEASES));
+  S.abbr = await DB.get("md_abbr", null) || JSON.parse(JSON.stringify(DEFAULT_ABBR));
+  S.teach = await DB.get("md_teach", null) || JSON.parse(JSON.stringify(DEFAULT_TEACH));
+  // #region agent log
+  DZLOG('init:teach','teach loaded',{ type:typeof S.teach, keys:S.teach?Object.keys(S.teach):null, counts:S.teach?Object.fromEntries(Object.entries(S.teach).map(([k,v])=>[k,Array.isArray(v)?v.length:typeof v])):null },'A');
+  // #endregion
+  S.srs = await DB.get("md_srs", {});
+  S.reflections = await loadReflections();
+  // #region agent log
+  DZLOG('init:diseases','diseases loaded',{
+    type: typeof S.diseases, isNull: S.diseases===null,
+    keys: S.diseases ? Object.keys(S.diseases) : null,
+    counts: S.diseases ? Object.fromEntries(Object.keys(S.diseases).map(k => [k, (S.diseases[k]||[]).length])) : null
+  },'A');
+  // #endregion
 
   renderHome();
   renderGoals();
+  renderReflect();
+  renderCalendar();
 })();
 </script>
 </body>
